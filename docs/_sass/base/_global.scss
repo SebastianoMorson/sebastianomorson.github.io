@@ -87,3 +87,44 @@ tbody tr:nth-child(odd) th {
   height: auto;             /* Mantiene il rapporto d'aspetto */
   margin-top: 20px;         /* Aggiunge spazio sopra, se necessario */
 }
+
+/* Icone social */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.social-icons a {
+  color: black;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+/* Titolo e bottone centrati */
+.main-content {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.main-content h1 {
+  font-family: 'Georgia', serif;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.whoami-button {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.whoami-button a {
+  text-decoration: none;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
