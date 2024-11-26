@@ -20,7 +20,6 @@
 
 title: JustAMonkey
 email: sebastiano.mors@outlook.com
-#description: >- 
 baseurl: "" # the subpath of your site, e.g. /blog
 domain: sebastianomorson.github.io
 url: "https://sebastianomorson.github.io" # the base hostname & protocol for your site, e.g. http://example.com
