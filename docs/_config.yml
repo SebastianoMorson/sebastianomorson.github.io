@@ -18,17 +18,38 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: JustAMonkey
-email: sebastiano.mors@outlook.com
-baseurl: "" # the subpath of your site, e.g. /blog
-domain: sebastianomorson.github.io
+title: "JustAMonkey"
+email: "sebastiano.mors@outlook.com"
+baseurl: "/" # the subpath of your site, e.g. /blog
+domain: "sebastianomorson.github.io"
 url: "https://sebastianomorson.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  SebastianoMorson
+github_username: "SebastianoMorson"
 
 # Build settings
-remote_theme: celeste
+remote_theme: nicoelayda/celeste
+
+
+markdown:            kramdown
+highlighter:         rouge
+
+exclude:             ['*.sublime-*', 'README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock', 'vendor/bundle']
+
+permalink:           pretty
+paginate:            5
+paginate_path:       /blog/:num
+
+blog:
+  truncated_preview: false
+
+sass:
+  sass_dir:          _sass
+  style:             :compressed
+
 plugins:
   - jekyll-feed
+  - jekyll-coffeescript
+  - jekyll-paginate
+  - jekyll-gist
 
 # Exclude from processing.
 # The following items will not be processed, by default.
