@@ -30,7 +30,7 @@ url: "https://sebastianomorson.github.io" # the base hostname & protocol for you
 github_username:  SebastianoMorson
 
 # Build settings
-theme: minima
+remote_theme: celeste
 plugins:
   - jekyll-feed
 
