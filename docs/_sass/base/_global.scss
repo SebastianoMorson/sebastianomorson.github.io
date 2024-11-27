@@ -12,7 +12,7 @@ html {
   font-size: $font-size;
   line-height: 1.5;
 
-  @media (max-width: 38em) {
+  @media (max-width: 10em) {
     font-size: $font-size-mobile;
   }
  
@@ -154,4 +154,16 @@ tbody tr:nth-child(odd) th {
   text-decoration: none;
   color: inherit; /* Usa il colore del bottone (dinamico con :hover) */
   font-family: $font-stack;
+}
+
+.flex-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.flex-container .image img {
+  max-width: 100%; /* Imposta una larghezza massima per mantenere il ridimensionamento responsivo */
+  height: auto; /* Mantiene il rapporto d'aspetto */
+  border-radius: 5px; /* Opzionale: arrotonda gli angoli */
 }
