@@ -7,6 +7,12 @@
     <div class="image-container">
       <img class="justamonkey" src="{{ site.baseurl }}/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito">
     </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:example@example.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/nicoelayda"><i class="fa fa-github"></i></a>
+      <a href="https://linkedin.com"><i class="fa fa-linkedin"></i></a>
+    </div>
     <nav class="nav-main">
       <ul>
         <li class="hvr-underline-reveal"><a href="{{ site.baseurl }}/about/">About</a></li>
@@ -22,17 +28,14 @@
       <main>
         {{ content }}
       </main>
-
-      <footer class="footer">
-        <small>
-            <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="{{ site.time | date_to_xmlschema }}">{{ site.time | date: '%Y' }}</time> {{ site.author.name }}</span> &middot;
-            <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
-        </small>
-        <div class="ftr-links">
-          <a href="https://github.com/nicoelayda"><i class="fa fa-github-alt"></i></a>
-          <a href="https://twitter.com/nicoelayda"><i class="fa fa-twitter"></i></a>
-        </div>
-      </footer>
     </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="{{ site.time | date_to_xmlschema }}">{{ site.time | date: '%Y' }}</time> {{ site.author.name }}</span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
 
 </html>

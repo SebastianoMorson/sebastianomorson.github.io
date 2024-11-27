@@ -15,12 +15,17 @@ html {
   @media (max-width: 38em) {
     font-size: $font-size-mobile;
   }
+ 
 }
 
 body {
+
   color: $body-text-color;
   background-color: $body-background-color;
   border-top: $body-top-border-width solid $body-top-border-color;
+  height: 100%;          /* Altezza totale del viewport */
+  display: flex;         /* Layout con flexbox */
+  flex-direction: column; /* Posiziona gli elementi in verticale */
 }
 
 a {
@@ -37,10 +42,17 @@ a {
   }
 }
 
+/* Footer in fondo alla pagina */
 footer {
-    text-align: center;
-    text-transform: lowercase;
-    margin-bottom: 2rem;
+  text-align: center;
+  text-transform: lowercase;
+  width: 100%;
+  padding: 10px;
+  color: white;
+  //position: absolute;
+  bottom: 0; /* Fissa il footer in fondo alla pagina */
+  color:#191919;
+  font-family: $font-stack;
 }
 
 img {
@@ -102,30 +114,44 @@ tbody tr:nth-child(odd) th {
   text-decoration: none;
 }
 
-/* Titolo e bottone centrati */
-.main-content {
-  background-color: yellow !important;
+/* Contenuto centrale: altezza del 40% del viewport */
+.container-content {
+  height: 50vh; /* Altezza pari al 40% dell'altezza del viewport */
+  display: flex;
+  flex-direction: column;
+  //justify-content: center; /* Centra il contenuto verticalmente */
+  align-items: center; /* Centra il contenuto orizzontalmente */
   text-align: center;
-  margin-top: 50px;
+  box-sizing: border-box; /* Include padding e border nelle dimensioni */
 }
 
-.main-content h1 {
-  font-family: 'Georgia', serif;
-  font-size: 36px;
-  margin-bottom: 20px;
+/* Elementi all'interno del contenitore */
+.container-content h1 {
+  font-family: $font-stack;
+  font-size: 2rem;
+  margin: 0;
 }
 
 .whoami-button {
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
+  background-color: #191919; /* Colore di sfondo originale */
+  color: white; /* Colore del testo originale */
+  padding: 10px 30px;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
+  margin-top: 2vh;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transizione fluida per sfondo e testo */
 }
 
+/* Cambia il colore dello sfondo e del testo al passaggio del mouse */
+.whoami-button:hover {
+  background-color: rgb(216, 214, 214); /* Sfondo più chiaro */
+  color: #191919; /* Testo più scuro */
+}
+
+/* Link all'interno del bottone */
 .whoami-button a {
   text-decoration: none;
-  color: white;
-  font-family: 'Arial', sans-serif;
+  color: inherit; /* Usa il colore del bottone (dinamico con :hover) */
+  font-family: $font-stack;
 }
