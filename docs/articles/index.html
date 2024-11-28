@@ -1,0 +1,90 @@
+---
+layout: default
+title: Articles
+---
+
+<!-- Banner con i pulsanti per il filtro -->
+<div class="filter-banner">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="cybersec">Cybersec</button>
+  <button class="filter-btn" data-filter="artificial">Artificial</button>
+  <button class="filter-btn" data-filter="miscellaneous">Miscellaneous</button>
+</div>
+
+<!-- Contenitore dei post -->
+<div class="posts">
+  {% for post in paginator.posts %}
+  <article class="post" data-tags="{{ post.tags | join: ' ' }}">
+    <h1 class="post-title">
+      <a href="{{ site.baseurl }}{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
+
+    <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date_to_string }}</time>
+
+    {% if post.truncated_preview == true or site.blog.truncated_preview and post.truncated_preview != false %}
+      {{ post.excerpt }}
+      <a href="{{ site.baseurl }}{{ post.url }}">Read more</a>
+    {% else %}
+      {{ post.content }}
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+
+<!-- Paginazione -->
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item" href="{{ paginator.next_page_path | prepend: site.baseurl }}">
+      <i class="fa fa-arrow-circle-o-left"></i> 
+      <span class="pagination-text">older posts</span>
+    </a>
+  {% else %}
+    <span class="pagination-item">
+      <i class="fa fa-arrow-circle-o-left"></i> 
+      <span class="pagination-text">older posts</span>
+    </span>
+  {% endif %}
+
+  {% if paginator.previous_page %}
+    <a class="pagination-item" href="{{ paginator.previous_page_path | prepend: site.baseurl }}">
+      <span class="pagination-text">newer posts</span> 
+      <i class="fa fa-arrow-circle-o-right"></i>
+    </a>
+  {% else %}
+    <span class="pagination-item">
+      <span class="pagination-text">newer posts</span> 
+      <i class="fa fa-arrow-circle-o-right"></i>
+    </span>
+  {% endif %}
+</div>
+
+<script>
+  // Ottieni tutti i bottoni e i post
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const posts = document.querySelectorAll('.post');
+
+  // Aggiungi un event listener a ciascun bottone
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Rimuovi la classe 'active' da tutti i bottoni
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      // Aggiungi la classe 'active' al bottone cliccato
+      button.classList.add('active');
+
+      // Ottieni il filtro selezionato
+      const filter = button.getAttribute('data-filter');
+
+      // Mostra o nascondi i post in base al filtro
+      posts.forEach(post => {
+        const tags = post.getAttribute('data-tags').split(' ');
+        if (filter === 'all' || tags.includes(filter)) {
+          post.style.display = 'block';
+        } else {
+          post.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

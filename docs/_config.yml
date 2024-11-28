@@ -35,8 +35,8 @@ highlighter:         rouge
 #exclude:             ['*.sublime-*', 'README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock', 'vendor/bundle']
 
 permalink:           pretty
-paginate:            1
-paginate_path:       /blog/:num
+paginate:            100
+paginate_path:       /articles/:num
 
 blog:
   truncated_preview: false

@@ -8,7 +8,7 @@ permalink: /whoami/
   <!-- Testo a sinistra -->
   <div style="flex: 1;">
    
-<p style="font-size: 5vh;">
+<p style="font-size: 4vh;">
     My name is Sebastiano Morson, and I am a simple chronic procrastinator from the neighborhood, born and raised in Friuli Venezia Giulia.
 </p>
 <p>

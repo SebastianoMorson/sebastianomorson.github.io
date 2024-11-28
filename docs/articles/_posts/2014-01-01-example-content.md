@@ -3,8 +3,8 @@ layout: post
 title: Example content
 truncated_preview: true
 excerpt_separator: <!--more-->
+tags: artificial
 ---
-
 <div class="message">
   Howdy! This is an example blog post that shows several types of HTML content supported in this theme.
 </div>
