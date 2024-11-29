@@ -6,7 +6,10 @@
 
 .page,
 .post {
-  margin-bottom: 4em;
+  margin-bottom: 2em;
+  border-bottom-style:solid;
+  border-bottom-color:#CCCCCC;
+  border-bottom-width:0.5px;
 }
 
 // Blog post or page title
@@ -14,6 +17,7 @@
 .post-title,
 .post-title a {
   color: $post-title-color;
+  font-size:x-large;
 }
 .page-title,
 .post-title {

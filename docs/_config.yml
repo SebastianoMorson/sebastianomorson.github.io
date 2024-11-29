@@ -33,7 +33,9 @@ markdown:            kramdown
 highlighter:         rouge
 
 #exclude:             ['*.sublime-*', 'README.md', 'LICENSE', 'Gemfile', 'Gemfile.lock', 'vendor/bundle']
-
+include:
+  - assets/images
+  
 permalink:           pretty
 paginate:            100
 paginate_path:       /articles/:num
