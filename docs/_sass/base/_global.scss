@@ -99,7 +99,13 @@ tbody tr:nth-child(odd) th {
   height: auto;             /* Mantiene il rapporto d'aspetto */
   margin-top: 20px;         /* Aggiunge spazio sopra, se necessario */
 }
-
+/* Regola il logo per schermi più piccoli */
+@media (max-width: 600px) { 
+  .justamonkey {
+    max-width: 30%; /* Aumenta la dimensione su schermi stretti */
+    margin-top: 10px; /* Riduci lo spazio sopra, se necessario */
+  }
+}
 /* Icone social */
 .social-icons {
   display: flex;
