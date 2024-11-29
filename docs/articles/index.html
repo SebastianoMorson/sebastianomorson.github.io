@@ -13,7 +13,8 @@ title: Articles
 
 <!-- Contenitore dei post -->
 <div class="posts">
-  {% for post in paginator.posts %}
+  {% for post in site.posts %}
+  {% if post.categories contains "article" %}
   <article class="post" data-tags="{{ post.tags | join: ' ' }}">
     <h1 class="post-title">
       <a href="{{ site.baseurl }}{{ post.url }}">
@@ -30,6 +31,7 @@ title: Articles
       {{ post.content }}
     {% endif %}
   </article>
+  {% endif %}
   {% endfor %}
 </div>
 

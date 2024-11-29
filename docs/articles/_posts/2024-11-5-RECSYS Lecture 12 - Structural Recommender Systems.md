@@ -5,6 +5,8 @@ truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
   - artificial
+categories: article
+
 ---
 <!--more-->
 Quando ho letto per la prima volta "structural recommender systems" ho subito pensato "cavolo, non ho mai sentito parlare di modelli di AI strutturali!". Spoiler: praticamente sono le Graph Neural Network.

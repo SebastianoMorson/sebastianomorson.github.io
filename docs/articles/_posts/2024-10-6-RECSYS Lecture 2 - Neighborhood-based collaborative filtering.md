@@ -5,6 +5,8 @@ truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
   - artificial
+categories: article
+
 ---
 <!--more-->
 ![](https://static.wixstatic.com/media/4959fd_a6f89a18d92048f79c1e9b46bc573455~mv2.png/v1/fill/w_280,h_186,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a6f89a18d92048f79c1e9b46bc573455~mv2.png)
