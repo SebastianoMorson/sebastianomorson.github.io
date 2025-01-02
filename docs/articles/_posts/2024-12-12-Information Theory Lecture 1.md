@@ -26,27 +26,30 @@ Vedendo questa cosa con la notazione logaritmica, otteniamo che $log\left( \frac
 Dato un alfabeto $A=\{a_{1},a_{2},\dots,a_{k}\}$ e una distribuzione di probabilità $P=\{p_{1},p_{2},\dots,p_{k}\}$
 dove $p_{i}$ è la probabilità di osservare $a_i$ 
 Allora la quantità di informazione media (Average Quantity of Information) è data da 
-$$  H(P) = \sum_{i}^k \cdot{p_{i}} \cdot{\left(-\log p_{i}\right)}$$
+
+$$ 
+H(P) = \sum_{i}^k \cdot{p_{i}} \cdot{\left(-\log p_{i}\right)}
+$$
 
 Esempio:
 Se ho una moneta non truccata, avrò due eventi possibili: $A=\{H,T\}$ con probabilità associate $p(H) = \frac{1}{2}$ e $p(T) = \frac{1}{2}$ 
 
 Allora la Shannon Entropy sarà data da 
+
 $$
 \begin{aligned}
 H(P) &= \frac{1}{2}\cdot{\left(-\log{\frac{1}{2}}\right)}+\frac{1}{2}\cdot{\left(-\log\ \frac{1}{2} \right)}\\
 &=\frac{1}{2}+\frac{1}{2} = 1
 \end{aligned}
-
 $$
 
 Se invece la moneta non è equa e ha una probabilità $p(H) = 0.9$ e $p(T)=0.1$ allora 
+
 $$
 \begin{aligned}
 H(P) &= 0.9\cdot{\left(-\log{0.9}\right)}+0.1\cdot{\left(-\log\ 0.1 \right)}\\
 &=\text{circa}\;\;0.32
 \end{aligned}
-
 $$
 
 Se invece provo a usare probabilità $p(H)=1$ e $p(T)=0$ scopro che $H(P)=0$ (giustamente, perchè che informazione ottengo se capita sempre testa o sempre croce?)
@@ -74,6 +77,7 @@ $n$ bit di informazione sono ricevuti flippando n volte una moneta *fair*.
 
 Perciò in generale 
 #### General case
+
 $$
 \begin{aligned}
 H(P) &= \sum_{i=1}^k p_{i}\cdot(-\log p_{i})\\
@@ -112,12 +116,14 @@ Se X e Y sono due distribuzioni indipendenti significa che
 $$
 H(X,Y) = - \sum_{i,\;j}{p(x,y)\cdot \log(p(x,y)})
 $$
+
 Però sappiamo che per gli eventi indipendenti $p(x,y) = p(x)\cdot p(y)$
 Ma allora
 
 $$
 H(X,Y) = - \sum_{i,\;j}{p(x)\cdot p(y)\cdot \log(p(x)\cdot p(y)})
 $$
+
 e quindi
 
 $$
@@ -132,6 +138,7 @@ H(X,Y) &= - \sum_{i}{p(x_{i})\cdot \log(p(x_{i}))}\cdot\sum_{j}(p(y_{j})) - \sum
 \end{equation}
 
 $$
+
 Essendo $\sum_{j}p(y_{j}) =1$ (perchè sommo tutte le probabilità della distribuzione Y, quindi la somma deve fare 1 per forza di cose) ottengo che
 
 $$
@@ -149,6 +156,7 @@ Se X e Y sono due distribuzioni dipendenti significa che
 $$
 H(X,Y) = - \sum_{i,\;j}{p(x\mid y)\cdot \log(p(x\mid y)})
 $$
+
 Però sappiamo che per gli eventi dipendenti $p(x\mid y) = \frac{p(y\mid x)\cdot p(x)}{p(y)}$
 Ma allora
 
@@ -165,6 +173,7 @@ H(X,Y) &= - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\lo
 \end{aligned}
 \end{equation}
 $$
+
 possiamo rimuovere $p(x_i)$ e $p(y_j)$ perchè possiamo vederli come $\frac{\sum_{i}p(x_{i})}{\sum_{j}p(y_{j})} = 1$
 $$
 \begin{equation}
@@ -180,7 +189,11 @@ La funzione $H$ definita da Shannon è l'unica funzione che soddisfa tutte quest
 
 
 #### Proprietà di Shannon 
-$$H(p_{1},\dots,p_{k}) \le \log k = H\left(\frac{1}{k},\dots, \frac{1}{k}\right)$$
+
+$$
+H(p_{1},\dots,p_{k}) \le \log k = H\left(\frac{1}{k},\dots, \frac{1}{k}\right)
+$$
+
 $k=|A|$
 
 che fondamentalmente significa che l'entropia è massima se la distribuzione delle probabilità è uniforme

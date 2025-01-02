@@ -9,9 +9,7 @@ tags:
 ---
 <!--more-->
 
-Bisogna ricordare il concetto di entropia definito [[2024-12-12-Information Theory Lecture 1#Definizione di Shannon Entropy|qui]] e [[2024-12-12-Information Theory Lecture 1#General case|qui]] e ovviamente le sue [[2024-12-12-Information Theory Lecture 1#Property of $H(P)$|pro]][[2024-12-12-Information Theory Lecture 1#Proprietà di Shannon|prietà]].
-
-Dalle lezioni viste a [[Coding|mobile communication]] sappiamo che un messaggio viene trasmesso seguendo un pattern ben preciso
+Dalle lezioni viste a mobile communication sappiamo che un messaggio viene trasmesso seguendo un pattern ben preciso
 
 1. prima decido il messaggio
 2. poi lo codifico in un *source code* (che ad esempio lo comprime con zip o bzip)
@@ -37,6 +35,7 @@ L'encoding Source code sarà una funzione del tipo
 $$
 \varphi: A^* \to B^*
 $$
+
 ossia una funzione ***iniettiva***.
 
 Ora, ci sono varie casistiche mediante le quali possiamo mappare gli elementi di $A^*$ in $B^*$ 
