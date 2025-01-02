@@ -7,3 +7,13 @@
 	font-family: "pcbius";
 	src: url("../fonts/PCBius.ttf");
 }
+
+@font-face {
+	font-family: "pcontrol";
+	src: url("../fonts/data-latin.ttf");
+}
+
+@font-face {
+	font-family: "pcantaro";
+	src: url("../fonts/Antaro.ttf");
+}
