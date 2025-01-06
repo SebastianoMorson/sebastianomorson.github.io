@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Information Theory - Lecture 1 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Information Theory - Lecture 1</h1>
+  <time datetime="2024-12-12T00:00:00+01:00" class="post-date">12 Dec 2024</time>
+  <!--more-->
+<p>La quantità di informazione presente all’interno di una frase non è fissa, ma è dipendente dal contesto.</p>
+
+<p>Ad esempio se dico “oggi piove”, nel caso in cui mi trovi a Gemona non sarebbe chissà che novità, ma se lo dicessi mentre sono nel deserto, allora è ben altra storia.</p>
+
+<p>Assumiamo quindi di avere un evento $E$ e che a tale evento sia associata una probabilità $p(E)$.</p>
+<ul>
+  <li>se $p(E) \to 0$ allora $\frac{1}{p(E)} \to \infty$</li>
+  <li>se $p(E) \to 1$ allora $\frac{1}{p(E)}\to 1$</li>
+</ul>
+
+<p>Vedendo questa cosa con la notazione logaritmica, otteniamo che $log\left( \frac{1}{p(E)} \right) = -\log(p(E))$</p>
+<ul>
+  <li>se $p(E) \to 0$        allora $-\log p(E) \to +\infty$</li>
+  <li>se $p(E) \to 1$        allora $-\log p(E)\to 0$</li>
+</ul>
+
+<hr />
+<h4 id="definizione-di-shannon-entropy">Definizione di Shannon Entropy</h4>
+<p>Dato un alfabeto $A={a_{1},a_{2},\dots,a_{k}}$ e una distribuzione di probabilità $P={p_{1},p_{2},\dots,p_{k}}$
+dove $p_{i}$ è la probabilità di osservare $a_i$ 
+Allora la quantità di informazione media (Average Quantity of Information) è data da</p>
+
+\[H(P) = \sum_{i}^k \cdot{p_{i}} \cdot{\left(-\log p_{i}\right)}\]
+
+<p>Esempio:
+Se ho una moneta non truccata, avrò due eventi possibili: $A={H,T}$ con probabilità associate $p(H) = \frac{1}{2}$ e $p(T) = \frac{1}{2}$</p>
+
+<p>Allora la Shannon Entropy sarà data da</p>
+
+\[\begin{aligned}
+H(P) &amp;= \frac{1}{2}\cdot{\left(-\log{\frac{1}{2}}\right)}+\frac{1}{2}\cdot{\left(-\log\ \frac{1}{2} \right)}\\
+&amp;=\frac{1}{2}+\frac{1}{2} = 1
+\end{aligned}\]
+
+<p>Se invece la moneta non è equa e ha una probabilità $p(H) = 0.9$ e $p(T)=0.1$ allora</p>
+
+\[\begin{aligned}
+H(P) &amp;= 0.9\cdot{\left(-\log{0.9}\right)}+0.1\cdot{\left(-\log\ 0.1 \right)}\\
+&amp;=\text{circa}\;\;0.32
+\end{aligned}\]
+
+<p>Se invece provo a usare probabilità $p(H)=1$ e $p(T)=0$ scopro che $H(P)=0$ (giustamente, perchè che informazione ottengo se capita sempre testa o sempre croce?)</p>
+
+<p>Ma cosa succede se invece di avere un alfabeto composto da 2 singoli eventi, ho un alfabeto composto da eventi che sono la combinazione di altri eventi?</p>
+
+<p>Per esempio, come calcolo l’entropia di Shannon se ho un alfabeto $A={\text{sequenze di lunghezza}\; n\; \text{di H e T} }$
+con $P(HHH…H) = \frac{1}{2^n}$  (ossia dove tutti hanno la stessa probabilità)?</p>
+
+<p>Bè, in questo caso $H(P)$ dev’essere visto in questo modo:</p>
+
+\[\begin{aligned}
+H(P) &amp;= \sum_{i=1}^{2^n} \frac{1}{2^n}\left(-\log \frac{1}{2^n} \right)\\
+&amp;= 2^n\left( \frac{1}{2^n}\cdot n \right)\\
+&amp;=n
+\end{aligned}\]
+
+<p>$n$ bit di informazione sono ricevuti flippando n volte una moneta <em>fair</em>.</p>
+
+<p>Perciò in generale</p>
+<h4 id="general-case">General case</h4>
+
+\[\begin{aligned}
+H(P) &amp;= \sum_{i=1}^k p_{i}\cdot(-\log p_{i})\\
+&amp;= - \sum_{i=1}^k p_{i}\log p_{i}\\
+&amp;= \sum_{i=1}^k p_{i}\log \frac{1}{p_{i}}
+\end{aligned}\]
+
+<p>dove $(-\log p_{i})$ è la quantità di informazione dell’evento $i$</p>
+
+<h4 id="property-of-hp-n-1-hp-ge-0">Property of $H(P)$ n° 1: $H(P) \ge 0$</h4>
+<p>Non può essere negativa l’entropia perchè abbiamo che l’entropia minima è 0 nel caso in p(E) = 1 (evento certo), mentre è $\infty$ se la probabilità di un evento è 0.</p>
+
+<h4 id="property-of-hp-n2--hp-0-se-e-solo-se-cè-un-evento-con-probabilità-1">Property of H(P) n°2 : $H(P) =0$ se e solo se c’è un evento con probabilità 1</h4>
+<p>Questo è dato dal fatto che log(1)=0 e quindi l’argomento del logaritmo annullerebbe l’entropia nel caso p(E) = 1</p>
+
+<h4 id="property-of-hp-n3-h-è-continua-in-p">Property of H(P) n°3: $H$ è continua in P</h4>
+<p>Difatti infinitesimali variazioni in P producono infinitesimali variazioni in H.</p>
+
+<h4 id="property-of-hp-n4--se-un-evento-viene-diviso-lentropia-deve-essere-additiva">Property of H(P) n°4 : se un evento viene diviso l’entropia deve essere additiva</h4>
+
+<h4 id="property-of-hp-n5--date-due-distribuzioni-indipendenti-xy-allora-hxland-y--hxhy">Property of H(P) n°5 : date due distribuzioni indipendenti X,Y allora $H(X\land Y) = H(X)+H(Y)$</h4>
+<p>Ecco, questa è la proprietà che al primo appello dell’esame di complexity mi scordai e mi costrinse a ritirarmi per la vergogna.</p>
+
+<p>Allora… All’esame avrei dovuto ricordarmi di 2 cose fondamentali:</p>
+<ol>
+  <li>il logaritmo gode di una proprietà interessante, ossia che $\log(x\cdot y) = \log(x)+\log(y)$</li>
+  <li>il buon vecchio teorema di Bayes ci dice che la probabilità condizionata è data da</li>
+</ol>
+
+\[p(A\mid B) = \frac{P(B\mid A) \cdot P(A)}{P(B)}\]
+
+<p>Se X e Y sono due distribuzioni indipendenti significa che</p>
+
+\[H(X,Y) = - \sum_{i,\;j}{p(x,y)\cdot \log(p(x,y)})\]
+
+<p>Però sappiamo che per gli eventi indipendenti $p(x,y) = p(x)\cdot p(y)$
+Ma allora</p>
+
+\[H(X,Y) = - \sum_{i,\;j}{p(x)\cdot p(y)\cdot \log(p(x)\cdot p(y)})\]
+
+<p>e quindi</p>
+
+\[\begin{equation}
+\begin{aligned}
+H(X,Y) &amp;= - \sum_{i,\;j}{p(x_{i})\cdot p(y_{j})\cdot \log(p(x_{i})+ \log(p(y_{j})))} \\
+H(X,Y) &amp;= - \sum_{i,\;j}{p(x_{i})\cdot p(y_{j})\cdot \log(p(x_{i}))} - \sum_{i,\;j}{p(x_{i})\cdot p(y_{j})\cdot \log(p(y_{j}))} \\
+
+H(X,Y) &amp;= - \sum_{i}{p(x_{i})\cdot \log(p(x_{i}))}\cdot\sum_{j}(p(y_{j})) - \sum_{j}{p(y_{j})\cdot \log(p(y_{j}))}\cdot \sum_{i}{p(x_{i})} \\
+
+\end{aligned}
+\end{equation}\]
+
+<p>Essendo $\sum_{j}p(y_{j}) =1$ (perchè sommo tutte le probabilità della distribuzione Y, quindi la somma deve fare 1 per forza di cose) ottengo che</p>
+
+\[\begin{equation}
+\begin{aligned}
+H(X,Y) &amp;= - \sum_{i}{p(x_{i})\cdot \log(p(x_{i}))} - \sum_{j}{p(y_{j})\cdot \log(p(y_{j}))}\\
+H(X,Y) &amp;= H(X) + H(Y)
+\end{aligned}
+\end{equation}\]
+
+<h5 id="che-succede-se-le-distribuzioni-sono-dipendenti">Che succede se le distribuzioni sono dipendenti?</h5>
+<p>Se X e Y sono due distribuzioni dipendenti significa che</p>
+
+\[H(X,Y) = - \sum_{i,\;j}{p(x\mid y)\cdot \log(p(x\mid y)})\]
+
+<p>Però sappiamo che per gli eventi dipendenti $p(x\mid y) = \frac{p(y\mid x)\cdot p(x)}{p(y)}$
+Ma allora</p>
+
+\[\begin{equation}
+\begin{aligned}
+H(X,Y) &amp;= - \sum_{i,\;j}{\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot \log\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})}} \\ \\
+
+H(X,Y) &amp;= - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\log(p(y_{j}|x_{i}))\cdot p(x_{i}))-\log(p(y_{j}))) \\ \\
+
+H(X,Y) &amp;= - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\log(p(y_{j}|x_{i}))+\log(p(x_{i}))-\log(p(y_{j}))) \\ \\
+
+H(X,Y) &amp;= - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\log(p(y_{j}|x_{i}))) - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\log(p(x_{i})))  - \sum_{i,\;j}\frac{p(y_{j}|x_{i})\cdot p(x_{i})}{p(y_{j})} \cdot (\log(p(y_{j}))) \\ \\
+\end{aligned}
+\end{equation}\]
+
+<p>possiamo rimuovere $p(x_i)$ e $p(y_j)$ perchè possiamo vederli come $\frac{\sum_{i}p(x_{i})}{\sum_{j}p(y_{j})} = 1$
+\(\begin{equation}
+\begin{aligned}
+H(X,Y) &amp;= - \sum_{i,\;j}p(y_{j}|x_{i}) \cdot \log(p(y_{j}|x_{i})) - \sum_{i,\;j} p(y_{j}|x_{i}) \cdot \log(p(x_{i}))  - \sum_{i,\;j}p(y_{j}|x_{i}) \cdot \log(p(y_{j})) \\ \\
+\end{aligned}
+\end{equation}\)</p>
+
+<p>La funzione $H$ definita da Shannon è l’unica funzione che soddisfa tutte queste proprietà</p>
+
+<h4 id="proprietà-di-shannon">Proprietà di Shannon</h4>
+
+\[H(p_{1},\dots,p_{k}) \le \log k = H\left(\frac{1}{k},\dots, \frac{1}{k}\right)\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>$k=</td>
+      <td>A</td>
+      <td>$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>che fondamentalmente significa che l’entropia è massima se la distribuzione delle probabilità è uniforme</p>
+
+<p><strong>Dimostrazione</strong>:
+Uso Jensen (al contrario), ossia \(\sum \lambda_{i} \cdot f(x_{i})\le f\left( \sum(\lambda_{i} \cdot x_{i}) \right)\)
+La dimostrazione per intero è presente [[Lect 1 Nota 28 set 2020.pdf#page=8|qui]]</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

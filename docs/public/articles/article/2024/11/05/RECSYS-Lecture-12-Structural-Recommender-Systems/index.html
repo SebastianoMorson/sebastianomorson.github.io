@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 12 - Structural Recommender Systems &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 12 - Structural Recommender Systems</h1>
+  <time datetime="2024-11-05T00:00:00+01:00" class="post-date">05 Nov 2024</time>
+  <!--more-->
+<p>Quando ho letto per la prima volta “structural recommender systems” ho subito pensato “cavolo, non ho mai sentito parlare di modelli di AI strutturali!”. Spoiler: praticamente sono le Graph Neural Network.</p>
+
+<p>I sistemi di raccomandazione strutturali sono quei sistemi che sfruttano la struttura di un grafo per effettuare delle previsioni. Se non riuscite a immaginare dove vengono impiegate, basta che pensiate i social networks. Su Instagram non vi siete mai chiesti perchè vi vengono suggerite certe persone che potreste conoscere? Secondo voi sono suggerite in base ai gusti degli utenti? Ma allora come si spiega che vi sia stata suggerita un vostro/a ex quando non avevamo neanche un gusto in comune con questa persona (sennò non sareste ex)? Semplice: perchè alcuni sistemi di raccomandazione costruiscono una sorta di albero genealogico di amicizie e poi cercano di capire se due persone dell’albero potrebbero andare d’accordo tra loro.</p>
+
+<p>L’idea di questa lezione è quindi questa: trovare un modo di rappresentare dei legami tra items/utenti e poi imparare dalla struttura che si viene a formare.</p>
+
+<p>Ed è per questo che le Graph Neural Networks fanno al caso nostro, ma prima di parlarne bisogna fare alcune premesse.</p>
+
+<h2 id="graphs">Graphs</h2>
+
+<p>Andrò piuttosto veloce su alcune nozioni, come questa, perchè dò per scontato che chi legge questi articoli abbia studiato almeno una volta cosa sono i grafi, ma in caso in futuro ci farò un articolo bello approfondito che linkerò a questo qua. Se non c’è alcun link sulla parola “grafi” significa che me ne sono dimenticato.</p>
+
+<p>Un grafo è questa roba qua:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_d8117d9d86c04ac5a983c4a4a50ddf43~mv2.png/v1/fill/w_384,h_258,al_c,lg_1,q_85,enc_auto/4959fd_d8117d9d86c04ac5a983c4a4a50ddf43~mv2.png" alt="" /></p>
+
+<p>ossia una struttura dati composta da</p>
+
+<ul>
+  <li>
+    <p>nodi che possono contenere delle informazioni</p>
+  </li>
+  <li>
+    <p>archi</p>
+
+    <ul>
+      <li>
+        <p>orientati o non orientati</p>
+      </li>
+      <li>
+        <p>con una label o senza una label</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>That’s it.</p>
+
+<p>Possiamo avere tanti nodi o pochi nodi, ma sicuramente se c’è un arco deve esserci almeno un nodo. Questa regola non vale anche al contrario, possiamo avere tantissimi nodi, ma nessun arco che li connette.</p>
+
+<p>Quando un grafo presenta dei nodi con delle label e da un nodo possono partire più archi con label diverse, parliamo di multi-relational graphs. Un esempio di grafo multi-relazionale potrebbe essere quello che rappresenta la nostra famiglia. Se ogni componente della famiglia è un nodo, tu avrai un arco “è figlio di” che parte da te e si dirige verso i tuoi genitori. Allo stesso tempo se hai fratelli potresti avere un arco “è fratello di” che parte da te e si dirige verso tuo fratello (e viceversa). Questo è un grafo multi-relazionale.</p>
+
+<p>Ora possiamo già iniziare a parlare di alcuni modi per modellare le caratteristiche di grafo.</p>
+
+<p>Consideriamo l’esempio di un social network. Ogni nodo è un utente e abbiamo utenti più o meno famosi, dove gli utenti hanno certi gusti musicali. Abbiamo gli utenti “rockettari” e quelli “metallari” e quelli “neomelodici”. Tra loro ci saranno degli archi che li uniscono se hanno dei gusti simili.</p>
+
+<h2 id="informazioni-sulle-relazioni-tra-nodi">Informazioni sulle relazioni tra nodi</h2>
+
+<p>Ora presento alcuni metodi per estrarre informazioni da un grafo. In particolare questi metodi studiano le relazioni tra coppie di nodi</p>
+
+<h3 id="graph-overlap-detection">Graph overlap detection</h3>
+
+<p>Il primo modo per estrarre informazioni è questo qua.</p>
+
+<p>L’idea è quella di confrontare il vicinato di due nodi, per capire se ha senso creare un link tra questi due nodi.</p>
+
+<p>Mettiamo che la situazione sia questa</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_952d49ce561b402f99d4d3333789262b~mv2.png/v1/fill/w_430,h_286,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_952d49ce561b402f99d4d3333789262b~mv2.png" alt="" /></p>
+
+<p>con N(u) definisco l’insieme dei nodi che appartengono al vicinato del nodo u.</p>
+
+<p>Con “probabilità di link” intendiamo la probabilità che abbia senso creare un link tra due nodi. Allora la probabilità di link potrebbe essere calcolata come:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_bd2ced9797014c89b6cc88b01a6b38a1~mv2.png/v1/fill/w_299,h_62,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_bd2ced9797014c89b6cc88b01a6b38a1~mv2.png" alt="" /></p>
+
+<h3 id="jaccard-measure">Jaccard Measure</h3>
+
+<p>Il problema è che due nodi potrebbero avere tanti nodi in comune semplicemente perchè i due nodi sono molto popolari. Se pensiamo al mio amore platonico Rachel McAdams e al mio secondo amore platonico Jennifer Lawrence, sicuramente hanno tantissimi utenti che seguono entrambe, ma i loro gusti/conoscenze reali potrebbero essere estremamente diverse.</p>
+
+<p>Bisogna tenerne in considerazione e lo fa bene la measure di Jaccard</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_ba743690ac9b482a8d8c4e078c04ad52~mv2.png/v1/fill/w_322,h_80,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_ba743690ac9b482a8d8c4e078c04ad52~mv2.png" alt="" /></p>
+
+<h3 id="adamic-adar-meausure">Adamic-Adar Meausure</h3>
+
+<p>C’è un altro problema.</p>
+
+<p>Su instagram seguo Ryan Reynolds perchè è una leggenda, ma sono uno dei suoi 59 milioni di follower. Anche la mia ex probabilmente seguiva Ryan Reynolds (chi è che non lo segue?) però ciò nonostante avevamo dei gusti super diversi e sarebbe stato meglio che non ci fosse stato il link tra noi. Ci serve un modo per controllare se il nostro vicinato è famoso e in tal caso depotenziare il suo contributo nel calcolo della “probabilità di link”.</p>
+
+<p>Il modo c’è ed è questo qua</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_a47962decfe547d5884055db8800e07a~mv2.png/v1/fill/w_322,h_58,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a47962decfe547d5884055db8800e07a~mv2.png" alt="" /></p>
+
+<h3 id="katz-index">Katz index</h3>
+
+<p>L’overlap va piuttosto bene finchè abbiamo dei grafi di questo tipo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_8aedf84051bd435fb280b3e8c427cfca~mv2.png/v1/fill/w_280,h_186,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_8aedf84051bd435fb280b3e8c427cfca~mv2.png" alt="" /></p>
+
+<p>ma che succede se ho dei grafi come questo?</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_b99151db5839480c97d373b7c4cfb2d0~mv2.png/v1/fill/w_280,h_247,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_b99151db5839480c97d373b7c4cfb2d0~mv2.png" alt="" /></p>
+
+<p>L’overlap tra i due nodi A e B è praticamente nullo, eppure i due nodi appartengono a un cluster globalmente molto informativo.</p>
+
+<p>L’obiettivo del Katz index è proprio scavalcare il problema dell’overlap, misurando, invece della dimensione del vicinato comune, il numero di paths che a partire da un nodo A raggiungono il nodo B.</p>
+
+<p>La formula è la seguente</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_1c470c04add44b7fb3184523b53bcd14~mv2.png/v1/fill/w_352,h_102,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_1c470c04add44b7fb3184523b53bcd14~mv2.png" alt="" /></p>
+
+<p>Più è alto il numero di paths, più i due nodi hanno una probabilità di link maggiore.</p>
+
+<h3 id="page-rank">Page rank</h3>
+
+<p>Il page rank è un metodo che ha come obiettivo capire se un nodo è importante o no. Il nodo potrebbe essere una pagina web, un utente, un documento, etc.</p>
+
+<p>Per attribuire l’importanza a questo elemento PageRank usa un “surfer” che salta da una pagina a un’altra.</p>
+
+<p>Immaginiamo di avere un grafo come questo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_addd1f75e2c24c20a744e1a50beb038a~mv2.png/v1/fill/w_280,h_219,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_addd1f75e2c24c20a744e1a50beb038a~mv2.png" alt="" /></p>
+
+<p>Può essere rappresentato dalla matrice di transizione</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>A</td>
+      <td>B</td>
+      <td>C</td>
+      <td>D</td>
+      <td>E</td>
+      <td>F</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>1/3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1/3</td>
+      <td>0</td>
+      <td>1/3</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1/2</td>
+      <td>0</td>
+      <td>1/2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>E</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1/2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1/2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All’inizio quindi la probabilità che il surfer si trovi a visitare uno dei nodi è data da <strong>π</strong> = [1/n, ..1/n].</p>
+
+<p>Aggiorniamo quindi la distribuzione di probabilità <strong>π</strong> moltiplicando <strong>π</strong> per la matrice di transizione. A poco a la distribuzione di probabilità tenderà a convergere.</p>
+
+<h4 id="i-soliti-problemi">I soliti problemi</h4>
+
+<p>Come al solito non va mai tutto bene all’inizio. Anche in questo caso con l’approccio descritto incappiamo in alcuni problemi:</p>
+
+<ul>
+  <li>
+    <p>dead-end: nel caso il surfer finisca su un nodo che non ha nessun arco che punta a un’altra pagina, l’esplorazione terminerebbe.</p>
+  </li>
+  <li>
+    <p>spider-trap: il surfer potrebbe finire ingabbiato in un loop dato da due nodi i e j in una relazione del tipo i-&gt;j j-&gt;i</p>
+  </li>
+</ul>
+
+<p>Questo non vogliamo che accada, perciò usiamo un parametro di teletrasporto ẞ che fa saltare il surfer in un nodo casuale.</p>
+
+<p>Aggiorniamo quindi la formula per il calcolo della transition matrix</p>
+
+<p>Il punto cruciale è che alla fine la distribuzione delle probabilità di transizione rispecchierà l’importanza della pagina stessa.</p>
+
+<h2 id="node-embedding">Node Embedding</h2>
+
+<p>Fin’ora abbiamo cercato di catturare le relazioni tra nodi a partire da una matrice di adiacenza (neighborhood methods) o una matrice di transizione (PageRank), ma perchè non trovare una rappresentazione del grafo più informativa? Magari dove nodi simili sono mappati in un latent space come punti vicini nello spazio?</p>
+
+<h3 id="encoder-decoder-approach">Encoder-decoder approach</h3>
+
+<p>Per creare un embedding dei nodi del grafo, un approccio è quello di usare un’architettura encoder-decoder. Essenzialmente in questa architettura le features di un nodo vengono date in pasto a un encoder che ne genera una rappresentazione su uno spazio continuo e di dimensione inferiore rispetto a quello di partenza. Banalmente, l’encoder potrebbe essere una embedding lookup table che usa l’indice del nodo per estrarne la rappresentazione. Il decoder è in grado a partire dall’embedding generato di ricostruire il grafo di partenza.</p>
+
+<h3 id="shallow-embeddings">Shallow embeddings</h3>
+
+<p>Un modello encoder-decoder semplice genera embeddings shallow, ossia rappresentazioni semplici che si basano unicamente sui dati osservati in fase di training, ma non consentono di derivare rappresentazioni per nuovi items.</p>
+
+<h3 id="graph-neural-networks-gnn">Graph Neural Networks (GNN)</h3>
+
+<p>Il problema principale degli shallow embeddings è che permettono di generare una rappresentazione per nodi che sono visti in fase di training, ma non per nodi che non lo sono. Ad esempio se ho un grafo e voglio generare una rappresentazione per i suoi nodi, posso addestrare un Encoder-Decoder, ma se alla stesso grafo aggiungo un nuovo nodo, dovrò addestrare nuovamente il modello.</p>
+
+<p>Questo non è ottimale quando ho a che fare ad esempio con i social networks in cui quotidianamente ho dei nuovi utenti.</p>
+
+<p>In questo senso, le GNN sono la soluzione migliore.</p>
+
+<p>Le GNN servono per creare degli embeddings dei nodi del grafo che permettano di eseguire previsioni. Gli embeddings saranno quindi versioni condensate e molto informative dei nodi, che considerano la morfologia e le features del grafo.</p>
+
+<p>Le GNN si basano su un meccanismo chiamato <strong>message passing</strong> che aggiorna la conoscenza di ciascun nodo del grafo.</p>
+
+<h4 id="message-passing">Message Passing</h4>
+
+<p>Il message passing si basa su due funzioni fondamentali</p>
+
+<ul>
+  <li>
+    <p>AGGREGATE è la funzione che aggrega le informazioni dei nodi nel vicinato di un nodo u. Bisogna pensare questa funzione come una maximum o una minimum, o una weighted sum, …</p>
+  </li>
+  <li>
+    <p>UPDATE è la funzione che aggiorna le informazioni del nodo considerando la rappresentazione aggregata dei nodi nel vicinato</p>
+  </li>
+</ul>
+
+<p>Il risultato del message passing viene svolto su tutti i nodi del grafo attraverso il calcolo della seguente funzione</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_e6396755229642a5b2b8aff399d27746~mv2.png/v1/fill/w_435,h_88,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_e6396755229642a5b2b8aff399d27746~mv2.png" alt="" /></p>
+
+<p>Ma possiamo anche immaginare di creare un hidden layer che calcola la funzione di UPDATE come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_0f89ab8da6ea49be87251873df1f8192~mv2.png/v1/fill/w_436,h_101,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_0f89ab8da6ea49be87251873df1f8192~mv2.png" alt="" /></p>
+
+<h2 id="possibili-domande">Possibili domande</h2>
+
+<ol>
+  <li>
+    <p>What is the significance of the eigenvectors corresponding to the 0 eigenvalue of the Laplacian in graph clustering?</p>
+  </li>
+  <li>
+    <p>How does the Neural Message Passing mechanism work in Graph Neural Networks (GNNs)?</p>
+  </li>
+  <li>
+    <p>What are the two main issues addressed in Graph Construction for GNNs?</p>
+  </li>
+  <li>
+    <p>What is the purpose of the Personalized PageRank algorithm?</p>
+  </li>
+  <li>
+    <p>What are some methods for graph-level classification mentioned in the document?</p>
+  </li>
+  <li>
+    <p>What are the mathematical properties of Laplacians formed from adjacency matrices, and why are they important in graph analysis?</p>
+  </li>
+  <li>
+    <p>How do social recommender systems utilize local neighbors’ preferences to enhance user modeling?</p>
+  </li>
+  <li>
+    <p>What challenges arise when integrating user representations from social influence and interaction behavior perspectives in GNNs?</p>
+  </li>
+  <li>
+    <p>What is the role of the encoder-decoder approach in graph-based learning, and how does it function?</p>
+  </li>
+  <li>
+    <p>What is the significance of local overlap measures in graph analysis, and how are they calculated?</p>
+  </li>
+  <li>
+    <p>What is the concept of multi-relational data in knowledge graphs, and how does it affect graph analysis?</p>
+  </li>
+  <li>
+    <p>How does node centrality differ from eigenvector centrality in measuring the importance of a node in a graph?</p>
+  </li>
+  <li>
+    <p>What are the implications of using sampling strategies in GNNs for large-scale graph-based recommendation tasks?</p>
+  </li>
+  <li>
+    <p>What is the purpose of the ‘message’ in the Neural Message Passing framework, and how is it utilized?</p>
+  </li>
+</ol>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

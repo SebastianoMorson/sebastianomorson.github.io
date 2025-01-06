@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 10 - Transformers &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 10 - Transformers</h1>
+  <time datetime="2024-11-01T00:00:00+01:00" class="post-date">01 Nov 2024</time>
+  <!--more-->
+
+<p><img src="https://static.wixstatic.com/media/4959fd_692118617a1b496e98b02a7a61862376~mv2.png/v1/fill/w_286,h_463,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_692118617a1b496e98b02a7a61862376~mv2.png" alt="" /></p>
+
+<p>E finalmente possiamo parlare di una delle tecnologie più interessanti degli ultimi 20mila anni: i transformers.</p>
+
+<p>Come nel film, anche questa tecnologia è comparsa sulla Terra per combattere i malvagi; per fare il culo a tutti quei modelli obsoleti e insulsi che riescono si e no a predirre i prezzi delle case.</p>
+
+<p>Perciò bando alle ciance, iniziamo a parlare di LSTM.</p>
+
+<p>Esatto. Avete sentito bene, sti cazzi dei transformers, noi vogliamo parlare di LSTM.</p>
+
+<h2 id="long-short-term-memory">Long Short-Term Memory</h2>
+
+<p>LSTM è un modello ricorsivo che serve per mitigare l’effetto della scomparsa del gradiente in modo da permettere alla rete di apprendere da sequenze di dati. L’idea quindi è di trasferire le conoscenze pregresse ai layer successivi, così da modellare situazioni di consequenzialità o relazioni tra elementi che appaiono uno di seguito all’altro.</p>
+
+<p>Lo schema è questo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2ac4bae987e845b8b69c823a6e0fb394~mv2.png/v1/fill/w_592,h_422,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_2ac4bae987e845b8b69c823a6e0fb394~mv2.png" alt="" /></p>
+
+<p>Devo ricordarmi di disegnare da zero le immagini, sennò mi fanno il culo a stelle e strisce quelli dei siti da cui le ho copiate.</p>
+
+<p>Tralasciando questo dettaglio: come si può vedere abbiamo 3 gate e una cosa strana chiamata “cell state”, che fondamentalmente è la memoria del nostro modello.</p>
+
+<h5 id="a-cosa-servono-i-gate">A cosa servono i gate?</h5>
+
+<p>Dipende dal tipo di gate, ma in generale i gate servono a fare in modo che l’informazione sia propagata più a lungo nei layer. In questo caso ne abbiamo di 3 tipi:</p>
+
+<ul>
+  <li>
+    <p>input gate: serve per capire quali informazioni devono essere aggiornate o modificate</p>
+  </li>
+  <li>
+    <p>forget gate: serve a decidere quali informazioni devono essere scartate</p>
+  </li>
+  <li>
+    <p>output gate: servono a capire quali informazioni devono essere propagate al layer successivo</p>
+  </li>
+</ul>
+
+<p>Potete notare subito una cosa: se ho 3 layer lstm A, B e C, non potrò calcolare C prima di aver calcolato B, che a sua volta non posso calcolare prima di essere passato per A.</p>
+
+<p>In breve: non posso parallellizzare la computazione.</p>
+
+<p>Si può notare anche un’altra cosa: una volta computato l’hidden state A, la sua informazione sarà molto rilevante per l’hidden state B, che a sua volta sarà molto rilevante per l’hidden state C, e così via. Più hidden state ci sono, più l’informazione di A si perde in mezzo alle informazioni degli hidden state che seguono A.</p>
+
+<p>Questo è un problema, perchè significa che se le sequenze sono molto lunghe finirò per perdere quasi del tutto molta dell’informazione che viene offerta dagli hidden state iniziali.</p>
+
+<p>Ma per fortuna in mezzo a questa valle di lacrime, un asteroide squarciò il cielo e il suo calore asciugo le nostre lacrime: ecco a voi i Transformers.</p>
+
+<h2 id="transformers">Transformers</h2>
+
+<p>Nel 2017 alcuni ricercatori di Google presentarono questo modello all’interno del paper “<a href="https://arxiv.org/abs/1706.03762">Attention is all you need</a>”. L’obiettivo non lo conosco, ma sicuramente quello che hanno tirato fuori risolve il problema che avevamo con LSTM (e di conseguenza con GRU e i modelli RNN in generale).</p>
+
+<p>Ora copierò e incollerò l’immagine più copiata del web:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2d85ce37d5374aaa91d907cf0d8902eb~mv2.png/v1/fill/w_592,h_720,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/4959fd_2d85ce37d5374aaa91d907cf0d8902eb~mv2.png" alt="" /></p>
+
+<p>Direi che per capire quello che fa bisogna procedere a piccoli passi.</p>
+
+<p>Iniziamo con l’idea.</p>
+
+<h4 id="idea">Idea</h4>
+
+<p>l’idea dei transformers è quella di usare una rete neurale profonda e il concetto di “self-attention” per catturare il contesto per ogni parola passata in input. In questo modo il modello è in grado di gestire sequenze testuali molto lunghe. Inoltre la self-attention viene calcolata contemporaneamente per tutte gli elementi della sequenza di input, cosa non possibile con le RNN.</p>
+
+<h2 id="architettura">Architettura</h2>
+
+<p>I Transformer seguono questa architettura:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_202bdf9e4087448c9ac1e7408f9e5145~mv2.png/v1/fill/w_592,h_401,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_202bdf9e4087448c9ac1e7408f9e5145~mv2.png" alt="" /></p>
+
+<p>In realtà è una versione semplificata, ma il concetto è che viene usato un blocco di encoding e uno di decoding.</p>
+
+<p>L’encoder serve per catturare le informazioni dell’input fornito. Se gli passo la frase “l’uomo è per l’uomo un lupo”, l’encoder cerca di creare una rappresentazione della frase che sia altamente informativa. La self-attention viene usata per catturare il contesto di ogni token.</p>
+
+<p>Il decoder serve per creare del contenuto a partire dall’output dell’encoder. Una volta che l’encoder mi fornisce una rappresentazione del mio input, il decoder è in grado di estrarre tutte le informazioni necessarie per creare del nuovo contenuto coerente con le relazioni delle parole dell’input. Il decoder a differenza dell’encoder non usa solo un input, bensì usa sia l’input dell’encoder che una sequenza di input parziale.</p>
+
+<p>Quindi:</p>
+
+<ul>
+  <li>
+    <p>encoder = catturare le informazioni dell’input</p>
+  </li>
+  <li>
+    <p>decoder = creare del nuovo contenuto</p>
+  </li>
+</ul>
+
+<h2 id="encoder">Encoder</h2>
+
+<h3 id="input-embedding">Input embedding</h3>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_4690da29e7be49b581afaaf0ab4a029e~mv2.png/v1/fill/w_280,h_223,al_c,lg_1,q_85,enc_auto/4959fd_4690da29e7be49b581afaaf0ab4a029e~mv2.png" alt="" /></p>
+
+<p>Non ci perdo troppo tempo perchè è relativamente importante. Questo layer serve per dare una forma più maneggevole al nostro input. I metodi per creare una rappresentazione dell’input dipendono dai dati di partenza che forniamo al modello.</p>
+
+<h3 id="positional-encoding">Positional Encoding</h3>
+
+<p>Il positional encoding serve per capire qual è l’ordine degli elementi nella sequenza.</p>
+
+<p>Ma perchè è così importante? Perchè se a un mio amico dico “se mangio la torta poi faccio la cacca” non voglio che capisca “se mangio la cacca poi faccio la torta”. Quindi con il positional encoding è come gli dicessi “(1)se (2)mangio (3)la (4)torta (5)poi (6)faccio (7)la (8)cacca”</p>
+
+<h3 id="multi-head-attention">Multi-head attention</h3>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_f50cd28b44a64571958a1cfd77b39f0e~mv2.png/v1/fill/w_166,h_202,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_f50cd28b44a64571958a1cfd77b39f0e~mv2.png" alt="" /></p>
+
+<p>Questo è un passaggio fondamentale. Una volta che ricevo l’embedding dei miei tokens, mi serve un modo per capire quali siano le relazioni tra i token. Per farlo uso il concetto di “attention”.</p>
+
+<h5 id="attention">Attention</h5>
+
+<p>Lo schema sottostante rappresenta il passaggio successivo all’embedding.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_24a4264331da4cc88609a62c4f80a322~mv2.png/v1/fill/w_559,h_428,al_c,lg_1,q_85,enc_auto/4959fd_24a4264331da4cc88609a62c4f80a322~mv2.png" alt="" /></p>
+
+<p>Come si può vedere, l’input X viene condiviso a 3 matrici dei pesi. Queste matrici sono:</p>
+
+<ul>
+  <li>
+    <p>WQUERY</p>
+  </li>
+  <li>
+    <p>WKEY</p>
+  </li>
+  <li>
+    <p>WVALUE</p>
+  </li>
+</ul>
+
+<p>Queste 3 matrici vengono addestrate dalla rete per creare una rappresentazione del mio input che sia molto informativa sulle relazioni tra le i tokens.</p>
+
+<p>Le righe della matrice X sono parole della frase di input.</p>
+
+<p>Perciò l’attention è calcolata come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2ff1838dfc0c4f9ca34b2ceda58110a2~mv2.png/v1/fill/w_399,h_73,al_c,lg_1,q_85,enc_auto/4959fd_2ff1838dfc0c4f9ca34b2ceda58110a2~mv2.png" alt="" /></p>
+
+<p>Il denominatore dentro la softmax serve come termine di normalizzazione per evitare argomenti troppo grandi della softmax che porterebbero a gradienti instabili.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_ebb7a178e10547f78c78194584c3f016~mv2.png/v1/fill/w_565,h_382,al_c,lg_1,q_85,enc_auto/4959fd_ebb7a178e10547f78c78194584c3f016~mv2.png" alt="" /></p>
+
+<p>Il problema è che come abbiamo visto, la matrice dei tokens è l’unione di tutti gli embeddings dei tokens, quindi la matrice Z che otteniamo è una rappresentazione delle relazioni calcolate su tutti i tokens. Ma ciò significa che potrebbe dare più peso alle relazioni tra il primo token e tutti gli altri, ma meno rispetto al secondo token e tutti gli altri, mentre noi vogliamo che racchiuda le informazioni tra tutti i tokens, con tutti i tokens. Per questo usiamo la multi-head attention. Questo passaggio considera l’attenzione per ciascuna head così calcolata</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_91444ec96ea744d382185b2fbf51ac40~mv2.png/v1/fill/w_458,h_96,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_91444ec96ea744d382185b2fbf51ac40~mv2.png" alt="" /></p>
+
+<p>Quindi ad esempio se abbiamo 8 heads, useremo 8 matrici dei pesi WQUERY WKEY WVALUE sugli input X e calcoleremo head1 head2 … head8  . Infine concateniamo assieme le heads perchè il feed-forward layer si aspetta una singola matrice e non 8 heads.</p>
+
+<h3 id="residualskip-connection">Residual/Skip connection</h3>
+
+<p>Nel modello che abbiamo visto all’inizio erano presenti delle connessioni come questa a lato.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_df9851c024fe46c799eaea6ac8957ef4~mv2.png/v1/fill/w_151,h_305,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_df9851c024fe46c799eaea6ac8957ef4~mv2.png" alt="" /></p>
+
+<p>Queste connessioni servono per “skippare” passaggi della rete in fase di training e per propagare l’informazione dei layer precedenti.</p>
+
+<p>Nell’esempio sotto, l’input embedding viene propagato alla multi-head attention e viene skippato invariato anche al layer “add &amp; norm”.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_de5343e1d9314c758a2d7c6b6fe13176~mv2.png/v1/fill/w_280,h_187,al_c,lg_1,q_85,enc_auto/4959fd_de5343e1d9314c758a2d7c6b6fe13176~mv2.png" alt="" /></p>
+
+<p>Durante la fase di addestramento il modello deciderà quanto peso dare a questa skip connection. Se viene assegnato un basso peso alla skip connection avremo che l’informazione dell’input embedding originale viene depotenziato o addirittura annullato (quindi il modello può anche eliminare la skip connection se gli fa comodo), oppure può dargli un forte peso, quindi eliminando il contributo della multi-head attention.</p>
+
+<p>Il senso di tutto ciò? Migliorare le performance. Ce la fa? A quanto pare sì.</p>
+
+<p>La cosa divertente è che questa è solo la parte dell’encoder.</p>
+
+<h2 id="decoder">Decoder</h2>
+
+<p>Il decoder sfrutta l’informazione ricavata dall’encoder per la generazione di nuovo contenuto.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>L’idea alla base è quella di calcolare p(Z</td>
+      <td>X) per ogni X, ossia trovare il token che ha la probabilità più alta di presentarsi sapendo che prima c’è stato il token X.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All’inizio X corrisponde all’output del dell’encoder.</p>
+
+<p>Immaginiamo che si inizi sapendo x. In seguito viene prodotto dal decoder il token Z1 , quindi il passaggio successivo è calcolare il valore di Z2 sapendo che sono già comparsi Z1 e X e così via finchè non si raggiunge un simbolo finale.</p>
+
+<p>Il processo è ben esemplificato da queste due gif.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_0b17161082a0486db4e403ec35cff925~mv2.gif" alt="" /></p>
+
+<p>All’inizio il decoder ha bisogno dell’encoding di K e di V per poter generare il primo elemento di partenza.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_42b651fcbf354021ae15cb44cc2d5a3f~mv2.gif" alt="" /></p>
+
+<p>in seguito il decoder utilizza gli output precedenti (a cui è stato aggiunto il positional encoding) per prevedere gli output successivi creando la propria Query matrix e usando la Key matrix e la Value matrix dell’encoder. L’addestramento avviene tramite Masking, ossia viene mascherato il token successivo a quello che abbiamo raggiunto, così che non possa essere “sbirciato”.</p>
+
+<p>Supponiamo che il decoder stia generando una traduzione parola per parola:</p>
+
+<ul>
+  <li>
+    <p>Se ha già generato “La casa è”, al prossimo step il decoder dovrà prevedere la parola successiva senza sapere quale sarà la parola seguente a “è”.</p>
+  </li>
+  <li>
+    <p>Il look-ahead masking blocca qualsiasi accesso a parole successive a “è”, consentendo una generazione causale, dove ogni parola si basa solo sul contesto passato.</p>
+  </li>
+</ul>
+
+<p>Come si può vedere, all’inizio all’inizio l’unica cosa che si conosce è l’encoding di K e di V provenienti dall’encoder.</p>
+
+<h3 id="domande-teoriche">Domande teoriche</h3>
+
+<ol>
+  <li>
+    <p><strong>Storia e contesto:</strong></p>
+
+    <ul>
+      <li>
+        <p>Quali sono le principali applicazioni dei modelli sequence-to-sequence prima dei Transformers?</p>
+      </li>
+      <li>
+        <p>Cosa si intende per attenzione nella frase “Attention is all you need”?</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Encoder-Decoder Architecture:</strong></p>
+
+    <ul>
+      <li>
+        <p>Spiega la differenza tra l’encoder e il decoder in un Transformer.</p>
+      </li>
+      <li>
+        <p>Perché l’encoder produce una rappresentazione contestualizzata del testo in input?</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Attention:</strong></p>
+
+    <ul>
+      <li>
+        <p>Quali sono i tre componenti principali della self-attention e quale ruolo hanno (Query, Key, Value)?</p>
+      </li>
+      <li>
+        <p>Cosa significa che l’attenzione è <strong>permutation invariant</strong>? Perché questo è un problema nel linguaggio naturale?</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Multi-Head Self-Attention:</strong></p>
+
+    <ul>
+      <li>
+        <p>Qual è il vantaggio di avere più heads nella multi-head self-attention?</p>
+      </li>
+      <li>
+        <p>Spiega come vengono calcolati i pesi di attenzione utilizzando la softmax.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Positional Encoding:</strong></p>
+
+    <ul>
+      <li>
+        <p>Perché il positional encoding è essenziale nei Transformers?</p>
+      </li>
+      <li>
+        <p>Descrivi come funzionano i positional encodings sinusoidali.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Residual Connections:</strong></p>
+
+    <ul>
+      <li>Perché i Transformers usano skip connections nei loro layer? Quali problemi risolvono?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Decoder:</strong></p>
+
+    <ul>
+      <li>
+        <p>Cosa si intende per masked self-attention e perché è usata nel decoder?</p>
+      </li>
+      <li>
+        <p>Quali strategie di decodifica si possono utilizzare nei Transformers e in quali casi sono utili?</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Cross-Attention:</strong></p>
+
+    <ul>
+      <li>Come funziona il cross-attention e quale differenza ha rispetto alla self-attention?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Transformers per il NLP:</strong></p>
+
+    <ul>
+      <li>
+        <p>Qual è l’impatto dei Transformers nel campo del Natural Language Processing?</p>
+      </li>
+      <li>
+        <p>Perché i Transformers hanno sostituito gli RNN in molte applicazioni?</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Scalabilità:</strong></p>
+  </li>
+  <li>
+    <p>Quali sono i principali problemi computazionali dei Transformers e come possono essere affrontati?</p>
+  </li>
+</ol>
+
+<h3 id="domande-di-ragionamento">Domande di ragionamento</h3>
+
+<ol>
+  <li>
+    <p><strong>Confronto con i modelli pre-Transformers:</strong></p>
+
+    <ul>
+      <li>Quali sono i limiti dei modelli basati su RNN o LSTM che i Transformers hanno risolto?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Multi-Head Attention:</strong></p>
+
+    <ul>
+      <li>Cosa succede se riduciamo il numero di heads in un Transformer? Quali aspetti del modello potrebbero soffrirne?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Masked Self-Attention:</strong></p>
+
+    <ul>
+      <li>Spiega come il masking nel decoder aiuta nella generazione di sequenze e cosa accadrebbe senza questa tecnica.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Beam Search vs Greedy Search:</strong></p>
+
+    <ul>
+      <li>Confronta beam search e greedy search per la generazione del testo nei Transformers. Quali sono i pro e contro di ciascuna strategia?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Positional Encoding:</strong></p>
+
+    <ul>
+      <li>Se il positional encoding non fosse utilizzato, cosa perderebbe il modello? Prova a fare un esempio pratico.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Applicazioni:</strong></p>
+
+    <ul>
+      <li>Come viene adattata l’architettura dei Transformers per immagini e audio? Quali trasformazioni sono necessarie?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Generazione di contenuti:</strong></p>
+
+    <ul>
+      <li>In che modo il contrastive search può incoraggiare la diversità nel testo generato rispetto al greedy search?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Unificazione dei domini:</strong></p>
+
+    <ul>
+      <li>Spiega il concetto “if you can tokenize it, you can feed it into a transformer”. Quali sono i limiti di questa affermazione?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Reinforcement Learning:</strong></p>
+
+    <ul>
+      <li>In che modo i Transformers vengono utilizzati nel reinforcement learning? Fai un esempio pratico.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Adattabilità:</strong></p>
+
+    <ul>
+      <li>
+        <p>Cosa succede se il modello Transformer è applicato a sequenze molto lunghe? Quali strategie possono essere utilizzate per gestire queste sequenze?</p>
+      </li>
+      <li></li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="domande-su-algoritmi-e-implementazioni">Domande su algoritmi e implementazioni</h3>
+
+<ol>
+  <li>
+    <p><strong>Softmax nella Self-Attention:</strong></p>
+
+    <ul>
+      <li>Spiega passo passo come viene calcolata la matrice di attenzione usando softmax</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Cross-Attention:</strong></p>
+
+    <ul>
+      <li>Qual è l’impatto del cross-attention nelle prestazioni complessive del modello?</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Scaling Factors:</strong></p>
+
+    <ul>
+      <li>Perché il prodotto Q⋅KTQ \cdot K^TQ⋅KT viene scalato dividendo per dk\sqrt{d_k}dk​</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="references">References</h4>
+
+<p><a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
+
+<p><a href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></p>
+
+<p><a href="https://ai.stackexchange.com/questions/20075/why-does-the-transformer-do-better-than-rnn-and-lstm-in-long-range-context-depen">https://ai.stackexchange.com/questions/20075/why-does-the-transformer-do-better-than-rnn-and-lstm-in-long-range-context-depen</a></p>
+
+<p><a href="https://lilianweng.github.io/posts/2018-06-24-attention/">https://lilianweng.github.io/posts/2018-06-24-attention/</a></p>
+
+<p><a href="https://www.humai.it/la-self-attention-delle-reti-transformer/">https://www.humai.it/la-self-attention-delle-reti-transformer/</a></p>
+
+<p><a href="https://medium.com/analytics-vidhya/attention-mechanism-and-softmax-65d8d50f7786">https://medium.com/analytics-vidhya/attention-mechanism-and-softmax-65d8d50f7786</a></p>
+
+<p><a href="https://stats.stackexchange.com/questions/421935/what-exactly-are-keys-queries-and-values-in-attention-mechanisms">https://stats.stackexchange.com/questions/421935/what-exactly-are-keys-queries-and-values-in-attention-mechanisms</a> (molto interessante un esempio presente in fondo)</p>
+
+<ul>
+  <li><a href="https://sebastianomorson.wixsite.com/sebastiano-morson/blog/tags/artificial-intelligence"></a></li>
+</ul>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

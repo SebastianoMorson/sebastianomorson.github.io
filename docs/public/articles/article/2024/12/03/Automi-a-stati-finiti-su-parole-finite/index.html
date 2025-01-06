@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Automi a stati finiti su parole finite &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Automi a stati finiti su parole finite</h1>
+  <time datetime="2024-12-03T00:00:00+01:00" class="post-date">03 Dec 2024</time>
+  <!--more-->
+<h1 id="def-deterministic-finite-automata-dfa">Def. Deterministic Finite Automata (DFA)</h1>
+
+<h1 id="def-non-deterministic-finite-automata-nfa">Def. Non-Deterministic Finite Automata (NFA)</h1>
+
+<h1 id="def-epsilon-nfa">Def. $\epsilon$-NFA</h1>
+
+<h2 id="teorema-di-equivalenza-tra-nfa-e-dfa">Teorema di equivalenza tra NFA e DFA</h2>
+<h2 id="teorema-di-equivalenza-tra-epsilon-nfa-e-nfa">Teorema di equivalenza tra $\epsilon$-NFA e NFA</h2>
+<h2 id="mcnaughton--yamada-1960-teorema-di-equivalenza-tra-dfa-e-linguaggi-regolari">(McNaughton &amp; Yamada, 1960) Teorema di equivalenza tra DFA e linguaggi regolari</h2>
+<p>Il teorema afferma che se ho un DFA posso ricavare un linguaggio regolare (ristretto) che lo rappresenta, e posso fare anche il viceversa.</p>
+
+<p>Per dimostrare questo teorema ho quindi bisogno di dimostrare che</p>
+<ol>
+  <li>sono in grado di costruire un’espressione regolare a partire da qualsiasi tipo di DFA</li>
+  <li>sono in grado di costruire un $\epsilon$-NFA  a partire da qualsiasi tipo di espressione regolare</li>
+</ol>
+
+<h3 id="dimostrazione-punto-1">Dimostrazione punto 1</h3>
+<p>Per dimostrare il primo punto l’idea è associare a ogni stato $q_i$  una variabile $X_i$ e costruire un sistema di equazioni a partire dall’automa $M={Q, \Sigma, \delta, q_0, F}$. Calcolando le soluzioni otterremo un’espressione regolare per ogni variabile $X_i$. 
+Se l’insieme degli stati finali è $F={q_{j_{1}},\dots, q_{j_{n}}}$ allora per ogni variabile $X_{j_{1}}\dots X_{j_{n}}$ avremo un’espressione regolare $r_{j_{k}}$ e la concatenazione di tutte queste espressioni regolari sarà proprio la soluzione del nostro sistema di equazioni, ossia la formula che rappresenta il DFA di partenza.</p>
+
+<p>Sarebbe bello se fosse così semplice, ma se fossimo catapultati nel 1000 d.C. non saprei dimostrare questa cosa semplicemente da queste poche nozioni. Quindi dobbiamo dare un po’ più di dettagli.</p>
+
+<p>Consideriamo</p>
+<ul>
+  <li>l’insieme ${q_{i_{1}},\dots, q_{i_{n}}}$ di stati tali che esiste un simbolo $a\in\Sigma$ per cui $\delta(q_{i_{j}},a)=q_{i}$</li>
+  <li>l’insieme ${b_{i_{1}},\dots, b_{i_{k}}}$ di simboli tali che $\delta(q_{i}, b_{i_{j}})=q_{i}$ 
+e mettiamo a sistema delle equazioni nella forma
+\(X_{i} = (X_{i_{1}}a_{i_{1}}+ \dots +X_{i_{n}}a_{i_{n}})\cdot(b_{i_{1}}+\dots+b_{i_{k}})\)
+dopo di che risolviamo il sistema di equazioni usando il metodo di sostituzione e ricordando che se dovessimo ottenere un’equazione del tipo $X_i = X_{i}s_{1}+s_{2}$  questa è uguale a $X_{i} = s_{2}s_{1}^*$
+    <h5 id="esempio-pratico">Esempio pratico</h5>
+    <p>#Todo</p>
+    <h3 id="dimostrazione-punto-2">Dimostrazione punto 2</h3>
+    <p>La dimostrazione del secondo punto è ancora più semplice. 
+È sufficiente trovare un automa per ogni pezzetto della nostra espressione regolare. È come se avessimo un robot dei Power Rangers e dovessimo fonderli assieme per fargli fare cose più potenti.
+Dunque:</p>
+  </li>
+  <li>per riconoscere una stringa vuota mi basta un automa tipo questo
+  #todo fixare le immagini nella pagina web</li>
+</ul>
+
+<p>![[/home/justamonkey/documenti/sebastianomorson.github.io/docs/assets/images/img_verification/Thompson-a-symbol.svg]]</p>
+<ul>
+  <li>per riconoscere un linguaggio vuoto mi basta un automa come quello sopra, ma senza nessun arco tra i due stati iniziale e finale</li>
+  <li>per riconoscere un linguaggio ${a}$ mi serve un automa come questo
+![[Pasted image 20241208223559.png]]</li>
+  <li>per riconoscere l’unione di due linguaggi mi serve un automa un po’ più complesso, con delle  $\epsilon$-transizioni come questo qua
+![[Pasted image 20241208223620.png]]</li>
+  <li>per riconoscere la concatenazione di due linguaggi mi serve un automa un po’ più complesso, con delle  $\epsilon$-transizioni come questo qua
+![[Pasted image 20241208223638.png]]</li>
+  <li>per riconoscere la chiusura di Kleene di un linguaggio mi serve un automa un po’ più complesso, con delle $\epsilon$-transizioni come questo qua
+![[Pasted image 20241208223647.png]]</li>
+</ul>
+
+<p>Un esempio carattaristico (i veri intenditori capiranno che non ho sbagliato a digitare) si può trovare <a href="http://cgosorio.es/Seshat/thompson?expr=a.(a%7Cb.a)*%7Cc*.a">qua</a></p>
+
+<h2 id="proprietà-di-chiusura">Proprietà di chiusura</h2>
+<p>I linguaggi regolari sono chiusi rispetto alle operazioni di unione, concatenazione, chiusura di kleene, complementazione e intersezione. Dimostrare questa cosa è piuttosto banale. Immaginiamo di due linguaggi regolari $L_1$ e $L_2$</p>
+<ul>
+  <li>unione -&gt; costruisco un automa in cui lo stato iniziale porta mediante una $\epsilon$-transizione allo stato iniziale dell’automa che riconosce $L_1$ e mediante un’altra  $\epsilon$-transizione allo stato iniziale dell’automa che riconosce $L_2$</li>
+  <li>concatenazione -&gt; costruisco un automa in cui ogni stato finale dell’automa che riconosce $L_1$ porta allo stato iniziale dell’automa che riconosce $L_2$</li>
+  <li>chiusura di Kleene -&gt; costruisco un automa in cui ogni stato finale riporta allo stato iniziale dell’automa</li>
+  <li>complementazione -&gt; inverto gli stati iniziali con quelli finali</li>
+  <li>intersezione -&gt; mi basta dimostrarlo usando le leggi di de Morgan, è questione di una riga
+    <h2 id="proprietà-di-decidibilità">Proprietà di decidibilità</h2>
+    <p>I seguenti problemi sui linguaggi regolari sono decidibili:</p>
+  </li>
+  <li><strong>problema del vuoto</strong>: l’insieme delle stringhe accettate da un DFA $M$ con n stati è non vuoto sse accetta una stringa di lunghezza inferiore a $n$</li>
+  <li><strong>problema dell’infinito</strong>: l’insieme delle stringhe accettate da un DFA M con n stati è infinito sse l’automa accetta una stringa di lunghezza $n&lt;l&lt;2n$</li>
+  <li><strong>problema dell’equivalenza</strong>: stabilire se i linguaggi accettati da due diversi DFA sono equivalenti</li>
+  <li><strong>problema dell’inclusione</strong>: stabilire se due linguaggi regolari sono in una relazione di inclusione tra loro</li>
+</ul>
+
+<h4 id="dimostrazione-decidibilità-del-problema-del-vuoto">Dimostrazione decidibilità del problema del vuoto</h4>
+<p>-&gt;  <strong><em>se l’insieme delle stringhe accettate da un DFA $M$ con n stati è non vuoto allora $M$ accetta una stringa di lunghezza inferiore a $n$</em></strong>
+Supponiamo che l’insieme non è vuoto. Prendiamo un qualsiasi suo elemento $s$ tale che $|s| = m$ . 
+Se $m &lt; n$ la nostra tesi è dimostrata.
+Se $m\ge n$ applichiamo il Pumping Lemma che ci dice che possiamo vedere $s = uvw$ con $|v| \ge 1$ e “spompiamo” (perchè qua gli spompinei non li facciamo) $s$ prendendo $s’ = uv^0w$ (che sappiamo per il Pumping Lemma appartenere al nostro linguaggio). 
+Se $s’$ non è abbastanza piccolo ripetiamo lo spompamento finchè entriamo dentro $n$.</p>
+
+<p>&lt;- <strong><em>se $M$ accetta una stringa di lunghezza inferiore a $n$ allora l’insieme delle stringhe accettate da un DFA $M$ con n stati è non vuoto</em></strong>
+La dimostrazione è banale, se viene accettata una stringa è ovvio che l’insieme non è vuoto.</p>
+<h4 id="dimostrazione-decidibilità-del-problema-dellinfinito">Dimostrazione decidibilità del problema dell’infinito</h4>
+<p>-&gt; <strong><em>se l’insieme delle stringhe accettate da un DFA M con n stati è infinito allora l’automa accetta una stringa di lunghezza $n&lt;l&lt;2n$</em></strong>
+L’idea è applicare nuovamente il Pumping Lemma. Se l’insieme è infinito posso considerare una stringa $z$ tale che $|z| = m &gt; 2n$. Per il Pumping Lemma $z = uvw$ e $|uw|\ge n$ . Posso applicare uno spompamento della stringa z considerando $z’ = uv^0w$ iterativamente finchè $z’ &lt;2n$.</p>
+
+<p>&lt;- <strong><em>se l’automa accetta una stringa di lunghezza $n&lt;l&lt;2n$ allora l’insieme delle stringhe accettate da un DFA M con n stati è infinito</em></strong>
+È ovvio che sia così. Se l’automa accetta una stringa di lunghezza $&gt;n$ significa che c’è un ciclo nel nostro automa, perchè per il problema della piccionaia, avremo che almeno uno degli stati dell’automa è raggiunto da più di un simbolo della nostra stringa.</p>
+
+<h4 id="dimostrazione-decidibilità-del-problema-dellequivalenza">Dimostrazione decidibilità del problema dell’equivalenza</h4>
+<p>#todo</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

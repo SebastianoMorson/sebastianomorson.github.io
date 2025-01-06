@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 1 Network Security - Introduction &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 1 Network Security - Introduction</h1>
+  <time datetime="2024-08-10T00:00:00+02:00" class="post-date">10 Aug 2024</time>
+  <!--more-->
+<p>CIA:</p>
+<ul>
+  <li>confidenzialità (data confidentiality, privacy)</li>
+  <li>integrity (data integrity, system integrity)</li>
+  <li>availability</li>
+</ul>
+
+<p>Accountability: posso tracciare univocamente le azioni di un utente 
+Authenticity: posso garantire la genuinità e l’affidabilità di un dato</p>
+
+<p><strong>Security attack:</strong> Any action that compromises the security of information 
+owned by an organization. 
+<strong>Security mechanism:</strong> A process (or a device incorporating such a process) that is designed to detect, prevent, or recover from a security attack. 
+<strong>Security service:</strong> A processing or communication service that enhances the security of the data processing systems and the information transfers of an organization. The services are intended to counter security attacks, and they make use of one or more security mechanisms to provide the service.</p>
+
+<p><strong>Threat</strong>: termine che definisce qualsiasi circostanza o evento potenzialmente avverso e che può impattare sulle operazioni di un’organizzazione
+<strong>Attack</strong>: qualsiasi tipo di attività malevola nei confronti delle risorse di un sistema informatico o delle informazioni stesse</p>
+
+<p>Secondo X.800, esistono due tipi di attacchi: passivo e attivo che differiscono per il fatto che il primo non affligge le risorse di un sistema, ma solo le informazioni. Il secondo tipo di attacco invece altera le risorse di un sistema o le operazioni.</p>
+
+<p>Esempi di attacchi passivi sono:</p>
+<ul>
+  <li>la diffusione del contenuto dei messaggi</li>
+  <li>l’analisi del traffico
+Esempi di attacchi attivi sono:</li>
+  <li><strong>replay attack</strong>: passive capture of a data unit and its subsequent retransmission</li>
+  <li><strong>masquerade</strong>:  one entity pretends to be a different entit</li>
+  <li><strong>denial of service</strong>: prevents or inhibits the normal use or management of communications facilitie</li>
+  <li><strong>data modification</strong>: some portion of a legitimate message is altered</li>
+</ul>
+
+<h1 id="security-services">Security Services</h1>
+<h2 id="authentication">Authentication</h2>
+<p>Voglio garantire che la mia comunicazione sia autentica, ossia che la sorgente di un messaggio ricevuto sia esattamente quella conosciuta e che una serie di messaggi non subisca interferenze dall’esterno che alterino una delle due parti legittime.</p>
+
+<p>Two specific authentication services are defined in X.800:</p>
+<ul>
+  <li><strong>Peer entity authentication:</strong> Provides for the corroboration of the identity of a peer entity in an association. Two entities are considered peers if they implement the same protocol in different systems</li>
+  <li><strong>Data origin authentication:</strong> Provides for the corroboration of the source of a data unit. It does not provide protection against the duplication or modification of data units</li>
+</ul>
+
+<p><strong>Access Control</strong>
+L’abilità di limitare e controllare l’accesso a un sistema e alle applicazioni attraverso canali di comunicazione. Per ottenere questa abilità le entità devono prima essere identificate o autenticate così che vengano garantiti i diritti di accesso.</p>
+
+<h2 id="data-confidentiality">Data confidentiality</h2>
+<p>Si intende la protezione dei dati trasmessi da un attacco passivo come ad esempio la traffic analysis</p>
+
+<h2 id="data-integrity">Data Integrity</h2>
+<p>In questo caso ci interessa garantire che il dato non venga modificato.
+Il servizio di data integrity può essere <strong>con o senza recovery</strong>.</p>
+
+<p>Inoltre il servizio di data integrity si concentra più sulla detection più che sulla prevention. Questo perchè se l’integrità viene meno è perchè viene svolto un attacco attivo, che è difficile da prevenire. Se invece si riesce a individuare (detection) allora si può decidere di applicare una politica di semplice notifica all’agente umano, o una policy di remediation per ripristinare il dato modificato.</p>
+
+<h2 id="nonrepudation">Nonrepudation</h2>
+<p>in certe casistiche è importante garantire il non-repudio, per esempio nel caso di transazione bancarie. In questi casi non dev’essere possibile eseguire un’azione e successivamente negare l’autenticità dell’azione richiesta. 
+Il non-repudio è un servizio che per l’appunto fa sì che le parti coinvolte nella comunicazione possano provare che ciò che è stato ricevuto provenga veramente dall’utente interessato.</p>
+
+<h2 id="availability">Availability</h2>
+<p>Il servizio di availability garantisce che un sistema o una risorsa sia accessibile dagli utenti che ne hanno diritto, in qualsiasi momento. Questo servizio è importante soprattutto nei contesti in cui sono probabili attacchi di tipo denial-of-service</p>
+
+<h1 id="security-mechanisms">Security Mechanisms</h1>
+<p><strong>Cryptographic algorithms:</strong> 
+We can distinguish between reversible cryptographic mechanisms and irreversible cryptographic mechanisms. A reversible cryptographic mechanism is simply an encryption algorithm that allows data to be encrypted and subsequently decrypted. Irreversible cryptographic mechanisms include hash algorithms and message authentication codes, which are used in digital 
+signature and message authentication applications.</p>
+
+<p><strong>Data integrity:</strong> This category covers a variety of mechanisms used to assure the integrity of a data unit or stream of data units.</p>
+
+<p><strong>Digital signature:</strong> Data appended to, or a cryptographic transformation of, a data unit that allows a recipient of the data unit to prove the source and integrity of the data unit and protect against forgery.</p>
+
+<p><strong>Authentication exchange:</strong> A mechanism intended to ensure the identity of an entity by means of information exchange.</p>
+
+<p><strong>Traffic padding:</strong> The insertion of bits into gaps in a data stream to frustrate traffic analysis attempts.</p>
+
+<p><strong>Routing control:</strong> Enables selection of particular physically or logically secure routes for certain data and allows routing changes, especially when a breach of security is suspected.</p>
+
+<p><strong>Notarization:</strong> The use of a trusted third party to assure certain properties of a data exchange</p>
+
+<p><strong>Access control:</strong> A variety of mechanisms that enforce access rights to resource</p>
+
+<p>![[1715174003_grim.png]]</p>
+<h2 id="keyless">Keyless</h2>
+<p>A <strong>hash function</strong> turns a variable amount of text into a small, fixed-length value called a hash value, hash code, or digest. A cryptographic hash function is one that has additional properties that make it useful as part of another cryptographic algorithm, such as a message authentication code or a digital signature.</p>
+
+<p>A <strong>pseudorandom number generator</strong> produces a deterministic sequence of numbers or bits that has the appearance of being a truly random sequence. Although the sequence appears to lack any definite pattern, it will repeat after a certain sequence length. Nevertheless, for some cryptographic purposes this apparently random sequence is sufficient.</p>
+<h2 id="single-key-algorithms">Single-key algorithms</h2>
+
+<p>![[1715174269_grim.png]]</p>
+
+<h2 id="asymmetric-algorithms">Asymmetric algorithms</h2>
+<p>![[1715174518_grim.png]]</p>
+
+<p>![[1715174541_grim.png]]</p>
+
+<p>Le parole chiave nel design sicuro sono:</p>
+<ul>
+  <li>economy of mechanism</li>
+  <li>fail-safe defaults</li>
+  <li>complete mediation</li>
+  <li>open design</li>
+  <li>separation of privilege</li>
+  <li>least privilege</li>
+  <li>least common mechanism</li>
+  <li>psychological acceptability</li>
+  <li>isolation</li>
+  <li>encapsulation</li>
+  <li>modularity</li>
+  <li>layering</li>
+  <li>least astonishment (l’utente deve poter intuire il comportamento di un certo meccanismo, sennò c’è maggior rischio di commettere errori)</li>
+</ul>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

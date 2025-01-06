@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 5 Network Security - User authentication &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 5 Network Security - User authentication</h1>
+  <time datetime="2024-08-14T00:00:00+02:00" class="post-date">14 Aug 2024</time>
+  <!--more-->
+<h1 id="authentication-principles">Authentication Principles</h1>
+<p><strong>Identità digitale</strong>: rappresentazione univoca di un soggetto coinvolto in una transazione online</p>
+
+<p><strong>Identity proofing</strong>: stabilisce che un soggetto è realmente chi dice di essere. Il processo di identity proofing prevede la collezione, la validazione e la verifica delle informazioni associate a una persona</p>
+
+<p><strong>Digital authentication</strong>: il processo per determinare la validità di uno o più authenticators usati per creare una identità digitale</p>
+
+<p>![[1715593554_grim.png]]</p>
+<ul>
+  <li>
+    <p><strong>Credential service provider (CSP):</strong> A trusted entity that issues or registers subscriber authenticators. For this purpose, the CSP establishes a digital credential for each subscriber and issues electronic credentials to subscribers. A CSP may be an independent third party or may issue credentials for its own use.</p>
+  </li>
+  <li>
+    <p><strong>Verifier</strong>: An entity that verifies the claimant’s identity by verifying the claimant’s possession and control of one or two authenticators using an authentication protocol. To do this, the verifier may also need to validate credentials that link the authenticator(s) to the subscriber’s identifier and check their status.</p>
+  </li>
+  <li>
+    <p><strong>Relying party (RP):</strong> An entity that relies upon the subscriber’s authenticator(s) and credentials or a verifier’s assertion of a claimant’s identity, typically to process a transaction or grant access to information or a system.</p>
+  </li>
+  <li>
+    <p><strong>Applicant</strong>: A subject undergoing the processes of enrollment and identity proofing.</p>
+  </li>
+  <li>
+    <p><strong>Claimant</strong>: A subject whose identity is to be verified using one or more authentication protocols.</p>
+  </li>
+  <li>
+    <p><strong>Subscriber</strong>: A party who has received a credential or authenticator from a CSP</p>
+  </li>
+</ul>
+
+<p>Una cosa importante sull’autenticazione è schematizzata in figura
+![[1715593963_grim.png]]
+Come si può vedere, l’autenticazione si basa sempre su una o più di queste 3 cose:</p>
+<ul>
+  <li>qualcosa che conosci (password, pin, passphrases, la risposta a una domanda specifica, …)</li>
+  <li>qualcosa che possiedi (hardware token, …)</li>
+  <li>qualcosa che sei o fai (caratteristiche biometriche come retina, impronta digitale, voce, scrittura, ritmo di scrittura, …)</li>
+</ul>
+
+<p>![[1715594174_grim.png]]
+![[1715594196_grim.png]]</p>
+
+<h1 id="replay-attacks">Replay Attacks</h1>
+
+<p>Per poter contrastare gli attacchi replay, si può:</p>
+<ul>
+  <li>
+    <p><strong><em>Timestamps</em></strong>: Party A accepts a message as fresh only if the message contains a timestamp that, in A’s judgment, is close enough to A’s knowledge of current time. This approach requires that clocks among the various participants be synchronized.</p>
+  </li>
+  <li>
+    <p><strong><em>Challenge/response:</em></strong> Party A, expecting a fresh message from B, <strong>first sends B a nonce (challenge) and requires</strong> that the <strong>subsequent message (response) received from B contain the correct nonce value.</strong></p>
+  </li>
+</ul>
+
+<p><strong>NOTA BENE!!</strong></p>
+<ol>
+  <li>l’approccio che usa timestamp non dovrebbe essere usato su applicazioni che sono connection-oriented, per via delle problematiche che questi sistemi presentano (ad esempio latenze di rete, sincronizzazione dei clocks, …)</li>
+  <li>l’approccio challenge-response non andrebbe usato su tipi di connessioni connectionless, perchè richiede una fase di negoziazione che non è previsto in sistemi connectionless. Ad esempio UDP è connectionless. Se avessi una nonce non potrei garantire che i pacchetti vengano spediti nell’ordine atteso
+    <ul>
+      <li><strong><em>Sequence numbers</em></strong>:
+        <h1 id="remote-user-authentication-using-symmetric-encryption">Remote User-Authentication Using Symmetric Encryption</h1>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="needham-schroeder-protocol">Needham-Schroeder Protocol</h1>
+<p>L’idea è quella di usare un’entità terza come mediatrice.
+La terza parte fidata è rappresentata dal KDC (Key Distribution Center).</p>
+
+<p>Uno schema del protocollo è il seguente:
+![[1715599425_grim.png]]</p>
+
+<p>Come si può vedere, le comunicazioni tra B e KDC non avvengono direttamente. 
+![[1715599384_grim.png]]
+La chiave di sessione viene distribuita correttamente, ma questo protocollo è comunque vulnerabile agli attacchi di tipo replay se una delle vecchie chiavi di sessione viene compromessa. In quel caso:</p>
+<ul>
+  <li>il messaggio 3 può essere spedito di nuovo</li>
+  <li>il messaggio 4 intercettato, decifrato con la vecchia chiave e risposto correttamente</li>
+  <li>a quel punto si può convincere B di star comunicando con A</li>
+</ul>
+
+<p>Il trucco è usare un timestamp o usare una nonce extra.</p>
+<h1 id="denning-sacco-protocol">Denning-Sacco Protocol</h1>
+<p>È la versione del protocollo di Needham-Schroeder, ma con il timestamp al posto delle nonce per evitare replay attacks.</p>
+
+<ol>
+  <li>A -&gt; S: A,B</li>
+  <li>S -&gt; A: $E_{Kas}$ (B, Kab, T, $E_{Kbs}$ (A, Kab, T))</li>
+  <li>A -&gt; B: $E_{Kbs}$(A, Kab, T)</li>
+</ol>
+
+<h5 id="suppress-replay-attack">Suppress-replay attack</h5>
+<p>Il problema è che se i clock non sono sincronizzati il protocollo smette di funzionare. In questo caso c’è un attacco chiamato <em>suppress-replay attack</em> che consiste nell’intercettare un messaggio dal sender e spedirlo di nuovo dopo quando il timestamp del messaggio diventa quello corrente dal lato del destinatario.</p>
+
+<h1 id="kerberos">Kerberos</h1>
+<p>Servizio di autenticazione che offre un centralized authentication server basato soltanto su cifratura simmetrica, la cui funzione è di autenticare gli utenti per i server e i server per gli utenti.</p>
+
+<p>I requisiti principali di Kerberos sono:</p>
+<ul>
+  <li><strong>sicurezza</strong>: un ascoltatore non deve essere in grado di ottenere le informazioni necessarie a impersonare un utente</li>
+  <li><strong>affidabilità</strong>: il server deve essere affidabile, in quanto gli utenti avranno bisogno di esso per poter applicare il protocollo</li>
+  <li><strong>scalabilità</strong>: il sistema dev’essere in grado di supportare un numero anche molto grande di utenti</li>
+  <li><strong>trasparenza</strong>: gli utenti non dovrebbero essere a conoscenza del fatto che l’autenticazione va oltre al semplice inserire una password</li>
+</ul>
+
+<h3 id="version-4">Version 4</h3>
+<p>La versione 4 di Kerberos fa uso di DES per il servizio di autenticazione, oltre a un Authentication Server (AS) che conosce le password di tutti gli utenti e le memorizza all’interno di un database centralizzato. L’AS inoltre memorizza una segreto univoco per ogni server.</p>
+
+<p>Una volta che l’AS verifica l’autenticità di un utente, genera un ticket contenente lo user ID, un indirizzo di rete e il server ID. Questo ticket è cifrato usando la stessa chiave segreta condivisa tra l’AS e il server.</p>
+
+<p>Infine il Ticket-granting server (TGS) serve per richiedere i ticket agli utente che sono stati autenticati dall’AS.
+Ogni volta che l’utente richiede l’accesso a un nuovo servizio il client si invia al TGS il ticket per autenticare sè stesso. Il client memorizza ogni service-granting ticket e lo usa per autenticare i suoi utenti a un server ogni volta che un particolare servizio viene richiesto.</p>
+
+<p>Ci sono alcune cose da tenere in considerazione:</p>
+<ul>
+  <li>il <strong>periodo di validità del ticket-granting ticket</strong> non può essere nè troppo corto nè troppo lungo. Nel primo caso l’utente dovrebbe inserire troppo frequentemente la password. Nel secondo caso l’attaccante avrebbe più opportunità di eseguire un replay attack</li>
+  <li>il <strong>servizio di rete</strong> deve essere in grado di provare che la persona che usa il ticket sia la stessa persone che ha richiesto quel ticket</li>
+  <li><strong>i server devono autenticarsi</strong> a loro volta agli utenti</li>
+</ul>
+
+<p>![[1715602102_grim.png]]</p>
+
+<p>![[1715602147_grim.png]]</p>
+
+<p>![[1715602171_grim.png]]</p>
+
+<p>Un sistema Kerberos è composto da un server Kerberos, un certo numero di clients e un numero di application servers che richiedono che:</p>
+<ul>
+  <li>
+    <p>il server Kerberos possieda gli user ID e gli hash delle password di tutti gli utenti del database</p>
+  </li>
+  <li>
+    <p>il server Kerberos deve avere una chiave segreta condivisa con ognuno dei server</p>
+  </li>
+  <li>
+    <p>il server Kerberos in ogni reame condivide una chiave segreta con il server di ogni altro reame. I due server Kerberos si sono registrati tra loro.
+![[1715602223_grim.png]]</p>
+  </li>
+</ul>
+
+<h3 id="differences-between-kerberos-v4-and-v5">Differences between Kerberos v4 and v5</h3>
+<ul>
+  <li>Kerberos v4 non era pensato per essere general purpose, mentre v5 si.</li>
+  <li>Kerberos v4 usa DES, mentre v5 usa AES</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Kerberos v4</th>
+      <th>Kerberos v5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>non era pensato per essere general purpose</td>
+      <td>è pensato per essere general purporse</td>
+    </tr>
+    <tr>
+      <td>usa DES come algoritmo di cifratura</td>
+      <td>usa AES come algoritmo di cifratura</td>
+    </tr>
+    <tr>
+      <td>richiede l’uso di indirizzi IP</td>
+      <td>possono essere usati tutti i tipi di indirizzi di rete</td>
+    </tr>
+    <tr>
+      <td>il mittente usa un ordinamento dei byte a sua scelta</td>
+      <td>tutti i messaggi sono definiti usando una Abstract Syntax Notation One (ASN.1) e Basic Encoding Rules (BER) che permette di evitare le ambiguità nel byte ordering</td>
+    </tr>
+    <tr>
+      <td>i valori di lifetime erano codificati usando 4-bit</td>
+      <td>il lifetime è indefinitamente lungo essendo che viene specificato lo start time e l’end time</td>
+    </tr>
+    <tr>
+      <td>viene usato DES in modalità PCBC che è vulnerabile</td>
+      <td>viene usato un meccanismo di integrità esplicito permettendo l’uso di CBC mode. Inoltre viene usato un checksum o un hash code aggiunto al messaggio prima dell’encryption</td>
+    </tr>
+    <tr>
+      <td>non ci sono meccanismi per ostacolare i password attacks</td>
+      <td>viene usato un meccanismo di preautenticazione che rende più difficile applicare un attacco alle password, anche se non lo previene</td>
+    </tr>
+    <tr>
+      <td>è vulnerabile ai replay attack</td>
+      <td>è possibile che il client e il server negozino una chiave di sub-sessione da usare per una sola connessione. Un nuovo accesso del client richiederebbe una nuova subsession key</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>![[1715602261_grim.png]]</p>
+
+<h1 id="mutual-authentication">Mutual Authentication</h1>
+<p>![[1715609635_grim.png]]</p>
+
+<p>![[1715609724_grim.png]]</p>
+<h1 id="one-way-authentication">One-Way Authentication</h1>
+<p>È possibile che non mi interessi che entrambi gli agenti della comunicazione vengano autenticati o proteggano la confidenzialità.</p>
+
+<p>In questo caso è sufficiente usare uno schema one-way come il seguente:
+\(A \rightarrow B:\; M ||E(PR_{a}, H(M))\)
+Il problema è che se un utente terzo intercetta il messaggio (per esempio se M è un progetto segreto che Bob vuole inviare al centro dei brevetti), potrebbe rimuovere la firma, inserire la sua, e inviarlo prima di Bob rubandogli l’idea.</p>
+
+<p>Per fare in modo che questo non sia possibile è sufficiente cifrare tutto con la chiave pubblica di B in modo che il destinatario sia l’unico in grado di leggere il messaggio
+\(A \rightarrow B:\;E(PU_{b}[M||E(PR_{a},H(M))])\)
+E se volessi fare in modo che non si possa eseguire un attacco replay, potrei aggiungere un timestamp in questo modo
+\(A \rightarrow B: M||E(PR_{a}, H(M)||E(PR_{as},[T||ID_{a}||PU_{a}]))\)</p>
+<h1 id="federated-identity-management">Federated Identity Management</h1>
+<p>Il Federated Identity Management, o Gestione delle Identità Federata, è un approccio alla gestione delle identità digitali che consente a più organizzazioni o sistemi di condividere in modo sicuro le informazioni di autenticazione e autorizzazione tra di loro. In pratica, questo significa che un utente può utilizzare le proprie credenziali di accesso (come nome utente e password) presso diverse piattaforme o servizi, senza la necessità di creare e memorizzare un set separato di credenziali per ciascun sistema.</p>
+
+<p>Il concetto fondamentale del Federated Identity Management è quello di creare un ambiente di trust tra le organizzazioni partecipanti, in modo che possano condividere in modo sicuro le informazioni di identità degli utenti. Ciò viene solitamente realizzato attraverso l’uso di standard e protocolli di autenticazione e autorizzazione, come SAML (Security Assertion Markup Language), OAuth e OpenID Connect.</p>
+
+<p>Le principali caratteristiche e vantaggi del Federated Identity Management includono:</p>
+
+<ol>
+  <li>
+    <p><strong>Interoperabilità:</strong> Le organizzazioni possono collaborare e integrare in modo più efficiente i loro servizi e sistemi, consentendo agli utenti di accedere a risorse distribuite su più piattaforme.</p>
+  </li>
+  <li>
+    <p><strong>Migliorata esperienza utente:</strong> Gli utenti possono accedere a diversi servizi utilizzando un’unica coppia di credenziali, semplificando il processo di accesso e riducendo il numero di password da ricordare.</p>
+  </li>
+  <li>
+    <p><strong>Riduzione del rischio di sicurezza:</strong> L’utilizzo di protocolli standardizzati e sicuri per lo scambio di informazioni di identità riduce il rischio di accessi non autorizzati e frodi.</p>
+  </li>
+  <li>
+    <p><strong>Miglior controllo dell’accesso:</strong> Le organizzazioni possono mantenere il controllo sull’accesso alle proprie risorse, anche quando queste sono condivise con altre organizzazioni, attraverso politiche di autorizzazione e regole di accesso.</p>
+  </li>
+</ol>
+
+<p>Complessivamente, il Federated Identity Management è un approccio fondamentale per supportare la collaborazione tra organizzazioni e fornire agli utenti un’esperienza di accesso più semplice e sicura attraverso diverse piattaforme e servizi online.</p>
+<h1 id="oauth2">OAuth2</h1>
+<p>https://itnext.io/an-oauth-2-0-introduction-for-beginners-6e386b19f7a9</p>
+
+<p>OAuth2 è un meccanismo di autenticazione che permette a siti web e web apps di richiedere un restricted access a un account di un altra applicazione</p>
+
+<p>OAuth2 è quello che viene usato quando ad esempio accedo a un’applicazione X usando il mio account Google. L’applicazione non viene a conoscenza delle credenziali del mio account Google, ma solo dell’autorizzazione all’accesso.
+-&gt; questo è ottenuto ottenendo un <strong>access_token</strong> da un server di autorizzazione.</p>
+
+<p>Le componenti di OAuth2 sono:</p>
+<ul>
+  <li>client application</li>
+  <li>resource owner</li>
+  <li>OAuth service provider</li>
+</ul>
+
+<p>Ci sono diverse varianti di OAuth2</p>
+
+<p>| Nome                     | Descrizione                                                                                                                                                                        |
+| ———————— | ———————————————————————————————————————————————————————————- |
+| Authorization Code Grant | viene ottenuto l’access_token, il codice per richiedere l’access token è rilasciato da un front-end dopo che l’utente fa il login. L’access_token viene richiesto server-side      |
+| Implicit Grant           | dopo l’accesso il token è comunicato immediatamente                                                                                                                                |
+| Client Credential Grant  | l’access_token è comunicato sul server, autenticando il client e non l’utente                                                                                                      |
+| Password Grant           | l’access_token è comunicato immediatamente con una singola richiesta contenente tutte le informazioni di login. Può essere più semplice da implementare ma ha alcune complicazioni |
+![[1715775767_grim.png]]</p>
+
+<p>Quale flow dovrei usare?
+Posso memorizzare il client secret in un posto sicuro?</p>
+<ul>
+  <li>sì, il client è una web application?
+    <ul>
+      <li>sì, l’utente si fida a usare le sue “Oauth credentials”?
+        <ul>
+          <li>sì, <strong>PASSWORD GRANT</strong></li>
+          <li>no, <strong>AUTHORIZATION CODE GRANT</strong></li>
+        </ul>
+      </li>
+      <li>no, <strong>CLIENT CREDENTIAL GRANT</strong></li>
+    </ul>
+  </li>
+  <li>no, <strong>IMPLICIT GRANT</strong></li>
+</ul>
+
+<p>Il processo di autorizzazione si divide in 2 fasi dove gli attori sono:</p>
+<ul>
+  <li>User: the person who wants to be authenticated, to access protected information.</li>
+  <li>Client App: the client is usually a web application. The application must have both a front-end and a back-end, later we’ll see why. This means a pure Front-end application (Javascript, React…) cannot implement this flow but can use the Implicit grant one.</li>
+  <li>Authorization Server: is the component that performs the authentication and the authorization, it handles login requests, user authentication, token generation, and security validations.</li>
+  <li>Resource Server: it exposes resources, as they could be REST API. After the Client App obtains the access_token, it will use it to call the Resource Server.</li>
+</ul>
+
+<p>![[1715776069_grim.png]]
+![[1715776092_grim.png]]</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 2 - Neighborhood-based collaborative filtering &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 2 - Neighborhood-based collaborative filtering</h1>
+  <time datetime="2024-10-06T00:00:00+02:00" class="post-date">06 Oct 2024</time>
+  <!--more-->
+<p><img src="https://static.wixstatic.com/media/4959fd_a6f89a18d92048f79c1e9b46bc573455~mv2.png/v1/fill/w_280,h_186,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a6f89a18d92048f79c1e9b46bc573455~mv2.png" alt="" /></p>
+<h2 id="i-modelli-neighborhood-based-collaborative-filtering">I modelli Neighborhood-based collaborative filtering</h2>
+
+<p>Nel precedente articolo ho parlato di modelli di raccomandazione collaborativi, ossia quei modelli che sfruttano i feedback impliciti o espliciti di altri utenti, per suggerire a un utente le cose che più gli piacciono. L’idea è che se sono Bob e mi piacciono certe cose, magari altri utenti hanno gli stessi gusti e posso trovare interessante quello che a loro interessa.</p>
+
+<p>A partire da questa idea possiamo introdurre il metodo Neighborhood-based (anche chiamato “memory-based”, poi capiremo perchè), ossia una tecnica di collaborative filtering in cui l’idea è quella di tenere traccia di tutte le valutazioni che gli utenti hanno fatto di tutti gli elementi e poi analizzarle. È un metodo vecchio, quindi non iniziate a lamentarvi del fatto che le cose potrebbero essere fatte meglio. Lo so anche io, piuttosto provate a pensare a come migliorare le cose invece che lamentarvi. Per Dio.</p>
+
+<p>Per prima cosa quindi il metodo Neighborhood-based costruisce una tabella come questa:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>Item 1</td>
+      <td>Item 2</td>
+      <td>Item 3</td>
+      <td>Item 4</td>
+    </tr>
+    <tr>
+      <td>Bob (user 1)</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Alice (user 2)</td>
+      <td>4</td>
+      <td>7</td>
+      <td>-</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Carl (user 3)</td>
+      <td>-</td>
+      <td>-</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Markus (user 4)</td>
+      <td>3</td>
+      <td>6</td>
+      <td>6</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Frank (user 5)</td>
+      <td>-</td>
+      <td>7</td>
+      <td>4</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>Dafne (user 6)</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Flora (user 7)</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Analiziamo la tabella:</p>
+
+<ul>
+  <li>
+    <p>alcuni utenti hanno votato usando range tra 2 e 7, altri utenti hanno range tra 4 e 8, e via così</p>
+  </li>
+  <li>
+    <p>alcuni utenti sono particolarmente cattivi, come l’utente 7, che guarda caso è una donna ed è stata cattivissima in tutte le sue votazioni</p>
+  </li>
+  <li>
+    <p>ci sono più utenti che items</p>
+  </li>
+  <li>
+    <p>ci sono degli elementi che non sono stati recensiti</p>
+  </li>
+</ul>
+
+<p>Teniamo a mente questi problemi, perchè tra un attimo capiremo perchè sono importanti da considerare.</p>
+
+<p>Nel frattempo definiamo una rappresentazione generica per le tabelle come quella sopra.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_1c072e594094479398bc8129ed48e036~mv2.png/v1/fill/w_592,h_176,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_1c072e594094479398bc8129ed48e036~mv2.png" alt="" /></p>
+
+<h2 id="user-based-vs-item-based-neighborhood">User-based vs Item-based neighborhood</h2>
+
+<p>Ebbene i metodi neighborhood possono essere di due tipi:</p>
+
+<ul>
+  <li>
+    <p>USER BASED: quelli che si concentrano sugli utenti simili a quello target</p>
+  </li>
+  <li>
+    <p>ITEM BASED: quelli che si concentrano sugli items simili a quelli che piacciono al nostro target</p>
+  </li>
+</ul>
+
+<p>La differenza è notevole, perchè il primo metodo metterà più enfasi sugli utenti simili, ma gli anni di indottrinamento scolastico ci hanno insegnato che le persone sono tutte diverse e quindi anche gli utenti potrebbero avere gusti super diversi, ma che in parte coincidono con quello del nostro utente target. A Bob potrebbero piacere i film horror, ma non i cartoni animati horror. Magari tra i nostri utenti quelli a cui piacciono gli horror amano anche i cartoni animati, quindi a Bob potrebbero venir suggeriti cartoni animati horror che gli fanno schifo.</p>
+
+<p>Viceversa, il secondo metodo è più personalizzato, perchè pone l’enfasi sui gusti del nostro utente target, cercando elementi simili a quelli che piacciono al nostro target.</p>
+
+<p>Facciamo che da ora in avanti Bob sarà il nostro utente target. Salutate tutti Bob.</p>
+
+<h3 id="user-based-neighborhood-collaborative-filtering">User-based Neighborhood collaborative filtering</h3>
+
+<p>Come abbiamo detto, nel modello user-based poniamo l’enfasi sul trovare utenti simili e poi suggeriamo elementi che piacciono ai k user più simili a Bob.</p>
+
+<p>Per prima cosa quindi abbiamo bisogno di calcolare un valore di somiglianza tra utenti. Per farlo useremo la mitica correlazione di Pearson, una formula spesso usata in intelligenza artificiale che permette di ottenere il valore di correlazione tra due elementi, considerando</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_7fea3395b71e40d88ba04b20a93056e2~mv2.png/v1/fill/w_592,h_382,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_7fea3395b71e40d88ba04b20a93056e2~mv2.png" alt="" /></p>
+
+<p>Consideriamo con x e come y due nostri utenti t (l’utente target) e q.</p>
+
+<p>Assumiamo inoltre che la media dei valori sia indicata da µ come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2bfb0ed13dcf4798808c86a16e550293~mv2.png/v1/fill/w_281,h_120,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_2bfb0ed13dcf4798808c86a16e550293~mv2.png" alt="" /></p>
+
+<p>Praticamente faccio la media di ciascuna riga e per ciascun utente.</p>
+
+<p>A questo punto la nostra correlazione di Pearson diventa:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_cb8bb5d3c9b340caab55b3306f420e67~mv2.png/v1/fill/w_592,h_138,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_cb8bb5d3c9b340caab55b3306f420e67~mv2.png" alt="" /></p>
+
+<p>Quindi cosa facciamo ora con questa correlazione? Semplicemente la calcoliamo per ciascuna coppia (t, user). In questo modo so quale utente ha valutato in modo simile a t.</p>
+
+<p>Quindi non ci resta che individuare i k utenti più simili a t, che non saranno altro che gli utenti con più alta correlazione.</p>
+
+<p>Indichiamo con P(t,j) l’insieme dei k utenti più simili all’utente t nelle valutazioni dell’elemento j.</p>
+
+<p>L’obiettivo adesso è prendere P(t,j) e per ciascuno dei suoi utenti individuare qual è la media pesata delle valutazioni. In questo modo si può capire quale valutazione mediamente otterrebbe quel particolare elemento j.</p>
+
+<p>Il problema è che, analizzando la tabella iniziale, avevamo scoperto che le scale dei valori cambiano da utente a utente… accidenti.</p>
+
+<p>Ci viene in soccorso la normalizzazione. Se normalizziamo la tabella prima di lavorarci sopra, i valori possiamo prenderli già belli puliti come piacciono a noi.</p>
+
+<p>Utilizziamo quindi la mean-normalization per normalizzare i valori.</p>
+
+<p>La formula è semplicissima</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_cb548ac0348042188881a6ac02f0ef66~mv2.png/v1/fill/w_302,h_81,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_cb548ac0348042188881a6ac02f0ef66~mv2.png" alt="" /></p>
+
+<p>Perciò per calcolare la media pesata e rimuovere la normalizzazione è sufficiente calcolare la formula</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_8be0c27ff96a4b5e8fdd16ca470efed4~mv2.png/v1/fill/w_592,h_139,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_8be0c27ff96a4b5e8fdd16ca470efed4~mv2.png" alt="" /></p>
+
+<p>Ora abbiamo un altro problema. Quando avevamo parlato di long-tail frequencies avevamo detto che nel caso ci siano elementi più recensiti di altri, questi saranno generalmente più apprezzati o più disprezzati. Ciò significa che in generale le persone, anche con gusti completamente diversi, tenderanno a schierarsi tutti da una parte. Perciò se io voglio trovare la somiglianza tra utenti, non posso dare troppo peso a questi items.</p>
+
+<p>Ecco che ci viene in soccorso la cosiddetta “inverse-user frequency”, ossia un termine che inseriremo dentro la nostra formula della correlazione di Pearsonn per bilanciare il peso di questi fastidiosi elementi.</p>
+
+<p>La inverse user frequency è calcolata come:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_0e90b39cab2c40059305fedcb77e1672~mv2.png/v1/fill/w_297,h_81,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_0e90b39cab2c40059305fedcb77e1672~mv2.png" alt="" /></p>
+
+<p>La formula finale per le correlazione diventa quindi:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_998da2535fda4a58bfaaeb4aee5edc71~mv2.png/v1/fill/w_592,h_134,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_998da2535fda4a58bfaaeb4aee5edc71~mv2.png" alt="" /></p>
+
+<p>That’s it.</p>
+
+<h3 id="item-based-neighborhood-collaborative-filtering">Item-based Neighborhood collaborative filtering</h3>
+
+<p>Questo metodo, al contrario del precedente (user-based neighborhood collaborative filtering) che cercava di identificare utenti simili, si focalizza sul trovare items simili già valutati.</p>
+
+<p>Per cominciare bisogna capire cosa vuol dire “item simile”, ma ancora prima bisogna capire come rappresentare quindi un item in modo da confrontarlo.</p>
+
+<p>Ebbene per descrivere un item useremo un vettore costruito a partire dalle valutazioni degli utenti. Ad esempio un item j verrà rappresentato dalle valutazioni fatte dagli utenti su quell’elemento. Il problema è che gli utenti potrebbero aver usato scale di valutazione diverse (magari c’è qualcuno che è più generoso con i valori, mentre altri più stitici). Perciò è necessario applicare la normalizzazione delle valutazioni degli utenti centrando sullo zero la media di tutte le righe.</p>
+
+<p>Una volta ottenuta la rappresentazione, possiamo usare una metrica di correlazione come Pearson (nel caso siamo interessati alla correlazione di dati normalizzati), oppure come la cosine-correlation (che invece si concentra sulla direzione dei vettori rappresentanti gli elementi) per ottenere dei valori di correlazione tra l’elemento target j e gli elementi valutati da parte del nostro utente target t.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_561b8231c7cb40e99d92e56adfe60555~mv2.png/v1/fill/w_592,h_139,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_561b8231c7cb40e99d92e56adfe60555~mv2.png" alt="" /></p>
+
+<p>dove</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_72273aa86c6a42169e8f1f9db49340db~mv2.png/v1/fill/w_415,h_72,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_72273aa86c6a42169e8f1f9db49340db~mv2.png" alt="" /></p>
+
+<p>Applichiamo questo procedimento a tutti gli elementi j che non sono ancora stati valutati da t e creiamo quindi un secondo insieme definito come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_c42c78840f7e4e238d99e9667a87d198~mv2.png/v1/fill/w_408,h_92,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_c42c78840f7e4e238d99e9667a87d198~mv2.png" alt="" /></p>
+
+<p>Fatto ciò prendiamo i k items più correlati all’item j. Ma che valutazione diamo quindi all’item j? Consideriamo l’utente target t e l’elemento target t e ne calcoliamo lo score come:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_fccc9765f0a2431598d55c4397150c96~mv2.png/v1/fill/w_592,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_fccc9765f0a2431598d55c4397150c96~mv2.png" alt="" /></p>
+
+<h3 id="considerazioni-sulla-complessità-dei-due-metodi">Considerazioni sulla complessità dei due metodi</h3>
+
+<p>Entrambi i metodi sono chiaramente piuttosto dispendiosi in termini di tempo. Nel caso dell’user-based model abbiamo una complessità O(m² · n) solo per calcolare la correlazione di Pearson, e cambia poco anche per l’item-based, dove abbiamo una complessità di O(n² · m) per calcolare la similarità tra tutti gli oggetti. Se poi vogliamo calcolare le predizioni, nel primo caso dobbiamo considerare tutti i k utenti simili, e individuare quale elemento è il migliore da consigliare, quindi abbiamo O(k·m) controlli da fare. Nel secondo metodo ne abbiamo O(k·n) perchè dobbiamo confrontare tutti i k items simili agli n elementi valutati dall’utente. La complessità in spazio almeno è per il primo metodo è un po’ meglio, perchè abbiamo O(m) per l’user-based neighborhood e O(n) per l’item-based.</p>
+
+<p>Tranquilli, metto una tabella così ci capiamo meglio.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Complessità/Metodo</td>
+      <td>User based</td>
+      <td>item based</td>
+    </tr>
+    <tr>
+      <td>Tempo per calcolare le correlazioni</td>
+      <td>O(m² · n)</td>
+      <td>O(n² · m)</td>
+    </tr>
+    <tr>
+      <td>Tempo per calcolare le predizioni</td>
+      <td>O(k·m)</td>
+      <td>O(k·n)</td>
+    </tr>
+    <tr>
+      <td>Spazio</td>
+      <td>O(m)</td>
+      <td>O(n)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Ma allora perchè dico che l’item based è meglio dello user based? Bè, perchè innanzitutto lo user-based è più rischioso a causa degli overlapping sulle valutazioni degli utenti, e poi perchè certe operazioni possono essere svolte in real-time e altre offline. In particolare se demandiamo le operazioni più costose alla fase offline, ci accorgiamo che nell’item-based method il numero di volte in cui dobbiamo ricalcolare la correlazione tra gli elementi non è poi così alto. Se immaginiamo di avere 1 milione di utenti e se ne aggiunge un altro, non serve ricalcolare le similitudini tra items, perchè quel singolo utente non farà mai la differenza, cosa che invece poteva accadere nello user-based method.</p>
+
+<p>Facciamo un altro esempio ancora più pratico: siamo in mezzo a un gruppo di amici (ne abbiamo tanti, tipo tutti gli abitanti di Milano) e chiediamo “Titanic è simile a Naruto?”, tutti mi diranno di no e anche se arriva un povero stronzo a dirmi “sì sono uguali”, non è che gli credo (a meno che anche io sia un povero stronzo). Se invece nel gruppo di amici cerco un utente simile a me, cavolo ogni volta che si aggiunge un nuovo amico devo controllare se ha i gusti simili ai miei, cosa che faranno anche tutti i miei amici. Praticamente diventa un puttanaio a cercare di capire chi è simile a chi. Capito adesso?</p>
+
+<h2 id="possibili-domande">Possibili domande</h2>
+
+<ol>
+  <li>
+    <p>What is the process of computing the Pearson coefficient in user-based neighborhood models?</p>
+  </li>
+  <li>
+    <p>What are the advantages of item-based methods compared to user-based methods in recommendation systems?</p>
+  </li>
+  <li>
+    <p>How does dimensionality reduction address issues in large sparse matrices?</p>
+  </li>
+  <li>
+    <p>What is the impact of the long tail distribution on rating frequencies in recommendation systems?</p>
+  </li>
+  <li>
+    <p>What is the role of clustering in improving the efficiency of neighborhood methods?</p>
+  </li>
+</ol>
+
+<p>##</p>
+
+<ol>
+  <li>
+    <p>Explain the process of obtaining mean-centered ratings in user-based neighborhood models and its significance.</p>
+  </li>
+  <li>
+    <p>Discuss the challenges faced by user-based collaborative filtering methods compared to item-based methods.</p>
+  </li>
+  <li>
+    <p>What are the implications of the long tail distribution on the profitability and prediction accuracy of items in recommendation systems?</p>
+  </li>
+  <li>
+    <p>Describe how dimensionality reduction techniques like PCA can help in addressing issues in collaborative filtering.</p>
+  </li>
+  <li>
+    <p>Analyze the computational complexity of user-based and item-based recommendation models and their implications for real-world applications.</p>
+  </li>
+  <li>
+    <p>User-based neighborhood models compute the Pearson coefficient only once for each user.</p>
+  </li>
+</ol>
+
+<ul>
+  <li>
+    <p>True</p>
+  </li>
+  <li>
+    <p>False</p>
+  </li>
+</ul>
+
+<ol>
+  <li>Item-based methods are more difficult to compute than user-based methods.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>True</p>
+  </li>
+  <li>
+    <p>False</p>
+  </li>
+</ul>
+
+<ol>
+  <li>The long tail distribution indicates that most items are rated frequently.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>True</p>
+  </li>
+  <li>
+    <p>False</p>
+  </li>
+</ul>
+
+<ol>
+  <li>Clustering can help improve the efficiency of neighborhood methods by reducing the number of peer groups.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>True</p>
+  </li>
+  <li>
+    <p>False</p>
+  </li>
+</ul>
+
+<ol>
+  <li>Dimensionality reduction techniques like PCA do not address biases in large sparse matrices.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>True</p>
+  </li>
+  <li>
+    <p>False</p>
+  </li>
+</ul>
+
+<ol>
+  <li>What is the primary purpose of computing the Pearson coefficient in user-based neighborhood models?</li>
+</ol>
+
+<p>A) To find the closest users for each item</p>
+
+<p>B) To categorize data into nominal scales</p>
+
+<p>C) To rank items based on popularity</p>
+
+<p>D) To reduce dimensionality of data</p>
+
+<ol>
+  <li>Which of the following is a characteristic of item-based methods compared to user-based methods?</li>
+</ol>
+
+<p>A) More difficult to generate explanations</p>
+
+<p>B) Less stable over time</p>
+
+<p>C) Easier to compute a ‘like factor’</p>
+
+<p>D) More reliant on user anonymity</p>
+
+<ol>
+  <li>What does the long tail distribution imply about item ratings?</li>
+</ol>
+
+<p>A) Most items are rated frequently</p>
+
+<p>B) A small fraction of items are rated frequently</p>
+
+<p>C) All items have equal ratings</p>
+
+<p>D) Items in the long tail are less profitable</p>
+
+<ol>
+  <li>What is the effect of clustering on the efficiency of neighborhood methods?</li>
+</ol>
+
+<p>A) Increases accuracy significantly</p>
+
+<p>B) Reduces the number of peer groups</p>
+
+<p>C) Eliminates the need for ratings</p>
+
+<p>D) Makes computations more complex</p>
+
+<ol>
+  <li>What is a key benefit of dimensionality reduction techniques like PCA in collaborative filtering?</li>
+</ol>
+
+<p>A) They increase the number of ratings</p>
+
+<p>B) They help reduce bias in large sparse matrices</p>
+
+<p>C) They eliminate the need for user ratings</p>
+
+<p>D) They simplify the user-item matrix</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 9 Network Security - IP Security &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 9 Network Security - IP Security</h1>
+  <time datetime="2024-08-18T00:00:00+02:00" class="post-date">18 Aug 2024</time>
+  <!--more-->
+<p>![[1717511358_grim.png]]</p>
+
+<p>IPSec è obbligatorio in IPv6 e opzionale in IPv4, inoltre può operare in modalità <strong>transport</strong> o <strong>tunnel</strong></p>
+
+<h2 id="ipsec-in-transport-mode">IPSec in Transport Mode</h2>
+<p>Fornisce la protezione per i payload dei protocolli di trasporto, inserendo i security headers dopo l’header IP originale e prima del payload IP originale.</p>
+
+<p>L’<strong>IP header originale NON è protetto</strong> (questo significa che tutte le informazioni associate, come ad esempio ip di destinazione e mittente non sono nascosti)
+![[1717511661_grim.png]]
+Generalmente questa modalità è usata per comunicazioni end-to-end tra due hosts.</p>
+<h2 id="ipsec-in-tunnel-mode">IPSec in Tunnel Mode</h2>
+<p>In questa modalità, l’intero pacchetto IP originale viene incapsulato per diventare il payload di un nuovo pacchetto IP.</p>
+<ul>
+  <li>Viene aggiunto un nuovo header IP sopra al pacchetto IP originale.</li>
+  <li>Questa modalità è utile per proteggere il traffico tra reti diverse.</li>
+  <li>Facilita l’instaurazione di un “tunnel” tra due gateway IPsec sicuri, che a loro volta possono collegare due reti diverse.</li>
+  <li>Nella modalità tunnel, il pacchetto originale può essere firmato per l’integrità e l’autenticazione tramite l’header AH (Authentication Header) o l’header ESP (Encapsulating Security Payload).</li>
+  <li><a href="https://www.twingate.com/blog/ipsec-tunnel-mode">Inoltre, il pacchetto può essere cifrato per una maggiore sicurezza</a><a href="https://www.twingate.com/blog/ipsec-tunnel-mode">1</a>.
+![[1717511684_grim.png]]</li>
+</ul>
+
+<h3 id="transport-mode-vs-tunnel-mode">Transport mode vs Tunnel Mode</h3>
+<p>![[1717511722_grim.png]]</p>
+
+<h2 id="ah-protocol-vs-esp-protocol">AH Protocol vs ESP Protocol</h2>
+<p>AH = Authentication Header Protocol
+ESP = Encapsulating Security Payload Protocol</p>
+
+<p>Praticamente AH era già usato quando ESP è stato ideato. ESP aggiunge funzionalità al protocollo AH.
+![[1717511860_grim.png]]</p>
+
+<h2 id="ah-protocol">AH Protocol</h2>
+<p>Fornisce Integrity e Authentication ai pacchetti IP, prevenendo l’attacco di address-spoofing.
+Il prezzo da pagare è che che le parti devono condividere un segreto.</p>
+
+<p>Fa uso inoltre di HMAC-MD5-96 o HMAC-SHA-1-96.
+![[1717512023_grim.png]]</p>
+
+<p>![[1717512078_grim.png]]</p>
+<h2 id="esp-protocol">ESP Protocol</h2>
+<p>Fornisce la <strong>confidenzialità sul contenuto dei messaggi</strong> e sulle comunicazioni a traffico limitato.</p>
+
+<p>Può inoltre offrire gli stessi servizi di autenticazione che forniva il protocollo AH.</p>
+
+<p>La differenza principale tra AH e ESP è che <strong>ESP usa anche la cifratura per mettere in sicurezza il contenuto dei messaggi.</strong>
+![[1717512382_grim.png]]</p>
+
+<p>La cosa bella di ESP è che <strong>nella modalità tunnel, viene cifrato l’intero pacchetto IP</strong>, e a ogni hop viene aggiunto un nuovo header. Questo va molto bene per le VPN e per ottenere la <strong>gateway-to-gateway security</strong>.</p>
+
+<p>![[1717512543_grim.png]]</p>
+
+<h2 id="anti-replay-protection">Anti-replay protection</h2>
+<p>Per proteggere la comunicazione da attacchi di tipo replay viene usato un sequence number e una window size. 
+Quando un nuovo pacchetto arriva, ci sono tre casi:</p>
+
+<ol>
+  <li>Se il suo numero di sequenza è <strong>inferiore a N</strong>, il <strong>pacchetto viene scartato</strong> (anche se autentico). Potrebbe essere un duplicato o troppo vecchio.</li>
+  <li>Se <strong>N ≤ il suo numero di sequenza &lt; N+W:</strong>
+    <ul>
+      <li>Se il pacchetto non è contrassegnato come “arrivato” (in verde) e supera il test di autenticazione, viene contrassegnato come “arrivato” e accettato.</li>
+      <li>Altrimenti, viene scartato come duplicato.</li>
+    </ul>
+  </li>
+  <li>Se il <strong>numero di sequenza è maggiore o uguale a N+W</strong>:
+    <ul>
+      <li>Se il pacchetto supera il test di autenticazione, la finestra di replay viene spostata al nuovo numero di sequenza (SN).</li>
+      <li><a href="https://community.fortinet.com/t5/FortiGate/Technical-Note-Explaining-IPSEC-Anti-replay-and-preventing/ta-p/192424">Il pacchetto viene quindi contrassegnato come “arrivato” e accettato</a><a href="https://community.fortinet.com/t5/FortiGate/Technical-Note-Explaining-IPSEC-Anti-replay-and-preventing/ta-p/192424">1</a>.
+![[1717512698_grim.png]]</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="security-associations">Security Associations</h2>
+<p>![[1717516502_grim.png]]</p>
+
+<h4 id="security-association-database-sad">Security Association Database (SAD)</h4>
+<p>è il database che contiene tutte le security associations e che deve essere presente in ogni implementazione di IPSec
+![[1717516559_grim.png]]</p>
+
+<h2 id="security-policies">Security Policies</h2>
+<p>Serve per definire la sicurezza applicata al pacchetto quando deve essere inviato o quando arriva, è una sorta di filtro come nei firewall network-based.</p>
+
+<p>Prima di poter usare SAD è necessario che un host determini la policy del pacchetto predefinito (ad esempio scarta tutti i pacchetti o altro)</p>
+
+<h2 id="security-policy-database">Security Policy Database</h2>
+<p>I Security Policy Databases (SPD) nel contesto di IPSec <strong>servono a definire come il traffico IP è correlato a specifiche Security Associations (SA).</strong> Ogni voce nel SPD definisce un sottoinsieme di traffico IP e punta a una SA per quel traffico.</p>
+
+<p>In ambienti più complessi, <strong>potrebbero esserci più voci che si riferiscono a una singola SA o più SA associate a una singola voce SPD</strong>.
+I <strong>selettori</strong>, costituiti da valori di campo IP e protocolli di livello superiore, vengono utilizzati <strong>per filtrare il traffico in uscita e mapparlo in una particolare SA</strong>.</p>
+
+<p>In breve, gli SPD consentono di gestire la politica di sicurezza per il traffico IP all’interno di una rete</p>
+
+<h2 id="security-policy-database-entries">Security Policy Database Entries</h2>
+<p>![[1717517870_grim.png]]</p>
+<h2 id="spsa-outbound--inbound-processing">SP&amp;SA outbound &amp; inbound processing</h2>
+<p>![[Pasted image 20240604182901.png]]</p>
+<h2 id="vpn">VPN</h2>
+<p>![[1717513021_grim.png]]</p>
+
+<p>![[1717514865_grim.png]]</p>
+
+<h2 id="internet-key-exchange">Internet Key Exchange</h2>
+<p>Tipicamente, sono necessarie quattro chiavi per la comunicazione tra due applicazioni: coppie di trasmissione e ricezione per l’integrità e la riservatezza. Il documento sull’architettura IPsec richiede il supporto di due tipi di gestione delle chiavi:</p>
+
+<ul>
+  <li><strong>Manuale</strong>: Un amministratore di sistema configura manualmente ciascun sistema con le proprie chiavi e quelle degli altri sistemi comunicanti. Questo approccio è pratico per ambienti piccoli e relativamente statici.</li>
+  <li><a href="https://paraphraz.it/it/"><strong>Automatizzato</strong>: Consente la creazione on-demand di chiavi per le Security Associations (SA) e facilita l’uso di chiavi in un grande sistema distribuito con una configurazione in evoluzione</a>
+Il key management automatico usato di default da IPSec è ISAKMP/Oakley, dove:
+    <h4 id="oakley-key-determination-protocol">Oakley Key Determination Protocol</h4>
+    <p>è il protocollo di key exchange basato su Diffie-Hellman ed abbastanza generico in quanto non definisce nessun formato specifico</p>
+  </li>
+</ul>
+
+<h4 id="isakmp">ISAKMP</h4>
+<p>è l’acronico di <strong>Internet Security Association and Key Management Protocol</strong> e specifica un framework per la gestione delle Internet Key.</p>
+
+<p>Consiste in un insieme di tipi di messaggio che abilitano l’uso di una varietà di algoritmi di scambio delle chiavi.</p>
+
+<p>La determinazione delle IKE Key è caratterizzato dalle seguenti features:</p>
+<ol>
+  <li><strong>Utilizzo di cookies</strong>: Per prevenire attacchi di congestione.</li>
+  <li><strong>Negoziazione del gruppo</strong>: Consente alle due parti di stabilire i parametri globali per lo scambio di chiavi Diffie-Hellman.</li>
+  <li><strong>Utilizzo di nonce</strong>: Per proteggersi dagli attacchi di replay.</li>
+  <li><strong>Scambio delle chiavi pubbliche Diffie-Hellman</strong>: Per stabilire la chiave segreta.</li>
+  <li><a href="https://www.geeksforgeeks.org/internet-key-exchange-ike-in-network-security/"><strong>Autenticazione dello scambio Diffie-Hellman</strong>: Per prevenire attacchi man-in-the-middle</a><a href="https://www.geeksforgeeks.org/internet-key-exchange-ike-in-network-security/">1</a>.</li>
+</ol>
+
+<p>![[1717515818_grim.png]]</p>
+
+<p>![[1717515830_grim.png]]</p>
+
+<p>![[1717515843_grim.png]]</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

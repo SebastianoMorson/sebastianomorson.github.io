@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Information Theory - Lecture 4 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Information Theory - Lecture 4</h1>
+  <time datetime="2024-12-26T00:00:00+01:00" class="post-date">26 Dec 2024</time>
+  <!--more-->
+<p>Riprendiamo il teorema dell’ultima volta, ossia il [[2024-12-26-Information Theory Lecture 3#1° Shannon Theorem (Source Code Theorem)|1° teorema di Shannon]]
+e anche la definizione di [[2024-12-26-Information Theory Lecture 3#Definition of EL|EL]].</p>
+
+<p>È possibile raggiungere la condizione per cui $EL(\varphi)= H_{D}(P) \;?$
+Ossia, è possibile che la lunghezza media delle stringhe del codice sia uguale all’entropia di $P$ ?</p>
+
+<p>Ad esempio:
+\(\begin{aligned}
+&amp;A = \{a,b\}\\
+&amp;B = \{0,1\}\\
+&amp;P \neq \left\{ \frac{1}{2}, \frac{1}{2} \right\}\\
+&amp;P = \left\{ \frac{2}{3}, \frac{1}{3} \right\} \\
+&amp;H(P) &lt;1\\
+&amp;EL(\varphi) \ge 1\\
+&amp;\varphi(a) = 0 \\
+&amp;\varphi(b) = 1 \\
+&amp;EL(\varphi) = \frac{2}{3}\cdot 1 +\frac{1}{3}\cdot{1} = 1\\
+&amp;\text{Ma allora H(P) non è raggiungibile}
+\end{aligned}\)</p>
+
+<h2 id="shannon-code">Shannon Code</h2>
+<p>L’idea è quella di assegnare un encoding di lunghezza maggiore ai simboli che hanno minor probabilità di comparire all’interno di una stringa. Per questa ragione si considera come lunghezza di encoding il negativo del logaritmo della probabilità del carattere.</p>
+
+<p>Intuitivamente, se ho un vocabolario corrispondente alle parole italiane saprò che le lettere più frequenti sono ${a,e,i,o,u}$ , quindi cercherò di minimizzare il numero di caratteri necessari a codificare tali simboli. 
+Al contrario simboli come ${k,j,w,y}$ sono molto meno frequenti e perciò mi aspetto che l’efficienza dell’encoding non abbia grosse perdite se codifico tali caratteri usando un numero più grande di simboli dell’alfabeto di output.</p>
+
+\[\begin{aligned}
+EL(\varphi) &amp;= \sum_{i=1}^k p_{i}\cdot l_{i}\;\;\;\;\;\;\;\;  l_{i}=|\varphi(a_{i})|\\
+H_{D}(P) &amp;= \sum_{i=1}^k p_{i}\cdot (-\log_{D}p_{i}) \\ \\
+l_{i} &amp;\cong -\log_{D}p_{i} \\ \\
+l_{i} &amp;= \lceil -\log_{D}p_{i} \rceil = -\log_{D}p_{i} + \beta_{i} \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\text{ con } 0\le\beta_{i}&lt;1 
+  \end{aligned}\]
+
+<p>Usando il [[2024-12-26-Information Theory Lecture 3#Theorem Direct|direct theorem]] 
+Se $\sum_{i=1}^k D^{-l_{i}} \le 1$<br />
+allora esiste un prefix code con lunghezze $l_i$  definibile usando una strategia <em>greedy</em> su un albero D-ario</p>
+
+<p>\(\begin{aligned}
+\sum_{i=1}^k D^{-l_{i}} &amp;= \sum_{i=1}^k D^{\log_{D}p_{i} - \beta_{i}} \\
+&amp;=\sum_{i=1}^k D^{\log_{D}p_{i}} \cdot D^{-\beta_{i}} \\
+&amp;= \sum_{i=1}^k p_{i} \cdot \frac{1}{D^{\beta_{i}}} \\
+&amp;\le 1 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\text{ essendo }\frac{1}{D^{\beta_{i}}} \le 1
+\end{aligned}\)
+Se $\beta_{i}=0$ significa che la lunghezza di encoding è identica alla lunghezza di encoding ottimale, perciò ci troviamo nel caso migliore, mentre se $\beta_{i}=1$ ci troviamo nel caso peggiore perchè significa che l’encoding del simbolo $i$ è più lungo del necessario.</p>
+
+<p>Esempio:
+\(\begin{aligned}
+&amp;A = \{a,b\} \\
+&amp;B = \{0,1\} \\
+&amp;P = \left\{ 1-\frac{1}{32}, \frac{1}{32} \right\} \\\\
+&amp;-\log_{2}\left( 1-\frac{1}{32} \right) &lt; 1 \to 1 \\
+&amp;-\frac{\log_{2}1}{32} = 5 \to 5
+\end{aligned}\)</p>
+
+<p>![[Pasted image 20241229124133.png]]</p>
+
+<h3 id="shannon-encoding">Shannon Encoding</h3>
+<p>\(\begin{aligned}
+EL(S) &amp;= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i} + \beta_{i}) \\
+&amp;= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i}) + \sum_{i=1}^k (p_{i}\cdot\beta_{i}) \\
+&amp;= H_{D}(P) + \sum_{i=1}^k p_{i} \beta_{i} &lt; H_{D}(P)+1 \\
+\end{aligned}\)
+\(H_{D}(P) \le EL(S) &lt; H_{D}(P)+1 \;\;\;\;\;\;\;\; \text{(sub-optimum)}\)</p>
+
+<h3 id="shannon-fano-encoding">Shannon-Fano Encoding</h3>
+<p>$B = {0,1}$</p>
+
+<p>Split $A$ trying to have $\frac{1}{2}$ probability in each
+![[Pasted image 20240307141013.png]]
+Ordino le probabilità e dividere quando la somma arriva a $\frac{1}{2}$
+\(p_{1} \le p_{2} \le p_{3} \le \dots \le p_{k}\)</p>
+
+<p>Esempio:
+\(\begin{aligned}
+A &amp;= \{a,b,c,d,e,f\} \\ 
+B &amp;= \{0,1\} \\
+P &amp;= \left\{ \frac{40}{100}, \frac{18}{100}, \frac{15}{100}, \frac{13}{100}, \frac{10}{100}, \frac{4}{100} \right\} \\
+\end{aligned}\)
+![[Pasted image 20240307141356.png]]</p>
+
+<p>\(\left| \sum_{i=1}^k p_{i} - \sum_{i = h+1}^k p_{i} \right| = \text{ find h such that result is the minimum}\)
+<strong><em>Be careful Sub-Set-Sum problem is NP-complete</em></strong>
+\(H_{D}(P) \le EL(SF) &lt; H_{D}(P)+1\)
+[[Nota 8 ott 2020.pdf#page=5|Esempio]]</p>
+
+<p>Cosa succede quando dobbiamo codificare tuple di n caratteri?</p>
+
+<p>[[Nota 8 ott 2020.pdf#page=7|Esercizio]]
+Ho due variabili X,Y con distribuzioni P e Q indipendenti 
+\(H(X\land Y) = H(X) + H(Y)\)</p>
+
+<h3 id="huffman-code">Huffman Code</h3>
+<p>L’idea è quella di giocare sulle probabilità associate agli elementi dell’alfabeto primario.
+Praticamente:</p>
+<ol>
+  <li>Prendo l’elemento con probabilità maggiore e gli assegno un valore (0 o 1)</li>
+  <li>Prendo il secondo elemento con probabilità maggiore tra i rimanenti e gli assegno un altro valore (0,1)</li>
+  <li>Se la prob del secondo elemento non è $\geq$ a quella del primo e se non è l’unico elemento rimanente, pesco il terzo elemento con probabilità più grande e gli assegno il simbolo opposto a quello precedente, dopodichè sommo le due probabilità e ripeto dal passo 2.</li>
+</ol>
+
+<p>Alla fine dovrei ottenere qualcosa come quella dell’esempio linkato.
+[[Nota 8 ott 2020.pdf#page=8|Example]]</p>
+
+<h1 id="lz77-algorithm">LZ77 Algorithm</h1>
+<p><a href="https://www.dei.unipd.it/~capri/LDS/MATERIALE/lez0606.pdf">Link utile</a>
+![[Pasted image 20240307145023.png]]</p>
+
+<p>![[Pasted image 20240307145056.png]]</p>
+
+<p>![[Pasted image 20240307145122.png]]</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

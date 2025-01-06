@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Weak S1S &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Weak S1S</h1>
+  <time datetime="2024-12-18T00:00:00+01:00" class="post-date">18 Dec 2024</time>
+  <!--more-->
+<p>In questo articolo vedremo la definizione di <em>Weak Second monadic Theory of One’s Successor</em> e perchè ha senso parlarne.</p>
+
+<p>Negli articoli precedenti avevamo visto alcune cose sui linguaggi $\omega$-regolari e come gli automi di Buchi fossero il top per riuscire a modellarli. 
+Inoltre avevamo pure visto che dato un automa di Buchi $\cal{A}$ potevamo usare una formulazione $S1S_{\cal{A}}$ dipendente dall’alfabeto usato dall’automa. Da qui la necessità di usare la formulazione alfabeto-agnostica $S1S$ che non era niente più che una formulazione che convertiva qualsiasi alfabeto in un alfabeto binario.</p>
+
+<p>L’ultima lezione poi era servita per dimostrare che un linguaggio $\omega$-regolare $L\subseteq A^\omega$  è $\omega$-regolare se e solo se è definibile in S1S (per il secondo teorema di Buchi).</p>
+
+<p>Ma quindi che ci serve dire ancora?
+Bè, semplicemente il caro vecchio Buchi ha studiato anche quello che succede se le variabili del second’ordine sono limitate ad essere insiemi finiti. 
+Dobbiamo immaginare che fino adesso le parole infinite erano computazioni di sistemi reattivi in cui volevamo analizzare certe proprietà. Per prima cosa abbiamo trovato un modo per rappresentare le computazioni tramite automa (e abbiamo quindi tirato fuori dal cappello gli automi di Buchi), poi abbiamo detto “questa forma forse è un po’ scomoda, meglio usare la logica che è un formalismo carino e coccoloso che è in voga da tipo 5000 anni” (e abbiamo tirato fuori S1S). Ora quello che vogliamo è tirare fuori dal cilindro un nuovo formalismo che ci permetta di rappresentare sistemi reattivi in cui certe proprietà valgono solo in certi frammenti di computazione. In parole povere vogliamo un formalismo che mi permetta di analizzare delle proprietà locali di una parola infinita.</p>
+
+<p>Con S1S possiamo trattare problemi come “verifica che dopo ogni a ci siano solo delle b”</p>
+
+<p>Con WS1S possiamo trattare i problemi come “verifiche dopo ogni a ci sia una certo numero di b”</p>
+
+<p>Ma scusa, ma se vogliamo trattare delle proprietà locali perchè non “tagliamo” dalla sequenza infinita la porzione che ci serve e la analizziamo con uno dei tanti metodi che esistono per trattare le parole finite? Bè, perchè vogliamo un formalismo che gestisca le parole infinite e ne permetta di verificare alcune proprietà locali: semplice.</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

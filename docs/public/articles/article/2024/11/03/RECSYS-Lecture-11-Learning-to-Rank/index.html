@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 11 - Learning-to-Rank &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 11 - Learning-to-Rank</h1>
+  <time datetime="2024-11-03T00:00:00+01:00" class="post-date">03 Nov 2024</time>
+  <!--more-->
+<p><img src="https://static.wixstatic.com/media/4959fd_7c960901cf744863aa4eec5fc3a1aa10~mv2.png/v1/fill/w_257,h_190,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_7c960901cf744863aa4eec5fc3a1aa10~mv2.png" alt="" /></p>
+
+<p>La domanda a cui vogliamo rispondere oggi è: perchè studiare solo modelli che si concentrano sull’ottimizzazione di predizioni, quando possiamo studiare modelli che si concentrano sul risolvere problemi di ranking?</p>
+
+<p>Fin’ora abbiamo visto dei modelli che a partire da dati di input generavano delle predizioni (per esempio predicevamo le canzoni da consigliare e ordinavamo la ranking list in modo che le canzoni più coerenti fossero poste in cima), ma ora vogliamo cercare di trovare dei modelli che ci permettano di fare ranking degli elementi in modo da ottimizzare l’efficacia del ranking, senza dare troppa importanza allo score dei singoli elementi.</p>
+
+<p>Facciamo subito un esempio: devo consigliare a Bob delle canzoni C1 C2 C3 C4 C5. Sò che lo score delle canzoni è rispettivamente del 98%, 97%, 80%, 75%, 70%. Sò che C1 e C2 sono molto simili tra loro. Posso decidere di presentare la lista come C1, C2, C3, C4, C5. Facciamo finta di ottenere da Bob un punteggio di apprezzamento del ranking di 80/100. Perchè non abbiamo ottenuto il 100/100? Perchè Bob non apprezza granchè le canzoni C1 e C2. Noi credevamo che gli piacessero, ma scopriamo che invece non è così. Se avessimo distanziato gli elementi C1 e C2 avremmo portato nelle prime posizioni le canzoni C3,C4 che invece sono quelle che Bob apprezza e avremmo ottenuto un ranking migliore.</p>
+
+<p>In questo esempio è evidente come basarsi unicamente sugli score non sempre è la scelta più efficace.</p>
+
+<p>Ed ecco quindi che possiamo presentare una nuova classe di algoritmi: la classe Learning-to-Rank.</p>
+
+<h2 id="learning-to-rank">Learning-to-Rank</h2>
+
+<p>Gli algoritmi learning-to-rank hanno lo scopo di ottimizzare l’ordinamento degli elementi all’interno della ranking list, quindi come ho già detto, prediligono il punteggio complessivo ottenuto dalla lista finale piuttosto che sugli score individuali degli elementi nella lista.</p>
+
+<p>Nei modelli tradizionali avevamo due casi:</p>
+
+<ul>
+  <li>
+    <p>modelli query dipendenti: ossia gli elementi vengono ordinati in base a un set di queries a cui devono “rispondere”</p>
+  </li>
+  <li>
+    <p>modelli query indipendenti: ossia gli elementi vengono ordinati non in base a una query, ma in base alle caratteristiche degli elementi stessi o in modo da rispondere alle preferenze dell’utente</p>
+  </li>
+</ul>
+
+<p>Perciò già qui possiamo fare alcune previsioni su come funzionano:</p>
+
+<ul>
+  <li>
+    <p>dovranno implementare un modo per confrontare due o più elementi al fine di ordinarli</p>
+  </li>
+  <li>
+    <p>dovranno considerare una lista che funga da ground-truth per poter paragonare la lista prodotta con quella corretta</p>
+  </li>
+</ul>
+
+<p>In effetti i metodi learning-to-rank possono adottare 3 tipi di approcci che rispondono in modo diverso proprio alle due previsioni che abbiamo fatto:</p>
+
+<ul>
+  <li>
+    <p>point-wise approach:</p>
+
+    <ul>
+      <li>
+        <p>considero un elemento candidato e una query e calcolo uno score di “coerenza” tra il candidato e la query</p>
+      </li>
+      <li>
+        <p>la lista finale viene generata seguendo l’ordinamento degli score</p>
+      </li>
+      <li>
+        <p>il problema è che gli elementi vengono considerati in modo indipendente, quindi non viene catturato l’ordinamento relativo tra gli elementi</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>pair-wise approach:</p>
+
+    <ul>
+      <li>
+        <p>confronto ogni elemento della ranking list con ogni elemento della ranking list per capire quale sia l’ordine parziale degli elementi rispetto a una certa query. Per ogni coppia (xi, xj) viene calcolata uno score di rank e gli elementi verranno ordinati in base a quello score</p>
+      </li>
+      <li>
+        <p>ciascun elemento non è considerato in modo indipendente, ma sempre rispetto a un altro elemento della lista</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>list-wise approach:</p>
+
+    <ul>
+      <li>
+        <p>viene considerata la lista per intero e si cerca di ottimizzare l’ordinamento della lista</p>
+      </li>
+      <li>
+        <p>il problema è l’evaluation gaming, bisogna fare in modo che il modello non apprenda il modo in cui il modello valuta la lista generata rispetto alla lista “ground-truth”</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Se ve lo state domandando: sì, i metodi pointwise sono molto simili a quelli tradizionali, l’unica cosa che cambia è che i metodi tradizionali possono lavorare anche su dati non etichettati (perchè possono essere algoritmi non supervisionati) mentre i metodi learning-to-rank di tipo pointwise hanno bisogno di dati etichettati (perchè sono modelli supervisionati). Però almeno con i metodi pointwise si ha a che fare con modelli che riescono a catturare relazioni non lineari tra le features di input, al contrario dei metodi tradizionali.</p>
+
+<p>Per fare un piccolo recap:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_5f96058c45bf4c20aafb0938bd3f3ed1~mv2.png/v1/fill/w_592,h_309,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_5f96058c45bf4c20aafb0938bd3f3ed1~mv2.png" alt="" /></p>
+
+<p>Bene, ora partiamo subito con il parlare di RankMART</p>
+
+<h2 id="rankmart">RankMART</h2>
+
+<p>RankMART è un modello pairwise che si basa sulla logistic regression.</p>
+
+<p>Dati due documenti, l’idea è quella di</p>
+
+<ol>
+  <li>
+    <p>calcolare la probabilità che due elementi siano uno più grande dell’altro</p>
+
+    <p><img src="https://static.wixstatic.com/media/4959fd_d8b7681c7e424966924478ef352ff12a~mv2.png/v1/fill/w_435,h_91,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_d8b7681c7e424966924478ef352ff12a~mv2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>calcolare il ground truth delle coppie</p>
+
+    <p><img src="https://static.wixstatic.com/media/4959fd_d79bdffbf3ba46cda79a763bbecedee4~mv2.png/v1/fill/w_169,h_31,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_d79bdffbf3ba46cda79a763bbecedee4~mv2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>lasciare che un albero di regressione come ranking function f</p>
+
+    <p><img src="https://static.wixstatic.com/media/4959fd_69d6fc59c1ac455a94adb614e533be2c~mv2.png/v1/fill/w_206,h_74,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_69d6fc59c1ac455a94adb614e533be2c~mv2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>calcolo la cross entropy tra gli score di ranking calcolati tramite function f</p>
+  </li>
+</ol>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_bb0381f234114a7c9a94606e5ee8b790~mv2.png/v1/fill/w_280,h_56,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_bb0381f234114a7c9a94606e5ee8b790~mv2.png" alt="" /></p>
+
+<h2 id="lambdamart">LambdaMART</h2>
+
+<p>Non è che mi è preso il matto, RankMART serviva per poter spiegare LambdaMART.</p>
+
+<p>Questo nuovo modello è di tipo listwise piuttosto interessante. I passaggi che svolge sono i seguenti:</p>
+
+<ol>
+  <li>
+    <p>uso RankMART su un insieme di documenti</p>
+  </li>
+  <li>
+    <p>prima di addestrare un nuovo albero di regressione ordino gli elementi sulla base dei risultati che ho ottenuto fino adesso</p>
+  </li>
+  <li>
+    <p>verifico che la lista ordinata abbia dei buoni margini tra gli elementi e migliori le valutazioni della lista</p>
+  </li>
+  <li>
+    <p>procedo con l’addestramento del nuovo albero</p>
+  </li>
+</ol>
+
+<h3 id="possibili-domande">Possibili domande</h3>
+
+<ol>
+  <li>What is the input space in listwise approaches for learning to rank?</li>
+</ol>
+
+<p>L’input space negli approcci listwise, data una generica query Q, è una lista di items L = {i1,i2,…,in} che viene considerata nella sua interezza come singolo elemento di input. Gli algoritmi listwise a differenza degli approcci pointwise e parwise, cercano di calcolare una funzione f tale che sull’input L e sui parametri theta, minimizzano la loss tra l’ordinamento della lista “predetto” e l’ordinamento “ground truth”. Come funzione di loss alcuni algoritmi come LambdaMART usano la cross entropy loss (prima calcolano la posizione corretta degli elementi, poi controllano se la funzione f riesce a calcolare uno score corretto dando in pasto alla cross function il valore f(xi)-f(xj) calcolato su due elementi di indice i e j per cui sappiamo che yi&lt;yj</p>
+
+<ol>
+  <li>What is the loss function used in the pairwise approach, specifically in RankNet?</li>
+</ol>
+
+<p>La funzione di loss usata è la cross entropy function. RankNet è un approccio pairwise e la cross entropy mira a misurare se due elementi del ground truth vengono posizionati correttamente uno sopra l’altro o meno. L’idea della cross entropy è usare una logistic regression per calcolare la posizione relativa tra due elementi. Viene usata questa funzione perchè le metriche di ranking tradizionali come NDCG non sono direttamente derivabili e quindi non possono essere usate per aggiornare i parametri di un modello. La cross entropy è derivabile e consente di misurare la discrepanza tra le preferenze P(i&gt;j) e le preferenze reali yij Migliorare la cross entropy del modello porta a migliorare indirettamente alcune metriche globali come NDCG.</p>
+
+<ol>
+  <li>What does LambdaMART do to minimize pairwise mismatches?</li>
+</ol>
+
+<p>LambdaMART prima di addestrare un nuovo albero di regressione confronta l’ordinamento della lista ottenuto precedentemente con i risultati ottenuti nell’ultimo passaggio. In base ai risultati ottenuti dall’addestramento dell’ultimo albero (se migliorano o peggiorano la loss della lista delle preferenze) vengono aggiornati i parametri. La nuova lista delle preferenze viene quindi fornita in input per addestrare il nuovo albero di regressione.</p>
+
+<p>LambdaMART perfeziona l’algoritmo pairwise RankMART integrandolo con l’aggiornamento dei gradienti in base alle metriche di ranking.</p>
+
+<ol>
+  <li>What is the main difference between Logistic Regression and traditional regression models?</li>
+</ol>
+
+<p>La logistic regression permette di risolvere problemi di classificazione, mentre i metodi di regressione in generale permettono di risolvere problemi di predizione di valori continui (ad esempio la linear regression cerca di calcolare una retta che meglio approssima i punti su cui viene addestrata).</p>
+
+<ol>
+  <li>Explain the concept of the hypothesis space in listwise approaches to learning to rank. How does it differ from pointwise and pairwise approaches?</li>
+</ol>
+
+<p>L’hypothesis space nella listwise approaches è definito come l’insieme delle funzioni che preso in input un insieme di insieme di descrizioni degli elementi da valutare, restituiscono come output una permutazione degli elementi dell’insieme di input ordinato in maniera coerente con quello che è l’ordinamento dell’insieme ground truth contenente i medesimi elementi.</p>
+
+<p>Negli approcci pointwise l’hypothesis space è formato dalle funzioni che presa in input la descrizione di un elemento, restituiscono in output uno score valutato sulle caratteristiche dell’elemento in input.</p>
+
+<p>Negli approcci pairwise l’hypothesis space è formato dalle funzioni che presi in input una coppia di elementi, restituiscono in output l’ordinamento relativo tra i due elementi in input.</p>
+
+<ol>
+  <li>
+    <p>What is the role of the sigmoid function in Logistic Regression, and how does it contribute to the model’s output?</p>
+  </li>
+  <li>
+    <p>Discuss the significance of LambdaMART in the context of information retrieval metrics. How does it enhance the learning to rank process?</p>
+  </li>
+  <li>
+    <p>What are the main differences between the Boolean model and the Vector Space Model in information retrieval?</p>
+  </li>
+  <li>
+    <p>What are the key components of the loss function in listwise approaches, and how do they differ from those in pointwise and pairwise approaches?</p>
+  </li>
+  <li>
+    <p>Explain the significance of using a neural network in the RankNet algorithm for learning to rank. What advantages does it provide over traditional methods?</p>
+  </li>
+  <li>
+    <p>Discuss the implications of ignoring position information in pointwise and pairwise approaches to learning to rank. How does this affect the ranking outcomes?</p>
+  </li>
+  <li>
+    <p>Compare and contrast the Vector Space Model (VSM) and Latent Semantic Indexing (LSI) in terms of their approach to document representation and relevance assessment.</p>
+  </li>
+  <li>
+    <p>What is the primary focus of listwise approaches in learning to rank?</p>
+  </li>
+</ol>
+
+<p>A) To evaluate individual documents</p>
+
+<p>B) To process the entire group of documents associated with a query</p>
+
+<p>C) To compare pairs of documents</p>
+
+<p>D) To ignore document relevance</p>
+
+<ol>
+  <li>What loss function is used in RankMART?</li>
+</ol>
+
+<p>A) Mean Squared Error (MSE)</p>
+
+<p>B) Cross-entropy</p>
+
+<p>C) Mean Absolute Error (MAE)</p>
+
+<p>D) Logistic Loss</p>
+
+<ol>
+  <li>What does LambdaMART minimize in its ranking process?</li>
+</ol>
+
+<p>A) Document retrieval time</p>
+
+<p>B) Pairwise mismatches</p>
+
+<p>C) User interaction rates</p>
+
+<p>D) Document length</p>
+
+<ol>
+  <li>What type of model is Logistic Regression classified as?</li>
+</ol>
+
+<p>A) Non-parametric regression model</p>
+
+<p>B) Parametric classification model</p>
+
+<p>C) Unsupervised learning model</p>
+
+<p>D) Clustering model</p>
+
+<ol>
+  <li>Which model is based on the probabilistic ranking principle?</li>
+</ol>
+
+<p>A) Boolean model</p>
+
+<p>B) Vector Space Model</p>
+
+<p>C) BM25</p>
+
+<p>D) Latent Semantic Indexing</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

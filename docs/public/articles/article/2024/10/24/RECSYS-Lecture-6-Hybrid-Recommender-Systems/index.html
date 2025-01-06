@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 6 - Hybrid Recommender Systems &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 6 - Hybrid Recommender Systems</h1>
+  <time datetime="2024-10-24T00:00:00+02:00" class="post-date">24 Oct 2024</time>
+  <!--more-->
+<p><img src="https://static.wixstatic.com/media/4959fd_cc9aea2b7c994da9a586f1e9944ace85~mv2.png/v1/fill/w_322,h_182,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_cc9aea2b7c994da9a586f1e9944ace85~mv2.png" alt="" /></p>
+
+<p>Ecco a voi l’argomento per nulla atteso, la fusione delle fusioni: i sistemi di raccomandazione ibridi.</p>
+
+<p>Ovviamente l’idea di base è quella di sfruttare la combinazione di sistemi già visti, per creare raccomandazioni più accurate.</p>
+
+<p>Qui bisogna fare un’importante distinzione, ossia quella tra sistemi ensemble e sistemi ibridi:</p>
+
+<ul>
+  <li>
+    <p>i sistemi ensemble sono sistemi che utilizzano più modelli di machine learning, simili o diversi tra loro, per creare delle previsioni su cui poi viene definita una votazione. Il fatto chiave è che però i modelli lavorano in maniera indipendente.</p>
+
+    <ul>
+      <li>
+        <p><strong>voting</strong>: considero la somma pesata dei risultati dei singoli modelli</p>
+      </li>
+      <li>
+        <p><strong>stacking</strong>: considero i risultati dei singoli modelli che vengono dati in pasto a un ulteriore modello che effettuerà la predizione finale</p>
+      </li>
+      <li>
+        <p><strong>bagging</strong>: gli input forniti ai singoli modelli (tutti dello stesso tipo) è un sottoinsieme del set di dati e il risultato finale è la somma pesata dei valori degli output dei singoli modelli</p>
+      </li>
+      <li>
+        <p><strong>boosting</strong>: vengono forniti dei dati di input a un modello, il cui input è poi fornito a un altro modello che migliora gli errori del modello precedente. La somma pesata dei risultati funge poi da risultato finale</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_730f8e912edb4108b21bf12f2d142b1e~mv2.png/v1/fill/w_538,h_1024,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/4959fd_730f8e912edb4108b21bf12f2d142b1e~mv2.png" alt="" /></p>
+
+<ul>
+  <li>
+    <p>i sistemi ibridi invece sono sistemi che usano più modelli anche molto diversi tra loro che vengono eseguiti al fine di ottenere un singolo risultato. È possibile che un modello X manipoli risultati di un altro modello Y. I singoli modelli non lavorano in modo indipendente per raggiungere più risultati che devono essere votati come invece i sistemi ensemble.</p>
+
+    <p>Possiamo classificare questi sistemi ibridi nelle seguenti categorie</p>
+
+    <ul>
+      <li>
+        <p><strong>weighted:</strong> uso più modelli e sommo i risultati</p>
+      </li>
+      <li>
+        <p><strong>switching</strong>: in base al contesto decido se usare un modello piuttosto che un altro</p>
+      </li>
+      <li>
+        <p><strong>feature augmentation:</strong> uso l’output di un modello per accrescere il numero di features dei dati passati al modello successivo</p>
+      </li>
+      <li>
+        <p><strong>feature combination:</strong> raccolgo dati da più sorgenti e fondo assieme le loro features per poi darle in pasto a un singolo modello</p>
+      </li>
+      <li>
+        <p><strong>cascade:</strong> uilizzo più modelli concatenati tra loro, è l’equivalente del boosting</p>
+      </li>
+      <li>
+        <p><strong>mixed:</strong> propongo i risultati generati da più modelli (non è visto come un vero e proprio modello ibrido)</p>
+      </li>
+      <li>
+        <p><strong>meta-level:</strong> utilizzo un modello per setacciare i dati da passare al modello successivo</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Piccolo recap:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_a1bbb6dd83334648a4bbfe420767e573~mv2.png/v1/fill/w_488,h_254,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a1bbb6dd83334648a4bbfe420767e573~mv2.png" alt="" /></p>
+
+<p>Come al solito, le domande che ci dobbiamo porre quando abbiamo più metodi da poter applicare, sono:</p>
+
+<ul>
+  <li>
+    <p>che differenza c’è tra ciascun modello?</p>
+
+    <p>Dipende dai modelli che vogliamo paragonare, ma in genere uno quando viene applicato in un certo produce un buon risultato, quando viene usato in un altro contesto produce un risultato peggiore, mentre un altro ne produrrà uno migliore.</p>
+  </li>
+  <li>
+    <p>in base a cosa posso valutare se un modello è migliore di un altro?</p>
+
+    <p>Attraverso i risultati che produce</p>
+  </li>
+  <li>
+    <p>eh, grazie al cazzo, ma quindi come vengono prodotti i risultati?</p>
+
+    <p>ora lo vediamo, stai calmo.</p>
+  </li>
+</ul>
+
+<p>Se vogliamo capire come vengono prodotti i risultati dobbiamo prima parlare di alcune cose</p>
+
+<ul>
+  <li>
+    <p>come capire se i risultati sono buoni oppure no</p>
+
+    <ul>
+      <li>
+        <p>varianza</p>
+      </li>
+      <li>
+        <p>bias</p>
+      </li>
+      <li>
+        <p>noise</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>capire come vengono prodotti i risultati</p>
+
+    <ul>
+      <li>gradient descent</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="varianza">Varianza</h4>
+
+<p>La varianza serve a capire quanto le nostre previsioni si discostano dai dati reali , ovverosia quanto sono concentrati o dispersi tra loro.</p>
+
+<h3 id="bias">Bias</h3>
+
+<p>Il bias serve a capire se le nostre previsioni si discostano dai dati reali secondo un errore sistematico o meno.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_13e3327e708849d7a437284718517cf4~mv2.png/v1/fill/w_592,h_466,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_13e3327e708849d7a437284718517cf4~mv2.png" alt="" /></p>
+
+<h3 id="noise">Noise</h3>
+
+<p>La noise (o rumore) serve per capire se quanto le nostre previsioni sono soggette a un errore casuale.</p>
+
+<h3 id="gradient-descent">Gradient descent</h3>
+
+<p>Il gradient descent viene usato per aggiornare i parametri del modello in base a una funzione di costo. Se con certi parametri il valore della funzione di costo che stiamo usando si alza, aggiorneremo i parametri per cercare di abbassarla. L’obiettivo è quello di minimizzare la funzione di costo.</p>
+
+<p>Prendiamo ad esempio una funzione di regressione lineare semplice, come questa qua</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_5eac638075cf4b8d90ca9a6110a071eb~mv2.png/v1/fill/w_322,h_114,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_5eac638075cf4b8d90ca9a6110a071eb~mv2.png" alt="" /></p>
+
+<p>Per capire quanto i nostri risultati sono belli, usiamo una funzione di costo definita come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_97272b2d639b483294f9ad2e974330fa~mv2.png/v1/fill/w_424,h_88,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_97272b2d639b483294f9ad2e974330fa~mv2.png" alt="" /></p>
+
+<p>Che produrrà un certo grafico, con delle concavità, delle curve etc etc.</p>
+
+<p>Comunque questa funzione di costo sarà di questo tipo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_6dc1b9c8f15c47fe880b9ac07e8c2797~mv2.png/v1/fill/w_351,h_210,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_6dc1b9c8f15c47fe880b9ac07e8c2797~mv2.png" alt="" /></p>
+
+<p>Per certi valori dei parametri (nell’immagine corrisponde a “weight”) la funzione di costo crescerà, per altri valori decrescerà. Noi vogliamo capire per quale valore la funzione di costo è minima.</p>
+
+<p>Ora facciamo caso a quella sigla chiamata “gradient” e a quel pallino nero che è il valore iniziale del nostro parametro. Il gradiente è rappresentato da quella linea tratteggiata e non è altro che la derivata della funzione in quel punto, ossia in parole povere la pendenza della curva. Secondo quella linea, se mi sposto a destra mi allontano dal minimo, se mi sposto a sinistra mi avvicino.</p>
+
+<p>Eh, ma come facciamo quindi a fare in modo che il gradiente si sposti?</p>
+
+<p>Semplice, aggiorniamo il valore del parametro in base al valore del gradiente. Se il gradiente è positivo (pendenza positiva) allora decremento il valore del parametro (mi sposto a sinistra). Viceversa se il gradiente è positivo incremento il valore del parametro (mi sposto a destra).</p>
+
+<p>In sostanza faccio questo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_b1518072a9734619a53b2af016453c23~mv2.png/v1/fill/w_592,h_286,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_b1518072a9734619a53b2af016453c23~mv2.png" alt="" /></p>
+
+<p>È importante notare che esitono più modi per aggiornare i parametri.</p>
+
+<p>Possiamo infatti</p>
+
+<ul>
+  <li>
+    <p>aggiornare i parametri una volta che tutti i sample sono stati predetti -&gt; stochastic gradient descent</p>
+  </li>
+  <li>
+    <p>aggiornare i parametri ogni volta che viene predetto un sample -&gt; mini-batch gradient descent</p>
+  </li>
+  <li>
+    <p>aggiornare i parametri quando un certo numero di sample è stato predetto -&gt; batch gradient descent</p>
+  </li>
+</ul>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_c0413dbfe201494eac1a509b977da89b~mv2.png/v1/fill/w_592,h_208,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_c0413dbfe201494eac1a509b977da89b~mv2.png" alt="" /></p>
+
+<h2 id="weighted-model">Weighted model</h2>
+
+<p>Questo tipo di modello è piuttosto semplice, non si fa altro che sommare i valori delle predizioni date dai singoli modelli.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2ab6f1eed3b24aed80cc1b0623e99121~mv2.png/v1/fill/w_345,h_134,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_2ab6f1eed3b24aed80cc1b0623e99121~mv2.png" alt="" /></p>
+
+<p>Come prima, ora bisogna trovare una funzione di costo opportuna, tipo questa</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_a89455979ae646efa62916ab00696ea2~mv2.png/v1/fill/w_378,h_154,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a89455979ae646efa62916ab00696ea2~mv2.png" alt="" /></p>
+
+<p>E per finire si aggiornano i pesi</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_a3d5dbae71564ea681bdb5ec9c1ff9f4~mv2.png/v1/fill/w_315,h_162,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a3d5dbae71564ea681bdb5ec9c1ff9f4~mv2.png" alt="" /></p>
+
+<p>Tutto molto semplice.</p>
+
+<h2 id="switching">Switching</h2>
+
+<p>Questo tipo di sistema è basato sul cambiare modello di raccomandazione in base alle necessità del contesto. Ad esempio in caso ci siano problemi di cold-start il sistema potrebbe optare per usare un modello knowledge based per poi usare un modello content-based non appena l’utente abbia valutato un numero sufficiente di items.</p>
+
+<p>I pro sono chiaramente questa adattabilità alle situazioni, ma di contro non sono visti propriamente come dei sistemi ibridi.</p>
+
+<h2 id="cascade">Cascade</h2>
+
+<p>I sistemi ibridi cascade sono modelli in cui si esegue un refinement degli output dei modelli prima di passarli ai modelli successivi della catena. Questo permette di diminuire l’errore della predizione finale.</p>
+
+<h2 id="feature-combination">Feature combination</h2>
+
+<p>L’idae non è altro che considerare più sorgenti di dati, combinarli e usare le features estratte come input per un modello.</p>
+
+<p>Ad esempio si può usare dei dati collaborativi (numero di utenti che hanno valutato positivamente un certo items, etc. ) per poi addestrare un modello che invece è di tipo content-based.</p>
+
+<p>Come funzione di costo può essere usata qualcosa del tipo</p>
+
+<p>J = collaborative object (θ) + ß·content-based object(θ) + termine di regolarizzazione</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

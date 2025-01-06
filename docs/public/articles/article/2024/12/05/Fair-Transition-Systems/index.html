@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Fair Transition System &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Fair Transition System</h1>
+  <time datetime="2024-12-05T00:00:00+01:00" class="post-date">05 Dec 2024</time>
+  <!--more-->
+<p>Una volta mi faceva schifo la matematica e ora invece trovo che sia fondamentale.
+I Fair Transition Systems sono un modello utile a rappresentare sistemi/programmi reattivi, ossia che variano in base alle condizioni del contesto in cui si trovano e che non ci si aspetta abbiano una terminazione. 
+Un sistema/programma tradizionale è un sistema che dato un input termina producendo un output, mentre un sistema reattivo è un programma che dato un contesto iniziale, esegue certe operazioni che possono variare in base agli stati in cui si troverà. Un esempio di sistema reattivo è un sistema operativo, il sistema SCADA di un automobile o cose di questo genere.</p>
+
+<h3 id="come-definisco-un-fts">Come definisco un FTS?</h3>
+<p>Un FTS è definito da una tupla così composta
+\(&lt;\cal{V},\Theta,\cal{T}, \cal{J}, \cal{C}&gt;\)
+Vi chiederete ovviamente cosa significa ciascuna di queste lettere. Allora:</p>
+<ul>
+  <li>$\cal{V}$ è l’insieme <em>finito</em> delle variabili
+    <ul>
+      <li><strong><em>control variable</em></strong>: ce n’è solo una</li>
+      <li><strong><em>data variable</em></strong>: possono essere più di una e rappresentano caratteristiche (ad esempio il colore di un semaforo, etc.)</li>
+    </ul>
+  </li>
+  <li>$\Theta$ è una formula di stato <strong><em>soddisfacibile</em></strong> che rappresenta la condizione iniziale. Se uno stato soddisfa $\Theta$ è detto <strong><em>initial state</em></strong></li>
+  <li>$\cal{T}$ è l’insieme <em>finito</em> delle transizioni
+    <ul>
+      <li>$\tau \in \cal{T}$ è una funzione del tipo $\tau: \Sigma \to 2^\Sigma$ (in pratica mappa da uno stato a un insieme di stati. Se mi trovo nello stato “semaforo verde” posso finire nello stato “mi butto sulle strisce”, “attraverso la strada”, “rimango fermo”, …)</li>
+      <li>bisogna vedere $\tau$ come una funzione che specifica i successori di uno stato s</li>
+      <li>se $\tau(s)\ne \emptyset$ allora la transizione è abilitata</li>
+      <li>se $\tau(s)=\emptyset$ allora la transizione è disabilitata</li>
+    </ul>
+  </li>
+  <li>$\cal{J}$ tale che $\cal{J}\subseteq \cal{T}$, è l’insieme delle transizioni per cui è richiesta la proprietà di <strong><em>justice</em></strong></li>
+  <li>$\cal{C}$ tale che $\cal{C}\subseteq \cal{T}$,  è l’insieme delle transizioni per cui è richiesta la proprietà di <strong><em>compassion</em></strong></li>
+</ul>
+
+<h4 id="proprietà-di-justice">Proprietà di Justice</h4>
+<p>La proprietà di justice dice questo: se arrivati a un certo stato posso fare qualcosa X (ad esempio arrivo in università e posso aprire la porta dell’aula) allora <strong><em>prima o poi</em></strong> eseguirò la transizione X (prima o poi aprirò la porta). “Non so quando, non so come, ma prima o poi vi troverò”.</p>
+<h4 id="proprietà-di-compassion">Proprietà di Compassion</h4>
+<p>La proprietà di compassion invece fa un’assunzione più forte. Dice che se ho una transizione X che è attiva un numero infinito di volte, allora la transizione verrà presa un numero infinito di volte. Cioè, in altri termini: <strong><em>escludo</em></strong> la possibilità che le transizioni attive un numero <strong><em>infinito</em></strong> di volte vengano prese solo in un numero <strong><em>finito</em></strong> di occasioni.</p>
+
+<p>La differenza sostanziale tra justice e compassione è che:</p>
+<ol>
+  <li>se richiedo la compassion automaticamente richiedo la justice (perchè la compassion è una proprietà più forte della justice)</li>
+  <li>se richiedo la justice non è detto che ottenga anche la compassion (perchè prima o poi la transizione potrebbe essere presa, ma non per un numero infinito di volte)</li>
+</ol>
+
+<h4 id="idling-transition">Idling transition</h4>
+<p>Esistono delle transizione “idling” che in pratica non fanno niente, perchè non cambiano nè i valori delle data variables, nè quello della control variable.</p>
+
+<p>Possiamo quindi vedere le idling transition come transizioni neutre.
+\(τ(sk​)={sk​}\)
+Il senso pratico è quello di mantenersi in una specifica condizione senza fare nulla (pensiamo al condizionatore. Può rimanere acceso senza fare nulla finchè le condizioni di calore o umidità non cambiano abbastanza da dover far intervenire il condizionatore)</p>
+
+<h4 id="p-computation">P-computation</h4>
+<p>Una p-computation non è altro che una sequenza di computazione $\sigma$ di un FTS che soddisfa le seguenti proprietà:</p>
+<ul>
+  <li><strong>initiliaty</strong>: $s_0$ soddisfa $\Theta$</li>
+  <li><strong>consequentiality</strong>: per ogni stato di indice j=1,2,… è vero che $s_{j+1}$ è un $\tau$-successore di $s_j$ per qualche $\tau$</li>
+  <li><strong>justice</strong>: non esistono transizioni $\tau \in \cal{J}$ che sono abilitate e non vengono mai prese</li>
+  <li><strong>compassion</strong>: non esistono transizioni $\tau \in \cal{C}$ che sono sempre abilitate e vengono prese un numero finito di volte</li>
+</ul>
+
+<p><strong>state P-accessible</strong>: stato contenuto in una P-computazione
+<strong>RUN computation</strong>: sequenza di computazione $\sigma$ che soddisfa solo le proprietà di initiality e consequentiality</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Complexity Theory - Lecture 4 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Complexity Theory - Lecture 4</h1>
+  <time datetime="2025-01-03T00:00:00+01:00" class="post-date">03 Jan 2025</time>
+  <!--more-->
+<h1 id="relazione-tra-classi-di-complessità">Relazione tra Classi di Complessità</h1>
+
+<h2 id="funzioni-proprie-e-macchine-precise">Funzioni Proprie e Macchine Precise</h2>
+<p>Alcune domande a cui cercheremo di dare una risposta in questo articolo sono:</p>
+<ul>
+  <li>Perchè abbiamo avuto bisogno di stabilire l’esistenza di funzioni proprie e di macchine precise?</li>
+  <li>Perchè le funzioni proprie sono interessanti?</li>
+  <li>Esistono funzioni non proprie e macchine non precise?</li>
+  <li>Esistono macchine precise che non calcolano funzioni proprie?</li>
+  <li>Esistono macchine non precise che calcolano funzioni proprie?</li>
+</ul>
+
+<p>(SUGGERIMENTO, riscriverò la domanda nel momento in cui vi risponderò, quindi se vi interessa sapere la risposta alla domanda basta fare un bel CTRL+F e cercare la domanda che vi interessa. Avrei potuto mettere un link diretto, ma perchè rendere la vita più semplice a me e a voi?)</p>
+
+<p>Diamo una definizione di <strong>funzione propria</strong>:</p>
+<h5 id="definizione-di-funzione-propria">Definizione di funzione propria</h5>
+<p>Una funzione $f$ si dice propria quando:</p>
+<ul>
+  <li>è monotona, non decrescente</li>
+  <li>per ogni input $x$ esiste una MdT $\mathcal{M}$ con I/O che calcola $f(x)$ e tale che a partire da una configurazione iniziale</li>
+</ul>
+
+<p>\((s, \triangleright,x,\triangleright,\varepsilon, \triangleright,\varepsilon,\dots )\)
+Dove:</p>
+
+<ul>
+  <li>$s$: stato iniziale.</li>
+  <li>$x$: input scritto in un formato valido (ad esempio, in binario o unario).</li>
+  <li>$\varepsilon$: nastro vuoto (non ancora utilizzato).</li>
+  <li>$\triangleright$: delimitatore che indica l’inizio del nastro.</li>
+</ul>
+
+<p>la MdT in $t$ steps di computazione giunge a una configurazione finale</p>
+
+<p>\((\{no,yes,halt\}, \triangleright, x, \triangleright,\sqcup, \dots, \triangleright,\sqcup, \sqcap^{f(x)})\)
+ossia a una configurazione in cui il nastro di output contiene solo simbolo quasi-blank per un numero di volte pari a f(x) (in binario).</p>
+
+<p><strong>La cosa importante è che:</strong></p>
+<ol>
+  <li>$t \in O(\mid x\mid + \log(x))$</li>
+  <li>$\mathcal{M} \in SPACE(f(\mid x\mid))$</li>
+</ol>
+
+<p>È importante che  $t \in O(\mid x\mid + \log(x))$  per</p>
+<ol>
+  <li>evitare computazioni che rallentano eccessivamente al crescere di $x$. 
+Ad esempio se considerassi $t \in O(2^{\mid x\mid})$ con $\mid x\mid  = 10$ avrei $t \in O(2^{10})$, ma con $\mid x \mid = 100$ avrei $t \in O(2^{100})$ che è un numero improponibile di passi di computazione)</li>
+  <li>se in $t$ non ci fosse il termine $\mid x\mid$ non potremmo considerare la funzione logaritmo come una funzione propria. Se solo per leggere l’input $x$ impiego $\mid x\mid$, con $t \in  O(log(x))$ non riuscirei a terminare la lettura di $x$ !</li>
+</ol>
+
+<p><strong>Esempi di funzioni proprie sono</strong>:</p>
+<ul>
+  <li>polinomio</li>
+  <li>costante</li>
+  <li>logaritmo</li>
+  <li>torre di esponenziali</li>
+</ul>
+
+<h5 id="definizione-di-macchina-di-turing-precisa">Definizione di macchina di Turing precisa</h5>
+<p>Una macchina di Turing precisa è una macchina precisa se esiste una funzione $f$ e una funzione $g$ tale che per ogni $x \in \Sigma^*$ $\mathcal{M}$ termina in tempo $f(\mid x\mid)$ usando spazio $g(\mid x\mid)$.</p>
+
+<p><strong><em>Ma perchè abbiamo avuto bisogno di stabilire l’esistenza di funzioni proprie e di macchine precise?</em></strong></p>
+
+<p>Perchè se dobbiamo parlare di “relazioni tra classi di complessità” abbiamo bisogno di confrontare delle funzioni. Se le funzioni che confrontiamo non hanno caratteristiche in comune o i modelli che usiamo sono diversi, i risultati potrebbero essere incoerenti o ambigui.
+Per questa ragione abbiamo deciso di definire le funzioni proprie e le macchine precise. Le prime sono funzioni che godono delle proprietà sopra enunciate, ossia dei limiti spaziali e temporali richiesti per la loro computazione. Le macchine precise invece sono un modello di macchine ragionevole e realistico, in cui, ad esempio, il calcolo di una funzione lineare non richiede tempo esponenziale.</p>
+
+<h3 id="che-relazione-cè-tra-mdt-precise-e-funzioni-proprie">Che relazione c’è tra MdT precise e funzioni proprie?</h3>
+<p>Sembrerebbe che se esiste una funzione propria allora esiste una macchina precisa che la calcola in f(n) steps.</p>
+
+\[\begin{gathered}
+\mathcal{L} \in TIME(f(\mid x\mid)), f \text{ is proper } \\ \\
+\Downarrow \\\\
+\exists\mathcal{M} \text{ MdT precise such that }\mathcal{M} \text{ decides } \mathcal{L}\text{ using } O(f(\mid x\mid)) \text{ steps.}
+\end{gathered}\]
+
+<h3 id="hierarchy-theorem">Hierarchy Theorem</h3>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

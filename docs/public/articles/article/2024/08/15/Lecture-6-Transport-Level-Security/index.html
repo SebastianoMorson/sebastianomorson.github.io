@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 6 Network Security - TLS &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 6 Network Security - TLS</h1>
+  <time datetime="2024-08-15T00:00:00+02:00" class="post-date">15 Aug 2024</time>
+  <!--more-->
+<p>![[1715758489_grim.png]]</p>
+
+<p>![[1715758635_grim.png]]</p>
+
+<h1 id="transport-level-security-tls">Transport Level Security (TLS)</h1>
+<p>![[1715758796_grim.png]]</p>
+
+<p>TLS è lo standard che ha surclassato il protocollo SSL (Secure Socket Layer).
+TLS si basa su TCP ed è un servizio general-purpose implementato come un insieme di protocolli.
+![[1715758928_grim.png]]
+TLS non è un singolo protocollo, ma bensì un doppio layer di protocolli come si può vedere in figura.
+Alcuni dei protocolli che fanno parte di TLS sono:</p>
+<ul>
+  <li>HTTP</li>
+  <li>Handshake Protocol</li>
+  <li>Change Cipher Spec Protocol (CCSP)</li>
+  <li>Alert Protocol</li>
+  <li>Heartbeat Protocol</li>
+</ul>
+
+<h3 id="architettura">Architettura</h3>
+<p>Quando si parla di TLS bisogna ricordare due concetti:</p>
+<ul>
+  <li><strong>TLS connection</strong>:
+    <ul>
+      <li>peer-to-peer</li>
+      <li>transitorie</li>
+      <li>ogni connessione è associata con <strong><em>una</em></strong> sessione</li>
+    </ul>
+  </li>
+  <li><strong>TLS session</strong>:
+    <ul>
+      <li>associazione tra client e server</li>
+      <li>definisce un insieme di parametri di sicurezza crittografica</li>
+      <li>usata per evitare l’overhead di stabilire nuovi parametri di sicurezza per ogni connessione</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Una sessione inoltre è definita dai seguenti parametri:</p>
+<ul>
+  <li><strong>identificatore di sessione</strong>
+  -&gt; sequenza di byte arbitraria scelta dal servere per identificare uno stato di sessione attivo o resumable</li>
+  <li><strong>peer certificate</strong>
+  -&gt; certificato X509.v3 che può avere anche valore nullo</li>
+  <li><strong>metodo di compressione</strong> 
+  -&gt; definisce l’algoritmo usato per comprimere i dati prima dell’encryption</li>
+  <li><strong>cipher spec</strong>
+  -&gt; definisce i metodi crittografici usati nelle connessioni</li>
+  <li><strong>master secret</strong>
+  -&gt; 48-byte secret condiviso tra client e server</li>
+  <li><strong>is resumable</strong>
+  -&gt; flag che specifica se la sessione può inizializzare nuove connessioni</li>
+</ul>
+
+<p>Lo stato di connessione è invece definito dai seguenti parametri:</p>
+<ul>
+  <li><strong>Server and client random:</strong> Byte sequences that are chosen by the server and client for each connection.</li>
+  <li><strong>Server write MAC secret:</strong> The secret key used in MAC operations on data sent by the server.</li>
+  <li><strong>Client write MAC secret:</strong> The secret key used in MAC operations on data sent by the client.</li>
+  <li><strong>Server write key:</strong> The secret encryption key for data encrypted by the server and decrypted by the client.</li>
+  <li><strong>Client write key:</strong> The symmetric encryption key for data encrypted by the client and decrypted by the server.</li>
+  <li><strong>Initialization vectors:</strong> When a block cipher in CBC mode is used, an initialization vector (IV) is maintained for each key. This field is first initialized by the TLS Handshake Protocol. Thereafter, the final ciphertext block from each record is preserved for use as the IV with the following record.</li>
+  <li><strong>Sequence numbers:</strong> Each party maintains separate sequence numbers for transmitted and received messages for each connection. When a party sends or receives a “change cipher spec message”, the appropriate sequence number is set to zero. Sequence numbers may not exceed $2^{64}-1$</li>
+</ul>
+
+<h1 id="tls-record-protocol">TLS Record Protocol</h1>
+<p>![[1715760194_grim.png]]</p>
+
+<p>I passaggi svolti dal TLS Record Protocol sono:</p>
+<ol>
+  <li>fragmentation: il messaggio viene frammentato in blocchi di dimensione $\leq2^{14}$ byte</li>
+  <li>compression: opzionale, in TLSv2 l’algoritmo di compressione di default è null</li>
+  <li>MAC: TLS usa HMAC</li>
+  <li>encryption: viene usata la cifratura simmetrica, l’encryption non può incrementare la lunghezza più di 1024 byte 
+![[1715760409_grim.png]]</li>
+</ol>
+
+<p>Il record header è così composto
+![[1715761214_grim.png]]</p>
+
+<ul>
+  <li><strong>Content Type (8 bits):</strong> The higher-layer protocol used to process the enclosed fragment.</li>
+  <li><strong>Major Version (8 bits):</strong> Indicates major version of TLS in use. For TLSv2, the value is 3.</li>
+  <li><strong>Minor Version (8 bits):</strong> Indicates minor version in use. For TLSv2, the value is 0.</li>
+  <li><strong>Compressed Length (16 bits):</strong> The length in bytes of the plaintext fragment (or compressed fragment if compression is used). The maximum value is 214 + 2048.</li>
+</ul>
+
+<p>![[1715761911_grim.png]]</p>
+<h1 id="change-cipher-spec-protocol">Change Cipher Spec Protocol</h1>
+<p>Protocollo che consiste in un singolo byte del valore 1.
+L’unico scopo di questo messaggio è di far sì che il pending state venga copiato nel current state, che aggiorna il cifrario da usare sulla connessione.</p>
+<h1 id="alert-protocol">Alert Protocol</h1>
+<p>Usato per comunicare alle peer entity i TLS-related alerts.
+Come in altre applicazioni che usano TLS, i messaggi di alert sono compressi e cifrati.</p>
+
+<p>Il messaggio di alert consiste di 2 byte:</p>
+<ul>
+  <li>1° byte: severità del messaggio (warning o fatal). Se è fatal, la comunicazione viene terminata immediatamente</li>
+  <li>2° byte: codice che indica l’alert specifico
+    <h1 id="handshake-protocol">Handshake Protocol</h1>
+    <p>Protocollo che serve per autenticare mutamente server e client e negoziare l’algoritmo di encryption e di MAC e le chiavi di cifratura usate.  L’Handshake Protocol è usato prima di ogni comunicazione.</p>
+  </li>
+</ul>
+
+<p>![[1715764461_grim.png]]</p>
+
+<p>![[1715761523_grim.png]]</p>
+
+<h3 id="phase-1-establish-security-capabilities">Phase 1 Establish Security Capabilities</h3>
+<p>viene inviato un messaggio da parte del client contenente:</p>
+<ul>
+  <li><strong>versione</strong>: la versione TLS più recente, conosciuta dal client</li>
+  <li><strong>random</strong>: 32-bit timestamp + 28 random bytes che viene usata in seguito come nonce e il key exchange per impedire replay attacks</li>
+  <li><strong>session id</strong>: variable-length session identifier. Se il session id è uguale a 0 significa che il client vuole creare una nuova connessione sulla sessione o fare un update dei parametri della connessione esistente</li>
+  <li><strong>chipersuite</strong>: una lista di algoritmi crittografici supportati dal client, in ordine decrescente rispetto alla preferenza</li>
+  <li><strong>compression method</strong>: metodi di compressione supportati dal client</li>
+</ul>
+
+<h3 id="phase-2-server-authentication-and-key-exchange">Phase 2 Server Authentication and Key Exchange</h3>
+<p>Il server invia il suo certificato e un <strong>server_key_exhange message</strong> (che può essere non inviato nel caso in cui viene usato RSA come key exhange o il server ha inviato un certificato con fixed Diffie-Hellman parameters)</p>
+
+<p>Infine il server invia il <strong>server_done message</strong> per indicare la terminazione dell’hello message e dei messaggi associati.</p>
+<h3 id="phase-3-client-authentication-and-key-exchange">Phase 3 Client Authentication and Key Exchange</h3>
+<p>Il client verifica la validità del certificato ricevuto dal server e controlla che server_hello parameters siano accettabili.  Nel caso in cui ci siano degli errori nei controlli viene l’alert <strong>no_certificate</strong></p>
+
+<p>Successivamente il client invia <strong>client_key_exchange message</strong> che contiene dei parametri dipendenti dal key exchange utilizzato:</p>
+<ul>
+  <li><strong>RSA</strong>: il client invia una pre-master secret di 48-byte e](&lt;RSA: Il cliente genera un segreto pre-master di 48 byte e lo cifra con la chiave pubblica del certificato del server o con una chiave RSA temporanea da un messaggio server_key_exchange. Il suo utilizzo per calcolare un segreto master è spiegato successivamente.</li>
+  <li><strong>Diffie–Hellman Ephemeral o Anonimo</strong>: I parametri pubblici Diffie–Hellman del cliente vengono inviati.</li>
+  <li><strong>Diffie–Hellman Fisso</strong>: I parametri pubblici Diffie–Hellman del cliente sono stati inviati in un messaggio di certificato, quindi il contenuto di questo messaggio è nullo.
+Infine, in questa fase, il cliente può inviare un messaggio certificate_verify per fornire una verifica esplicita di un certificato del cliente. Questo messaggio viene inviato solo a seguito di eventuali certificati del cliente che hanno capacità di firma (cioè tutti i certificati tranne quelli contenenti parametri Diffie–Hellman fissi).
+    <h3 id="phase-4-finish">Phase 4 Finish</h3>
+    <p>Il cliente invia un messaggio change_cipher_spec e copia il CipherSpec pendente nel CipherSpec corrente. Si noti che questo messaggio non è considerato parte del Protocollo di Handshake ma viene inviato utilizzando il Protocollo Change Cipher Spec.
+Il cliente invia quindi immediatamente il messaggio finished con i nuovi algoritmi, chiavi e segreti. Il messaggio finished verifica che gli scambi di chiavi e i processi di autenticazione siano stati completati con successo</p>
+  </li>
+</ul>
+
+<h1 id="generation-of-cryptographic-parameters">Generation of Cryptographic Parameters</h1>
+
+<h1 id="ssltls-attacks">SSL/TLS Attacks</h1>
+
+<h1 id="hyper-text-transfer-protocol-secure-https">Hyper Text Transfer Protocol Secure (HTTPS)</h1>
+
+<h1 id="secure-shell-ssh">Secure Shell (SSH)</h1>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

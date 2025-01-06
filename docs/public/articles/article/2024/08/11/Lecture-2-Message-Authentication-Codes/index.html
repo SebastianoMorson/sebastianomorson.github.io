@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 2 Network Security - MAC &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 2 Network Security - MAC</h1>
+  <time datetime="2024-08-11T00:00:00+02:00" class="post-date">11 Aug 2024</time>
+  <!--more-->
+<p>Quando parliamo di comunicazione attraverso una rete, potremmo incappare nei seguenti attacchi:</p>
+<ul>
+  <li>disclosure</li>
+  <li>traffic analysis</li>
+  <li>masquerade</li>
+  <li>content modification</li>
+  <li>sequence modification</li>
+  <li>timing modification</li>
+  <li>source repudation</li>
+  <li>destination repudation</li>
+</ul>
+
+<p>La <strong>message authentication</strong> è la procedura per verificare che il messaggio ricevuto arriva da una presunta sorgente non è stato alterato durante il percorso (volontariamente o involontariamente).</p>
+
+<h1 id="how-mac-works">How MAC works</h1>
+<p>![[1715177156_grim.png]]</p>
+
+<p>A MAC function is similar to encryption. One difference is that the MAC algorithm need not be reversible, as it must be for decryption. In general, the MAC function is a many-to-one function. The domain of the function consists of messages of some arbitrary length, whereas the range consists of all possible MACs and all possible keys</p>
+
+<p>Un MAC dovrebbe:</p>
+<ul>
+  <li>impedire di poter creare un MAC uguale a quello di un altro messaggio o di scovare una chiave che genera lo stesso MAC</li>
+  <li>permettere solo di svolgere attacchi a forza bruta su un certo plaintext</li>
+  <li>l’algoritmo di autenticazione non dovrebbe essere più debole su un sottoinsieme di bit del messaggio</li>
+</ul>
+
+<h2 id="hmac">HMAC</h2>
+<p>Un HMAC è un MAC derivato da una funzione di hash.
+L’idea è sfruttare la velocità delle funzioni di hash rispetto a quelle di encryption simmetrico</p>
+
+<p>![[1715180084_grim.png]]</p>
+
+<p>Efficient implementation of HMAC:
+![[1715180125_grim.png]]</p>
+
+<p>È stato dimostrato che la sicurezza di HMAC dipende dalla forza della funzione di hash utilizzata.</p>
+
+<h2 id="data-authentication-algorithm-daa">Data Authentication Algorithm (DAA)</h2>
+<p>![[1715180667_grim.png]]</p>
+
+<h2 id="chiperbased-message-authentication-code-cmac">ChiperBased Message Authentication Code (CMAC)</h2>
+<p>![[1715180716_grim.png]]</p>
+
+<h1 id="authenticated-encryption-ae">Authenticated Encryption (AE)</h1>
+<p>AE è un termine per indicare sistemi di crittografia che proteggono sia la confidenzialità che l’autenticità di una comunicazione.</p>
+
+<p>Si può ottenere un sistema di questo tipo in varie maniere:</p>
+<ul>
+  <li>digest + encrypted version 
+    h = H (M ) 
+    E(K , (M ||h ))</li>
+  <li>authentication + encryption 
+    T = MAC(K1 , M ) 
+    E(K2 , [M || T ])</li>
+  <li>encryption + authentication
+   C = E(K2 , M ) 
+   T = MAC(K1 , C )
+   (C , T )</li>
+  <li>encryption || authentication
+    C = E(K2 , M )
+    T = MAC(K1 , M )
+    (C , T )</li>
+</ul>
+
+<p>Il problema è che ciascuno di questi approccia ha delle vulnerabilità.</p>
+
+<h2 id="counter-with-chiper-block-chaining-message-authentication-code-ccm">Counter with Chiper Block Chaining Message Authentication Code (CCM)</h2>
+<p>È una variante dell’approccio “cifra e poi fai il MAC” per la cifratura autenticata.</p>
+
+<p>CCM si basa sull’utilizzo di AES, CTR mode e CMAC come algoritmo di cifratura.</p>
+
+<p>La chiave simmetrica usata per la cifratura è la stessa usata per calcolare il MAC.</p>
+
+<p>![[1715328300_grim.png]]
+In questo schema:</p>
+<ul>
+  <li>nonce serve per impedire i replay attacks,</li>
+  <li>Ass. Data sono dati non cifrati associati al plaintext, come ad esempio l’ header di un pacchetto, etc.</li>
+</ul>
+
+<h2 id="galoiscounter-mode-gcm">Galois/Counter Mode (GCM)</h2>
+<p>È un algoritmo pensato per essere parallelizzabile così da fornire un alto throughput, ma con minor costo e latenza</p>
+
+<p>![[1715328672_grim.png]]</p>
+
+<p>GCM usa le due funzioni schematizzate nell’immagine sopra:</p>
+<ul>
+  <li>GHASH, ossia una funzione di hash che usa una chiave</li>
+  <li>GCTR, ossia una modalità CTR che prevede dei contatori per contare le operazioni</li>
+</ul>
+
+<p>La funzione $GHASH_{H}(X)$ può essere vista come 
+\(GHASH_{H}(X) = (X_{1}\cdot H^m)\; XOR\; (X_{2}\cdot H^{m-1})\;XOR\; \dots\;XOR\; (X_{1}\cdot H^2)\; XOR\; (X_{m}\cdot H)\)
+dove:</p>
+<ul>
+  <li>il simbolo $\cdot$ indica la moltiplicazione in $GF(2^{128})$</li>
+  <li>H è la chiave di hash</li>
+</ul>
+
+<p>Se la stessa chiave di hash viene usata per l’autenticazione di messaggi multipli, allora $H^{2},H^{3}$ può essere precalcolata ona volta per l’utilizzo di ogni messaggio che deve essere autenticato.</p>
+
+<p>$GCTR_{K}(ICB, X)$ prende in input un segreto K e una stringa di lunghezza arbitraria X e ritorna un testo cifrato Y di lunghezza len(X).</p>
+
+<p>Lo schema generale di GCM è il seguente:
+![[1715329372_grim.png]]</p>
+
+<h2 id="key-wrap-kw">Key Wrap (KW)</h2>
+<p>L’idea è quella di scambiare una chiave simmetrica in modo sicuro usando una chiave simmetrica che è già nota a entrambi le parti. Questa chiave già conosciuta prende il nome di <strong>Key Encryption Key (KEK)</strong></p>
+
+<p>La comodità di questo algoritmo è che se la segretezza della chiave pre-shared è mantenuta, le due parti possono modificare la chiave segreta utilizzata per la comunicazione rapidamente, scambiandosi la chiave attraverso key wrapping.</p>
+
+<p>Il nuovo modo di cifratura, chiamato Key Wrapping (KW), è stato creato per gestire chiavi di lunghezza superiore alla dimensione dei blocchi dell’algoritmo di crittografia, come AES. Poiché le chiavi sono cruciali per la sicurezza e vengono utilizzate ripetutamente, la loro protezione è prioritaria. KW offre una robusta crittografia in cui ogni bit dell’output dipende in modo significativo da ogni bit dell’input, a differenza di altre modalità. Tuttavia, KW ha un throughput inferiore rispetto ad altre modalità, ma è adatto per applicazioni di gestione delle chiavi. È utilizzato principalmente per piccole quantità di testo in chiaro anziché per grandi quantità come messaggi o file.</p>
+
+<p>![[1715330937_grim.png]]</p>
+
+<p>![[1715333316_grim.png]]</p>
+
+<h2 id="pseudorandom-number-generation-using-hash-functions-and-macs">Pseudorandom Number Generation Using Hash Functions and MACs</h2>
+<p>L’idea è di usare una hash function o MAC come PRNG.
+![[1715333424_grim.png]]
+![[1715333590_grim.png]]
+Nello standard di sicurezza LAN wireless IEEE 802.11i, viene utilizzata una combinazione di seme e contatore come input dati, incrementando il contatore per ogni blocco di output. Questo metodo sembra offrire una sicurezza migliorata rispetto all’approccio SP 800-90, dove l’input dati per ciascun blocco di output dipende solo dall’output del blocco precedente di HMAC. Tuttavia, anche se un avversario può osservare l’output pseudocasuale, conoscendo sia l’input che l’output di HMAC, la presunta sicurezza di HMAC dovrebbe impedire di recuperare la chiave K e quindi di prevedere i futuri bit pseudocasuali. Al contrario, protocolli come TLS e WTLS utilizzano HMAC due volte per ogni blocco di output, senza fornire informazioni dirette sull’input. Questa doppia applicazione di HMAC aumenta il carico computazionale ma sembra eccessiva in termini di sicurezza.</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

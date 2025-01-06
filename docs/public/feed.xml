@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://sebastianomorson.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sebastianomorson.github.io/" rel="alternate" type="text/html" /><updated>2025-01-06T11:35:21+01:00</updated><id>https://sebastianomorson.github.io/feed.xml</id><title type="html">JustAMonkey</title><entry><title type="html">Complexity Theory - Lecture 3</title><link href="https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity-Theory-Lecture-3/" rel="alternate" type="text/html" title="Complexity Theory - Lecture 3" /><published>2025-01-03T00:00:00+01:00</published><updated>2025-01-03T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity%20Theory%20Lecture%203</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity-Theory-Lecture-3/"><![CDATA[<!--more-->
+
+<p>Se credevate esistessero solo le macchine di Turing deterministiche, ebbene surprise! Esistono anche quelle non deterministiche.</p>
+
+<p>Quello che cambia non sono altro che le transizioni. Se prima per uno stato potevamo avere una singola transizione attivata dal simbolo “a” (è un esempio), ora ne possiamo avere più di una che si attiva sul medesimo simbolo e il medesimo stato.</p>
+
+<p>Oltretutto la cosa figa è che se abbiamo più scelte, il non determinismo ci permette di eseguire contemporaneamente tutti i percorsi (perchè potenzialmente al primo colpo potrei individuare proprio il path che ci va meglio).</p>
+
+<h2 id="simulazione-di-una-mdt-non-deterministica-su-una-mdt-deterministica">Simulazione di una MdT non deterministica su una MdT deterministica</h2>
+<p>\(NTIME(f(n)) \subseteq \bigcup_{c \in \mathbb{N}} TIME(c^{f(n)})\)
+<strong>Dimostrazione</strong></p>
+
+<p>Bisogna ricordare una cosa fondamentale: in una MdT non deterministica le transizioni possono essere tante. Significa che in $\Delta$ avremo più transizioni del tipo
+\(\begin{aligned}
+\delta(q_0​,1)={(q_{accept}​,1,R),(q_{0}​,1,R)}
+\end{aligned}\)</p>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Complexity Theory - Lecture 4</title><link href="https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity-Theory-Lecture-4/" rel="alternate" type="text/html" title="Complexity Theory - Lecture 4" /><published>2025-01-03T00:00:00+01:00</published><updated>2025-01-03T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity%20Theory%20Lecture%204</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2025/01/03/Complexity-Theory-Lecture-4/"><![CDATA[<!--more-->
+<h1 id="relazione-tra-classi-di-complessità">Relazione tra Classi di Complessità</h1>
+
+<h2 id="funzioni-proprie-e-macchine-precise">Funzioni Proprie e Macchine Precise</h2>
+<p>Alcune domande a cui cercheremo di dare una risposta in questo articolo sono:</p>
+<ul>
+  <li>Perchè abbiamo avuto bisogno di stabilire l’esistenza di funzioni proprie e di macchine precise?</li>
+  <li>Perchè le funzioni proprie sono interessanti?</li>
+  <li>Esistono funzioni non proprie e macchine non precise?</li>
+  <li>Esistono macchine precise che non calcolano funzioni proprie?</li>
+  <li>Esistono macchine non precise che calcolano funzioni proprie?</li>
+</ul>
+
+<p>(SUGGERIMENTO, riscriverò la domanda nel momento in cui vi risponderò, quindi se vi interessa sapere la risposta alla domanda basta fare un bel CTRL+F e cercare la domanda che vi interessa. Avrei potuto mettere un link diretto, ma perchè rendere la vita più semplice a me e a voi?)</p>
+
+<p>Diamo una definizione di <strong>funzione propria</strong>:</p>
+<h5 id="definizione-di-funzione-propria">Definizione di funzione propria</h5>
+<p>Una funzione $f$ si dice propria quando:</p>
+<ul>
+  <li>è monotona, non decrescente</li>
+  <li>per ogni input $x$ esiste una MdT $\mathcal{M}$ con I/O che calcola $f(x)$ e tale che a partire da una configurazione iniziale</li>
+</ul>
+
+<p>\((s, \triangleright,x,\triangleright,\varepsilon, \triangleright,\varepsilon,\dots )\)
+Dove:</p>
+
+<ul>
+  <li>$s$: stato iniziale.</li>
+  <li>$x$: input scritto in un formato valido (ad esempio, in binario o unario).</li>
+  <li>$\varepsilon$: nastro vuoto (non ancora utilizzato).</li>
+  <li>$\triangleright$: delimitatore che indica l’inizio del nastro.</li>
+</ul>
+
+<p>la MdT in $t$ steps di computazione giunge a una configurazione finale</p>
+
+<p>\((\{no,yes,halt\}, \triangleright, x, \triangleright,\sqcup, \dots, \triangleright,\sqcup, \sqcap^{f(x)})\)
+ossia a una configurazione in cui il nastro di output contiene solo simbolo quasi-blank per un numero di volte pari a f(x) (in binario).</p>
+
+<p><strong>La cosa importante è che:</strong></p>
+<ol>
+  <li>$t \in O(\mid x\mid + \log(x))$</li>
+  <li>$\mathcal{M} \in SPACE(f(\mid x\mid))$</li>
+</ol>
+
+<p>È importante che  $t \in O(\mid x\mid + \log(x))$  per</p>
+<ol>
+  <li>evitare computazioni che rallentano eccessivamente al crescere di $x$. 
+Ad esempio se considerassi $t \in O(2^{\mid x\mid})$ con $\mid x\mid  = 10$ avrei $t \in O(2^{10})$, ma con $\mid x \mid = 100$ avrei $t \in O(2^{100})$ che è un numero improponibile di passi di computazione)</li>
+  <li>se in $t$ non ci fosse il termine $\mid x\mid$ non potremmo considerare la funzione logaritmo come una funzione propria. Se solo per leggere l’input $x$ impiego $\mid x\mid$, con $t \in  O(log(x))$ non riuscirei a terminare la lettura di $x$ !</li>
+</ol>
+
+<p><strong>Esempi di funzioni proprie sono</strong>:</p>
+<ul>
+  <li>polinomio</li>
+  <li>costante</li>
+  <li>logaritmo</li>
+  <li>torre di esponenziali</li>
+</ul>
+
+<h5 id="definizione-di-macchina-di-turing-precisa">Definizione di macchina di Turing precisa</h5>
+<p>Una macchina di Turing precisa è una macchina precisa se esiste una funzione $f$ e una funzione $g$ tale che per ogni $x \in \Sigma^*$ $\mathcal{M}$ termina in tempo $f(\mid x\mid)$ usando spazio $g(\mid x\mid)$.</p>
+
+<p><strong><em>Ma perchè abbiamo avuto bisogno di stabilire l’esistenza di funzioni proprie e di macchine precise?</em></strong></p>
+
+<p>Perchè se dobbiamo parlare di “relazioni tra classi di complessità” abbiamo bisogno di confrontare delle funzioni. Se le funzioni che confrontiamo non hanno caratteristiche in comune o i modelli che usiamo sono diversi, i risultati potrebbero essere incoerenti o ambigui.
+Per questa ragione abbiamo deciso di definire le funzioni proprie e le macchine precise. Le prime sono funzioni che godono delle proprietà sopra enunciate, ossia dei limiti spaziali e temporali richiesti per la loro computazione. Le macchine precise invece sono un modello di macchine ragionevole e realistico, in cui, ad esempio, il calcolo di una funzione lineare non richiede tempo esponenziale.</p>
+
+<h3 id="che-relazione-cè-tra-mdt-precise-e-funzioni-proprie">Che relazione c’è tra MdT precise e funzioni proprie?</h3>
+<p>Sembrerebbe che se esiste una funzione propria allora esiste una macchina precisa che la calcola in f(n) steps.</p>
+
+\[\begin{gathered}
+\mathcal{L} \in TIME(f(\mid x\mid)), f \text{ is proper } \\ \\
+\Downarrow \\\\
+\exists\mathcal{M} \text{ MdT precise such that }\mathcal{M} \text{ decides } \mathcal{L}\text{ using } O(f(\mid x\mid)) \text{ steps.}
+\end{gathered}\]
+
+<h3 id="hierarchy-theorem">Hierarchy Theorem</h3>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Complexity Theory - Lecture 1</title><link href="https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity-Theory-Lecture-1/" rel="alternate" type="text/html" title="Complexity Theory - Lecture 1" /><published>2025-01-02T00:00:00+01:00</published><updated>2025-01-02T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity%20Theory%20Lecture%201</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity-Theory-Lecture-1/"><![CDATA[<!--more-->
+<p>Nell’information theory abbiamo studiato quanta informazione è possibile rappresentare e trasmettere in modo efficiente attraverso un encoding, analizzando la relazione tra la quantità di informazione (misurata tramite l’entropia) e la lunghezza media dell’encoding.</p>
+
+<p>Successivamente, abbiamo introdotto il concetto di complessità di Kolmogorov, che misura la lunghezza del programma più corto capace di generare una certa stringa, consentendoci di quantificare quanta “casualità” contiene una stringa e quanto essa sia comprimibile.</p>
+
+<p>Ora, con la teoria della complessità computazionale, il nostro obiettivo si sposta: non studiamo quanto sia difficile generare una stringa, ma quanto sia difficile risolvere determinati problemi. Attenzione: non parliamo di misurare la complessità di un algoritmo specifico che risolve un problema, ma di analizzare quanto, <strong>indipendentemente dall’algoritmo scelto</strong>, sia intrinsecamente difficile risolvere il problema, considerando risorse come tempo e spazio.</p>
+
+<p>Esistono 3 tipi di problemi:</p>
+<ul>
+  <li>di <strong>decisione</strong>: posso raggiungere qualsiasi nodo a partire da un nodo qualsiasi?</li>
+  <li>di <strong>funzione</strong>: come posso raggiungere un qualsiasi nodo a partire da un nodo qualsiasi?</li>
+  <li>di <strong>ottimizzazione</strong>: come posso raggiungere un qualsiasi nodo a partire da un nodo qualsiasi eseguendo il numero minimo di attraversamenti?</li>
+</ul>
+
+<p>Noi ci concentreremo sui problemi decisionali.</p>
+
+<h3 id="turing-machine">Turing Machine</h3>
+<p>Vogliamo ricordare che una macchina di Turing è definita da una tupla $&lt;K,\Sigma,\delta, s&gt;$ dove:
+dove</p>
+<ul>
+  <li>$K$ è un insieme finito di stati</li>
+  <li>$\Sigma$ è un alfabeto finito tale per cui
+    <ol>
+      <li>$K\cap \Sigma = \emptyset$</li>
+      <li>$\rhd, \sqcup \in \Sigma$</li>
+    </ol>
+  </li>
+  <li>$\delta: K \times \Sigma \to (K \cup {\text{yes,no,halt}}) \times \Sigma \times {\leftarrow, \rightarrow, -}$
+  $\rhd$ cannot be changed
+  $\rhd$ cannot go to its left
+  $\delta(q,\rhd) = (q’, \rhd, \rightarrow)$</li>
+  <li>$s \in K$ starting state</li>
+</ul>
+
+<p>k-tape $\to \delta: K \times \Sigma^K \to (K \cup {y,n,h}) \times \Sigma^K \times {\leftarrow,\rightarrow,-}^k$</p>
+
+<p>Una generica configurazione è data dalla tripla $(q,w,u)$.
+Nello stato iniziale avremo una configurazione</p>
+
+\[(1, \triangleright, x)\]
+
+<p>mentre uno stato finale è descritto dalla configurazione</p>
+
+\[(H,w,u)\]
+
+<p>con $H={yes,no,halt}$</p>
+
+<p>Un passo di computazione tra due configurazioni è descritto come</p>
+
+\[(q,w,u)  \rightarrow^\delta (q',w,u')\]
+
+<p>Se dopo $t$ passi di computazione una MdT passa da uno stato iniziale a uno finale, diciamo che la MdT ha <strong>complessità di tempo</strong> $t$.</p>
+
+<h3 id="criterio-di-costo-uniforme-e-logaritmico">Criterio di costo uniforme e logaritmico</h3>
+<p>È importante osservare che nella macchina di Turing il tempo di computazione ( la sua complessità temporale) è data dal numero di passi svolti dalla macchina. Non ci interessa che l’input sia grande 10, 100 o 1 milione, ogni passo vale $\Theta$(1) <strong><em>(criterio di costo uniforme)</em></strong>.</p>
+
+<p>Ma ci sono modelli di calcolo che ci mostrano come non sia sempre adatto usare un <strong>criterio di costo uniforme</strong>.</p>
+
+<p>Partiamo con un piccolo pezzo di storia:</p>
+<h5 id="tesi-di-church-estesa">Tesi di Church estesa</h5>
+<p>La Tesi di Church-Turing Estesa afferma che tutti i modelli <strong>ragionevoli</strong> di computazione possono simulare l’un l’altro in tempo correlato polinomialmente.</p>
+
+<p>Questo implica che, se un problema può essere risolto in tempo $O(f(n))$ da un modello di computazione, allora un altro modello ragionevole risolverà lo stesso problema in tempo al massimo $O(p(f(n)))$, dove $p(f(n)$ è una funzione polinomiale.<br />
+Ad esempio, se ho un programma $P$ scritto in Python che impiega $O(f(n))$ tempo per completarsi, lo stesso programma tradotto in un altro linguaggio e sugli stessi input impiegherà un tempo diverso, ma correlato polinomialmente a quello del primo programma. Questo presuppone che entrambi i linguaggi siano implementati in modo efficiente e che non vi siano overhead artificiale non correlato alla dimensione dell’input.</p>
+
+<p>Il problema è che certi modelli potrebbero non essere ragionevoli. Ad esempio il modello URM (Unlimited Register Machine) con prodotto non è ragionevole. Ad esempio il calcolo di $x^{2^x}$ non è lineare rispetto alla dimensione di x, se lo fosse vorrebbe dire che potremmo calcolare un’operazione esponenziale in modo lineare! 
+Essendo l’operazione di prodotto un’operazione che dipende dal numero di cifre dell’input, per misurare la complessità in maniera non ambigua usiamo un <strong><em>criterio di costo logaritmico.</em></strong></p>
+
+<h5 id="definizione">Definizione</h5>
+<ul>
+  <li><strong><em>Criterio di costo uniforme:</em></strong> usato quando le operazioni non dipendono dal numero di cifre dell’input. Le operazioni non fanno crescere significativamente l’input e l’output. La complessità è data dal numero di operazioni eseguite</li>
+  <li><strong><em>Criterio di costo logaritmico:</em></strong> usato quando le operazioni fanno crescere l’input o l’output in modo più o meno veloce proporzionalmente al numero di cifre coinvolte</li>
+</ul>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Complexity Theory - Lecture 2</title><link href="https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity-Theory-Lecture-2/" rel="alternate" type="text/html" title="Complexity Theory - Lecture 2" /><published>2025-01-02T00:00:00+01:00</published><updated>2025-01-02T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity%20Theory%20Lecture%202</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2025/01/02/Complexity-Theory-Lecture-2/"><![CDATA[<!--more-->
+
+<h2 id="k-tape-turing-machine">K-tape Turing Machine</h2>
+
+<h2 id="k-tape-turing-machine-with-inputoutput">K-tape Turing Machine with Input/Output</h2>
+
+<h2 id="complessità-temporale">Complessità temporale</h2>
+
+<h2 id="complessità-spaziale">Complessità spaziale</h2>
+
+<h2 id="differenza-tra-complessità-temporale-su-k-tape-e-1-tape">Differenza tra Complessità temporale su k-tape e 1-tape</h2>
+<p>Se ho una k-MdT $\mathcal{M}$ che accetta un linguaggio $\mathcal{L}$ in tempo $TIME(f(n))$ allora esiste una 1-MdT $\mathcal{M}’$ che accetta il medesimo linguaggio in tempo $TIME(f(n)^2)$</p>
+
+<h2 id="classi-di-complessità-temporale">Classi di complessità temporale</h2>
+
+<h2 id="classi-di-complessità-spaziale">Classi di complessità spaziale</h2>
+
+<h2 id="speed-up-theorem-sul-tempo">Speed-up theorem sul tempo</h2>
+
+<p>\(TIME(f(n)) = TIME(\epsilon \cdot f(n)+n+2)\)
+La cosa bella dello speed-up theorem è che ci permette di evitare di avere mille classi di complessità diverse per ciascun problema. Essenzialmente infatti ci dice che fintanto che per misurare la complessità di tempo usiamo k-MdT,  le costanti moltiplicative sono ininfluenti, perchè in base a come costruiamo la macchina di Turing possiamo completamente annullarle.</p>
+
+<p>L’idea della dimostrazione è quella di considerare una MdT $\mathcal$ che computa un certo problema e simularne l’esecuzione su una macchina k-tape $\mathcal{M}’$ che esegue $m$ simboli di $\mathcal{M}$ alla volta.</p>
+
+<p>Un volta compresso</p>
+
+<h2 id="speed-up-theorem-su-spazio">Speed-up theorem su spazio</h2>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Information Theory - Lecture 6</title><link href="https://sebastianomorson.github.io/articles/article/2025/01/01/Kolmogorov-Complexity-vs-Shannon-Entropy/" rel="alternate" type="text/html" title="Information Theory - Lecture 6" /><published>2025-01-01T00:00:00+01:00</published><updated>2025-01-01T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2025/01/01/Kolmogorov%20Complexity%20vs%20Shannon%20Entropy</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2025/01/01/Kolmogorov-Complexity-vs-Shannon-Entropy/"><![CDATA[<!--more-->
+<h1 id="complessità-di-kolmogorov-vs-entropia-di-shannon">Complessità di Kolmogorov vs entropia di Shannon</h1>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Information Theory - Lecture 2</title><link href="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-2/" rel="alternate" type="text/html" title="Information Theory - Lecture 2" /><published>2024-12-26T00:00:00+01:00</published><updated>2024-12-26T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2024/12/26/Information%20Theory%20Lecture%202</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-2/"><![CDATA[<!--more-->
+
+<p>Dalle lezioni viste a mobile communication sappiamo che un messaggio viene trasmesso seguendo un pattern ben preciso</p>
+
+<ol>
+  <li>prima decido il messaggio</li>
+  <li>poi lo codifico in un <em>source code</em> (che ad esempio lo comprime con zip o bzip)</li>
+  <li>poi lo codifico in un <em>channel code</em> (che ad esempio applica error correction, Viterbi o Reed Soloman)</li>
+  <li>infine lo trasmetto sul canale</li>
+</ol>
+
+<p>Dalla parte del ricevente quello che succede è invece</p>
+<ol>
+  <li>ricevo il messaggio e lo decodifico attraverso un canale di decoding</li>
+  <li>trasformo il messaggio decodificato in una nuova versione <em>source decoded</em></li>
+  <li>infine leggo il messaggio che se tutto va bene è leggibile</li>
+</ol>
+
+<h2 id="problema">Problema:</h2>
+<p>immaginiamo di avere due alfabeti:</p>
+
+\[\begin{aligned}
+A &amp;= \{a_{1},a_{2},\dots,a_{n}\} \\
+B &amp;= \{b_{1}, b_{2}, \dots, b_{k}\} 
+\end{aligned}\]
+
+<p>L’encoding Source code sarà una funzione del tipo</p>
+
+\[\varphi: A^* \to B^*\]
+
+<p>ossia una funzione <strong><em>iniettiva</em></strong>.</p>
+
+<p>Ora, ci sono varie casistiche mediante le quali possiamo mappare gli elementi di $A^<em>$ in $B^</em>$</p>
+
+<h3 id="block-block">Block-Block</h3>
+<p>Semplicemente uso una funzione del tipo:</p>
+
+\[\varphi(a_{1}a_{2}\dots a_{m}) = \varphi(a_{1})\varphi(a_{2})\dots \varphi(a_{n})\]
+
+<p>In questo modo creo una funzione che mappa elementi di $A$  lunghezza $n$, con elementi di $B$ di lunghezza $n$.</p>
+<h3 id="block-variable-length">Block-variable length</h3>
+<p>Ci sono però situazioni in cui potremmo avere due alfabeti che usano un numero di elementi differente. In questo caso la mappatura non potrà essere 1 a 1, ma ci servirà un metodo differente.</p>
+
+<p>Posso usare un metodo simile a questo:</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 0 \\
+b &amp;\to 10 \\
+c &amp;\to 01  \\
+\end{aligned}\]
+
+<p>In questo modo sono in grado di mappare correttamente gli elementi di $A$ in $B$.</p>
+
+<p>Però il problema è che in questo caso la funzione di encoding <strong>NON</strong> è <strong><em>Uniquely Decodable</em></strong>, ossia non è iniettiva rispetto a $A^*$</p>
+
+<p>Ad esempio</p>
+
+\[\varphi(ab) = 010 = \varphi(ca)\]
+
+<h3 id="uniquely-decodable-with-delay-1">Uniquely Decodable with delay 1</h3>
+<p>Un metodo simile al precedente potrebbe essere usare dei prefissi comuni e dei suffissi che si modificano.</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 0 \\
+b &amp;\to 01 \\
+c &amp;\to 011  \\
+\end{aligned}\]
+
+<p>Il problema principale in questo genere di codifica è che la lunghezza del testo codificato aumenta di parecchio. 
+Difatti</p>
+
+\[\varphi(abccbba) = 00101101101010\]
+
+<h3 id="uniquely-decodable-with-unlimited-delay">Uniquely Decodable with unlimited delay</h3>
+<p>Un ulteriore metodo è quello di usare un numero di elementi differente come postfisso.
+Ad esempio</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 00 \\
+b &amp;\to 1 \\
+c &amp;\to 10  \\
+\end{aligned}\]
+
+<p>In questo caso avremmo che</p>
+
+\[\varphi(b^{3}acac\dots) = 110100100010 \dots 100 \dots 01 \dots\]
+
+<p>se abbiamo situazioni ambigue come $100$, possiamo capire a quale simbolo facciamo riferimento guardando quanti elementi ci sono postfissi al valore 1.</p>
+<ul>
+  <li>se 1 è seguito da un numero pari di 0, allora indichiamo $b$</li>
+  <li>se 1 è seguito da un numero dispari di 0, allora indichiamo $c$</li>
+</ul>
+
+<h3 id="sono-utili-i-codici-con-delay">Sono utili i codici con delay?</h3>
+<p>bè, sì perchè permettono una compressione migliore di altri possibili codici senza delay. Sì, anche se prima ho detto che in realtà allungano il messaggio iniziale. In generale sono comunque un buon compromesso (a caval donato non si guarda in bocca).</p>
+
+<h2 id="prefix-code-definition">Prefix code definition</h2>
+<p>Dato</p>
+
+\[\varphi: A^* \to B^*\]
+
+<p>Con il termine <em>prefix code</em> si intende</p>
+
+\[\forall a_{1},a_{2} \in A \;\;\;\; \varphi(a_{1})\; \text{is not a prefix of}\;\varphi(a_{2})\]
+
+<h2 id="lemma">Lemma</h2>
+<p>If $\varphi$ <strong>is prefix</strong>, the $\varphi$ uniquely decodable without delay.</p>
+
+<p><strong><em>Code representation</em></strong></p>
+
+\[B=\{b_{1}, \dots, b_{D}\} \to \text{D-ary tree}\]
+
+<p>Esempio:</p>
+
+\[\begin{aligned}
+a &amp;\to 00 \\
+b &amp;\to 1 \\
+c &amp;\to 10
+\end{aligned}\]
+
+<p>Una possibile rappresentazione è la seguente
+![[Pasted image 20240306143316.png]]</p>
+
+<p>Non è un prefix code
+esiste un path con più di una label</p>
+
+<p>Questo metodo di codifica consiste nel scansionare l’encoded message e visitare l’albero. Quando incontriamo una label la decodifichiamo stampandola e ricominciamo di nuovo a partire dalla root.</p>
+
+<h2 id="definition">Definition</h2>
+
+\[\begin{aligned}
+A &amp;= \{a_{1},a_{2},\dots,a_{k}\} \\
+l_{i} &amp;= |\varphi(a_{i})|
+\end{aligned}\]
+
+<h2 id="kraft-macmillan-theorem-inverse-theorem">Kraft MacMillan Theorem (inverse theorem)</h2>
+<p>Se $\varphi$ è <strong><em>uniquely decodable</em></strong> allora</p>
+
+\[\sum_{i=1}^k D^{-l_{i}} \le 1\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>$\varphi:A\to B^* \;\;\;\;</td>
+      <td>B</td>
+      <td>=D$ = lunghezza dell’alfabeto di output</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Praticamente il teorema di Kraft-MacMillan afferma che per una data lunghezza di codice, ci devono essere abbastanza codewords disponibili per coprire tutte le possibili combinazioni di simboli di quella lunghezza.</p>
+
+<p>Example</p>
+
+\[\begin{align}
+|A| = k &amp;&gt; |B| =D \\ \\
+l_{i} = 1 &amp;= |\varphi(a_{i})|  \\ \\ 
+\frac{1}{D}+\frac{1}{D}&amp;+\dots+\frac{1}{D} = \frac{K}{D} &gt; 1
+\end{align}\]
+
+<h3 id="proof-for-prefix-codes">Proof for prefix codes</h3>
+<p>Consideriamo un codice prefisso $\varphi$ dove</p>
+
+\[\begin{aligned}
+l(a_{1}) &amp;\le l(a_{2}) &amp;\le &amp;\dots &amp;\le l(a_{k}) \\
+l_{1} &amp;\le l_{2} &amp;\le &amp;\dots &amp;\le l_{k} = l
+\end{aligned}\]
+
+<p>Consideriamo quindi il corrispondente D-albero
+![[Pasted image 20240307090324.png]]
+Sappiamo che le foglie totali possono essere $D^{l_{k}}$. Difatti se ho un alfabeto {0,1} e voglio formare stringhe di lunghezza massima 4, so che il numero totale di stringhe componibili sarà $2^4$</p>
+
+<p>Nel nostro caso voglio avere codici prefissi, di conseguenza se ho una stringa di lunghezza $l_i &lt; l_k$ so per certo che tutto il ramo dell’albero a partire dal nodo $i$ dovrà essere inevitabilmente scartato. Il numero totale di stringhe scartate sarà $D^{l_{k}-l_{i}}$. Ad esempio se ho creato un albero binario di altezza massima 5 e il mio codice prevede una parola di output di lunghezza 3, avrò che il numero totale di parole sarà 32, ma di queste, quelle effettivamente utilizzabili sarà $32-8 = 26 = 2^5 - 2^{5-3}$</p>
+
+<p>Il numero di foglie a cui non può essere associata una label con $a_{k}$ è</p>
+
+\[\sum_{i=1}^{k-1} D^{l_{k} - l_{i}}\]
+
+<p>Considero il numero di foglie utilizzabili $D^{l_{k}}$ e sottraggo il numero di foglie inutili. Sò che se la codifica è ammissibile deve ammettere almeno una foglia, perciò</p>
+
+\[\begin{aligned}
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} D^{l_{k} - l_{i}} \ge 1 \\
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} \frac{D^{l_{k}}}{D^{l_{i}}} \ge 1 \\ \\
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} D^{l_{k}} \cdot D^{-l_{i}} \ge 1 \\ \\
+&amp;\text{raccolgo }D^{l_{k}} \\ \\
+&amp;D^{l_{k}} \left( 1-\sum_{i=1}^{k-1} D^{-l_{i}} \right) \ge 1 \\
+&amp;1-\sum_{i=1}^{k-1}D^{-l_{i}} \ge D^{-l_{k}}\\
+&amp;\text{porto } -\sum_{i}^{k-1}D^{-l_{i}} \text{ a destra } \\
+&amp;1 \ge \sum_{i=1}^{k} D^{-l_{i}}\\
+
+\end{aligned}\]
+
+<h3 id="proof-for-a-general-uniquely-decodable">Proof for a general Uniquely Decodable</h3>
+
+\[l(a_{1}) \le l(a_{2}) \le \dots \le l(a_{k}) = l\]
+
+<p>Il numero di stringhe di lunghezza $n$ ($A^n$) che corrispondono a stringhe di lunghezza n è  $N(n,h)$</p>
+
+<p>$N(n,h) \le D^h$ è il numero di stringhe di lunghezza $h$ di $B$</p>
+
+<p>Tesi: $\sum_{i=1}^k D^{-l_{i}} \le 1$
+Studio $\left(\sum_{i=1}^k D^{-l_{i}}\right)^n$ per un $n$ generico
+Il passaggio cruciale è qui. 
+Scomponendo la sommatoria, ottengo che</p>
+
+\[\begin{aligned}
+\left(\sum_{i=1}^k D^{-l_{i}}\right)^n  = \left( D^{-l_{1}} +D^{-l_{2}} + \dots + D^{-l_{k}} \right)^n = \\
+D^{n\cdot (-l_{1})}+D^{n\cdot (-l_{2})}+ \dots + D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)} + D^{n(-l_{k})} = \\
+\end{aligned}\]
+
+<p>Ora mi accorgo che $D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)}$  si può vedere come $D^{-J}$ dove $J$ è la lunghezza dell’encoding di una sequenza di $n$ simboli dell’alfabeto primario.</p>
+
+<p>Quante volte $D^{-J}$ occorre nella somma? Bè, tante volte quanto il numero di parole di lunghezza $n$ i cui encoding hanno lunghezza J, perciò occorre $N(n,J$)</p>
+
+<p>Ma allora, la formula di prima diventa</p>
+
+\[\begin{aligned}
+&amp;D^{n\cdot (-l_{1})}+D^{n\cdot (-l_{2})}+ \dots + D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)} + D^{n(-l_{k})} = \\
+
+&amp;N(n,1)D^{-1} +N(n,2)D^{-2} + \dots + N(n,n\cdot l)D^{-n\cdot l} =  \\\\
+&amp;\text{ma sappiamo che } N(n,1) \text{ è } \le D^1 \text{e così via per tutti gli altri termini, quindi} \\ \\
+&amp;=N(n,1)D^{-1} +N(n,2)D^{-2} + \dots + N(n,n\cdot l)D^{-n\cdot l} \le \\
+&amp;\le D^1\cdot D^{-1} + D^2\cdot D^{-2} + \dots + D^{n\cdot l}\cdot D^{n\cdot l} \\
+&amp;\le n\cdot l \\
+
+&amp;\left(\sum_{i=1}^{k} D^{-l_{i}} \right)^n \le n \cdot l \text{(costant)} \\
+&amp;\implies \sum_{i=1}^k D^{-l_{i}} \le 1
+\end{aligned}\]]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Information Theory - Lecture 3</title><link href="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-3/" rel="alternate" type="text/html" title="Information Theory - Lecture 3" /><published>2024-12-26T00:00:00+01:00</published><updated>2024-12-26T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2024/12/26/Information%20Theory%20Lecture%203</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-3/"><![CDATA[<!--more-->
+<h2 id="theorem-direct">Theorem Direct</h2>
+<p>Se $l_{1},l_{2},\dots,l_{k}$ sono tali che $\sum_{i=1}^k D^{-l_{i}} \le 1$, allora esiste un prefix code dove le lunghezze degli encoding sono $l_{1},l_{2},\dots,l_{k}$</p>
+
+<p><strong><em>Dimostrazione</em></strong>
+La dimostrazione si basa sullo stesso concetto della dimostrazione del [[2024-12-26-Information Theory Lecture 2#Proof for prefix codes|teorema di Kraft MacMillan per i prefix code ]]
+![[Pasted image 20240307095131.png]]</p>
+<h2 id="remark">Remark</h2>
+<p>Ricordiamo la definizione di [[2024-12-26-Information Theory Lecture 2#Uniquely Decodable with delay 1|Uniquely Decodable]].
+I prefix code <strong><em>hanno lo stesso potere dei U.D. codes</em></strong>.
+Possiamo raggiungere gli stessi livelli di compressione e non abbiamo delay nel decoding usando i prefix codes.</p>
+
+<h2 id="definition-of-el">Definition of EL</h2>
+<p>Assumiamo</p>
+
+\[\begin{aligned}
+&amp;A\text{ primary alphabet}\\
+&amp;B\text{ secondary alphabet} \\
+&amp;\varphi:A^* \to B^*
+\end{aligned}\]
+
+<p>Allora</p>
+
+<p>\(\begin{aligned}
+EL(\varphi) &amp;= \sum_{i=1}^k p_{i}\cdot l(\varphi(a_{i})) \\
+&amp;= \sum_{i=1}^k p_{i \cdot l_{i}}
+\end{aligned}\)
+Ossia, $EL(\varphi)$ rappresenta la lunghezza media delle stringhe del codice</p>
+<h1 id="code-rate">Code Rate</h1>
+
+<h2 id="compression-rate">Compression Rate</h2>
+
+<h3 id="1-shannon-theorem-source-code-theorem">1° Shannon Theorem (Source Code Theorem)</h3>
+<p>Se $\varphi$ è Uniquely Decodable allora</p>
+
+\[EL(\varphi) \ge H_{D}(P)\]
+
+<p>dove $H_D(P)$ è l’entropia di $P$ usando $log_D$</p>
+
+<p>L’idea è che non si può esprimere più informazione dell’entropia che abbiamo.
+Perciò il teorema di Shannon dimostra che l’entropia $H_D(P)$ è una misura teorica del numero di bit medio necessari a rappresentare l’informazione di una sorgente attraverso una codifica ottimale.</p>
+
+<p><strong><em>Dimostrazione</em></strong></p>
+
+<p><em>Tesi</em>: $EL(\varphi) - H_{D}(P) \ge 0$</p>
+
+\[\begin{aligned}
+EL(\varphi) - H_{D}(P) &amp;= \sum_{i=1}^k p_{i} \cdot l_{i} + \sum_{i=1}^k p_{i} \log_{D} p_{i} \\
+&amp;= \sum_{i=1}^k p_{i} (l_{i}+\log_{D}p_{i}) \\
+&amp;= \sum_{i=1}^k p_{i} \left(\log_{D}D^{l_{i}} + \log_{D} p_{i}\right) \\
+&amp;= \frac{1}{\ln D } \cdot \sum_{i=1}^k p_{i} \ln(D^{l_{i}}\cdot p_{i})\\
+&amp;= -\frac{1}{\ln D} \cdot \sum_{i=1}^k p_{i} \ln\left( \frac{1}{D^{l_{i}} \cdot p_{i}} \right) \\
+&amp;\ge -\frac{1}{\ln D} \sum_{i=1}^k p_{i} \ln\left( \frac{1}{D^{l_{i}} \cdot p_{i}} - 1 \right) \\
+&amp;\ge -\frac{1}{\ln D} \left( \sum_{i=1}^k p_{i} \cdot \frac{1}{D^{l_{i}}\cdot p_{i}} - \sum_{i=1}^k p_{i} \cdot 1 \right) \\
+&amp;\ge -\frac{1}{\ln D}\left( \sum_{i=1}^k D^{-l_{i}} -1 \right) \\ \\
+&amp;\text{Ma per il teorema di Kraft MacMillen}\\
+&amp;\text{quello che sta dentro le parentesi è } \le 1\\ &amp;\text{Perciò:}
+\\ \\
+&amp;\ge 0
+
+\end{aligned}\]]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Information Theory - Lecture 4</title><link href="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-4/" rel="alternate" type="text/html" title="Information Theory - Lecture 4" /><published>2024-12-26T00:00:00+01:00</published><updated>2024-12-26T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2024/12/26/Information%20Theory%20Lecture%204</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2024/12/26/Information-Theory-Lecture-4/"><![CDATA[<!--more-->
+<p>Riprendiamo il teorema dell’ultima volta, ossia il [[2024-12-26-Information Theory Lecture 3#1° Shannon Theorem (Source Code Theorem)|1° teorema di Shannon]]
+e anche la definizione di [[2024-12-26-Information Theory Lecture 3#Definition of EL|EL]].</p>
+
+<p>È possibile raggiungere la condizione per cui $EL(\varphi)= H_{D}(P) \;?$
+Ossia, è possibile che la lunghezza media delle stringhe del codice sia uguale all’entropia di $P$ ?</p>
+
+<p>Ad esempio:
+\(\begin{aligned}
+&amp;A = \{a,b\}\\
+&amp;B = \{0,1\}\\
+&amp;P \neq \left\{ \frac{1}{2}, \frac{1}{2} \right\}\\
+&amp;P = \left\{ \frac{2}{3}, \frac{1}{3} \right\} \\
+&amp;H(P) &lt;1\\
+&amp;EL(\varphi) \ge 1\\
+&amp;\varphi(a) = 0 \\
+&amp;\varphi(b) = 1 \\
+&amp;EL(\varphi) = \frac{2}{3}\cdot 1 +\frac{1}{3}\cdot{1} = 1\\
+&amp;\text{Ma allora H(P) non è raggiungibile}
+\end{aligned}\)</p>
+
+<h2 id="shannon-code">Shannon Code</h2>
+<p>L’idea è quella di assegnare un encoding di lunghezza maggiore ai simboli che hanno minor probabilità di comparire all’interno di una stringa. Per questa ragione si considera come lunghezza di encoding il negativo del logaritmo della probabilità del carattere.</p>
+
+<p>Intuitivamente, se ho un vocabolario corrispondente alle parole italiane saprò che le lettere più frequenti sono ${a,e,i,o,u}$ , quindi cercherò di minimizzare il numero di caratteri necessari a codificare tali simboli. 
+Al contrario simboli come ${k,j,w,y}$ sono molto meno frequenti e perciò mi aspetto che l’efficienza dell’encoding non abbia grosse perdite se codifico tali caratteri usando un numero più grande di simboli dell’alfabeto di output.</p>
+
+\[\begin{aligned}
+EL(\varphi) &amp;= \sum_{i=1}^k p_{i}\cdot l_{i}\;\;\;\;\;\;\;\;  l_{i}=|\varphi(a_{i})|\\
+H_{D}(P) &amp;= \sum_{i=1}^k p_{i}\cdot (-\log_{D}p_{i}) \\ \\
+l_{i} &amp;\cong -\log_{D}p_{i} \\ \\
+l_{i} &amp;= \lceil -\log_{D}p_{i} \rceil = -\log_{D}p_{i} + \beta_{i} \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\text{ con } 0\le\beta_{i}&lt;1 
+  \end{aligned}\]
+
+<p>Usando il [[2024-12-26-Information Theory Lecture 3#Theorem Direct|direct theorem]] 
+Se $\sum_{i=1}^k D^{-l_{i}} \le 1$<br />
+allora esiste un prefix code con lunghezze $l_i$  definibile usando una strategia <em>greedy</em> su un albero D-ario</p>
+
+<p>\(\begin{aligned}
+\sum_{i=1}^k D^{-l_{i}} &amp;= \sum_{i=1}^k D^{\log_{D}p_{i} - \beta_{i}} \\
+&amp;=\sum_{i=1}^k D^{\log_{D}p_{i}} \cdot D^{-\beta_{i}} \\
+&amp;= \sum_{i=1}^k p_{i} \cdot \frac{1}{D^{\beta_{i}}} \\
+&amp;\le 1 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\text{ essendo }\frac{1}{D^{\beta_{i}}} \le 1
+\end{aligned}\)
+Se $\beta_{i}=0$ significa che la lunghezza di encoding è identica alla lunghezza di encoding ottimale, perciò ci troviamo nel caso migliore, mentre se $\beta_{i}=1$ ci troviamo nel caso peggiore perchè significa che l’encoding del simbolo $i$ è più lungo del necessario.</p>
+
+<p>Esempio:
+\(\begin{aligned}
+&amp;A = \{a,b\} \\
+&amp;B = \{0,1\} \\
+&amp;P = \left\{ 1-\frac{1}{32}, \frac{1}{32} \right\} \\\\
+&amp;-\log_{2}\left( 1-\frac{1}{32} \right) &lt; 1 \to 1 \\
+&amp;-\frac{\log_{2}1}{32} = 5 \to 5
+\end{aligned}\)</p>
+
+<p>![[Pasted image 20241229124133.png]]</p>
+
+<h3 id="shannon-encoding">Shannon Encoding</h3>
+<p>\(\begin{aligned}
+EL(S) &amp;= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i} + \beta_{i}) \\
+&amp;= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i}) + \sum_{i=1}^k (p_{i}\cdot\beta_{i}) \\
+&amp;= H_{D}(P) + \sum_{i=1}^k p_{i} \beta_{i} &lt; H_{D}(P)+1 \\
+\end{aligned}\)
+\(H_{D}(P) \le EL(S) &lt; H_{D}(P)+1 \;\;\;\;\;\;\;\; \text{(sub-optimum)}\)</p>
+
+<h3 id="shannon-fano-encoding">Shannon-Fano Encoding</h3>
+<p>$B = {0,1}$</p>
+
+<p>Split $A$ trying to have $\frac{1}{2}$ probability in each
+![[Pasted image 20240307141013.png]]
+Ordino le probabilità e dividere quando la somma arriva a $\frac{1}{2}$
+\(p_{1} \le p_{2} \le p_{3} \le \dots \le p_{k}\)</p>
+
+<p>Esempio:
+\(\begin{aligned}
+A &amp;= \{a,b,c,d,e,f\} \\ 
+B &amp;= \{0,1\} \\
+P &amp;= \left\{ \frac{40}{100}, \frac{18}{100}, \frac{15}{100}, \frac{13}{100}, \frac{10}{100}, \frac{4}{100} \right\} \\
+\end{aligned}\)
+![[Pasted image 20240307141356.png]]</p>
+
+<p>\(\left| \sum_{i=1}^k p_{i} - \sum_{i = h+1}^k p_{i} \right| = \text{ find h such that result is the minimum}\)
+<strong><em>Be careful Sub-Set-Sum problem is NP-complete</em></strong>
+\(H_{D}(P) \le EL(SF) &lt; H_{D}(P)+1\)
+[[Nota 8 ott 2020.pdf#page=5|Esempio]]</p>
+
+<p>Cosa succede quando dobbiamo codificare tuple di n caratteri?</p>
+
+<p>[[Nota 8 ott 2020.pdf#page=7|Esercizio]]
+Ho due variabili X,Y con distribuzioni P e Q indipendenti 
+\(H(X\land Y) = H(X) + H(Y)\)</p>
+
+<h3 id="huffman-code">Huffman Code</h3>
+<p>L’idea è quella di giocare sulle probabilità associate agli elementi dell’alfabeto primario.
+Praticamente:</p>
+<ol>
+  <li>Prendo l’elemento con probabilità maggiore e gli assegno un valore (0 o 1)</li>
+  <li>Prendo il secondo elemento con probabilità maggiore tra i rimanenti e gli assegno un altro valore (0,1)</li>
+  <li>Se la prob del secondo elemento non è $\geq$ a quella del primo e se non è l’unico elemento rimanente, pesco il terzo elemento con probabilità più grande e gli assegno il simbolo opposto a quello precedente, dopodichè sommo le due probabilità e ripeto dal passo 2.</li>
+</ol>
+
+<p>Alla fine dovrei ottenere qualcosa come quella dell’esempio linkato.
+[[Nota 8 ott 2020.pdf#page=8|Example]]</p>
+
+<h1 id="lz77-algorithm">LZ77 Algorithm</h1>
+<p><a href="https://www.dei.unipd.it/~capri/LDS/MATERIALE/lez0606.pdf">Link utile</a>
+![[Pasted image 20240307145023.png]]</p>
+
+<p>![[Pasted image 20240307145056.png]]</p>
+
+<p>![[Pasted image 20240307145122.png]]</p>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Information Theory - Lecture 5</title><link href="https://sebastianomorson.github.io/articles/article/2024/12/26/Kolmogorov-Complexity/" rel="alternate" type="text/html" title="Information Theory - Lecture 5" /><published>2024-12-26T00:00:00+01:00</published><updated>2024-12-26T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2024/12/26/Kolmogorov%20Complexity</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2024/12/26/Kolmogorov-Complexity/"><![CDATA[<!--more-->
+<h1 id="kolmogorov-complexity-1965">Kolmogorov Complexity 1965</h1>
+<p>Con la complessità di Kolmogorov si cerca di descrivere la quantità di complessità di un oggetto (stringa). Fin’ora abbiamo visto quanta informazione può trasmettere una stringa, ora vogliamo studiare la sua complessità.</p>
+
+<h2 id="ripasso-sulle-turing-machines">Ripasso sulle Turing Machines</h2>
+<p>\(M = (K, \Sigma, \delta, s) \\\)
+dove</p>
+<ul>
+  <li>$K$ è un insieme finito di stati</li>
+  <li>$\Sigma$ è un alfabeto finito tale per cui
+    <ol>
+      <li>$K\cap \Sigma = \emptyset$</li>
+      <li>$\rhd, \sqcup \in \Sigma$</li>
+    </ol>
+  </li>
+  <li>$\delta: K \times \Sigma \to (K \cup {\text{yes,no,halt}}) \times \Sigma \times {\leftarrow, \rightarrow, -}$
+  $\rhd$ cannot be changed
+  $\rhd$ cannot go to its left
+  $\delta(q,\rhd) = (q’, \rhd, \rightarrow)$</li>
+  <li>$s \in K$ starting state</li>
+</ul>
+
+<p>1-tape
+k-tape $\to \delta: K \times \Sigma^K \to (K \cup {y,n,h}) \times \Sigma^K \times {\leftarrow,\rightarrow,-}^k$</p>
+
+<h3 id="definizione-mdt-universale">Definizione M.d.T. Universale</h3>
+<p>Esiste una macchina di Turing $\mathcal{U}$ che, ricevuto un input $bin(M); bin(X)$ si comporta come $M$ su un input $x$. Questa macchina è chiamata macchina di Turing universale.</p>
+
+\[\mathcal{U}(\mathcal{M};x) = \mathcal{M}(x)\]
+
+<h3 id="definizione-kolmogorov-complexity">Definizione Kolmogorov Complexity</h3>
+<p>La complessità di Kolmogorov associata a una stringa $x \in \Sigma^*$ è data dalla lunghezza minima della MdT $\mathcal{M}$ che calcola x.</p>
+
+\[K_{\mathcal{U}}(x) = min_{\mathcal{M}:\mathcal{U}(\mathcal{M})=x}\mid M \mid\]
+
+<p>A partire da questa definizione possiamo concludere alcune interessanti proprietà:</p>
+<ul>
+  <li>se $\mathcal{M}$ è calcolata senza avere informazioni a priori, allora la sua complessità di Kolmogorov sarà più alta di quella della medesima macchina, avendo una conoscenza $y$</li>
+</ul>
+
+\[K_{\mathcal{U}}(x) \ge K_{\mathcal{U}}(x\mid y)\]
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Se ho un programma che stampa $m$ volte la stringa "Hello world", ma non conosco $m$, sarà necessario scrivere $m$-volte "print(Hello world)". Ma se conosco $m$ posso scrivere un ciclo $for$ che sono sicuro termini dopo $m$ passi.
+Perciò invece di avere $m$ istruzioni, me ne bastano 2:
+for i in range(0,m):
+	print("hello world")
+</code></pre></div></div>
+
+<ul>
+  <li>se ho due macchina di Turing universali $\mathcal{U}$ e $\mathcal{A}$ avremo sempre che</li>
+</ul>
+
+\[K_{\mathcal{U}}(x\mid y) \le K_{\mathcal{A}}(x \mid y) + c_{\mathcal{UA}}\]
+
+<h4 id="limiti-alla-complessità-di-kolmogorov-sulle-stringhe">Limiti alla complessità di Kolmogorov sulle stringhe</h4>
+<p>Il problema della complessità di Kolmogorov sulle stringhe è che non è definibile in maniera precisa. In altre parole non è mai possibile dire con precisione che la complessità di Kolmogorov della stringa $x$ è “295”, perchè per dimostrarlo dovrei provare che tutte le MdT di lunghezza &lt;295 non producono in output la stringa $x$. Ma basterebbe solo che una di queste MdT non terminasse per rendere impossibile la dimostrazione e quindi impossibile stabilire con certezza che la Kolmogorov Complexity su $x$ sia esattamente “295”.</p>
+
+<p>Ma, c’è un ma.</p>
+
+<p>Non potremo dire con certezza assoluta quale sia la complessità di Kolmogorov su $x$, però possiamo dire a spanne quanto potrebbe valere: invece di dire “vale 295” diremo “è un valore tra 250 e 330”.</p>
+
+<p>Il teorema sui limiti alla complessità di kolmogorov sulle stringhe afferma più precisamente che:</p>
+
+\[\mid x \mid \leq K(x) \leq \mid x \mid + c\]
+
+<p><strong>Dimostrazione</strong> $K(x) \le \mid x \mid + c$</p>
+
+<p>L’idea è quella di considerare una</p>
+
+<p><strong>Dimostrazione</strong> $\exists x \mid x \mid \leq K(x)$</p>
+
+<p>Se considero un valore k, sappiamo che il numero di stringhe con complessità di Kolmogorov minore di k è</p>
+
+<p>\(\sum_{i=0}^{k-1} 2^i = 2^k -1\)
+Questo significa che se ho una stringa di lunghezza $\mid x \mid$, esisterono $2^{\mid x \mid} -1$ stringhe con complessità minore di $\mid x \mid$ e quindi almeno una MdT per la quale la lunghezza $\mid x \mid$ è maggiore o uguale a $K(x)$. 
+Di conseguenza esiste almeno una x per la quale $\mid x \mid \leq K(x)$.</p>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Weak S1S</title><link href="https://sebastianomorson.github.io/articles/article/2024/12/18/Weak-S1S/" rel="alternate" type="text/html" title="Weak S1S" /><published>2024-12-18T00:00:00+01:00</published><updated>2024-12-18T00:00:00+01:00</updated><id>https://sebastianomorson.github.io/articles/article/2024/12/18/Weak%20S1S</id><content type="html" xml:base="https://sebastianomorson.github.io/articles/article/2024/12/18/Weak-S1S/"><![CDATA[<!--more-->
+<p>In questo articolo vedremo la definizione di <em>Weak Second monadic Theory of One’s Successor</em> e perchè ha senso parlarne.</p>
+
+<p>Negli articoli precedenti avevamo visto alcune cose sui linguaggi $\omega$-regolari e come gli automi di Buchi fossero il top per riuscire a modellarli. 
+Inoltre avevamo pure visto che dato un automa di Buchi $\cal{A}$ potevamo usare una formulazione $S1S_{\cal{A}}$ dipendente dall’alfabeto usato dall’automa. Da qui la necessità di usare la formulazione alfabeto-agnostica $S1S$ che non era niente più che una formulazione che convertiva qualsiasi alfabeto in un alfabeto binario.</p>
+
+<p>L’ultima lezione poi era servita per dimostrare che un linguaggio $\omega$-regolare $L\subseteq A^\omega$  è $\omega$-regolare se e solo se è definibile in S1S (per il secondo teorema di Buchi).</p>
+
+<p>Ma quindi che ci serve dire ancora?
+Bè, semplicemente il caro vecchio Buchi ha studiato anche quello che succede se le variabili del second’ordine sono limitate ad essere insiemi finiti. 
+Dobbiamo immaginare che fino adesso le parole infinite erano computazioni di sistemi reattivi in cui volevamo analizzare certe proprietà. Per prima cosa abbiamo trovato un modo per rappresentare le computazioni tramite automa (e abbiamo quindi tirato fuori dal cappello gli automi di Buchi), poi abbiamo detto “questa forma forse è un po’ scomoda, meglio usare la logica che è un formalismo carino e coccoloso che è in voga da tipo 5000 anni” (e abbiamo tirato fuori S1S). Ora quello che vogliamo è tirare fuori dal cilindro un nuovo formalismo che ci permetta di rappresentare sistemi reattivi in cui certe proprietà valgono solo in certi frammenti di computazione. In parole povere vogliamo un formalismo che mi permetta di analizzare delle proprietà locali di una parola infinita.</p>
+
+<p>Con S1S possiamo trattare problemi come “verifica che dopo ogni a ci siano solo delle b”</p>
+
+<p>Con WS1S possiamo trattare i problemi come “verifiche dopo ogni a ci sia una certo numero di b”</p>
+
+<p>Ma scusa, ma se vogliamo trattare delle proprietà locali perchè non “tagliamo” dalla sequenza infinita la porzione che ci serve e la analizziamo con uno dei tanti metodi che esistono per trattare le parole finite? Bè, perchè vogliamo un formalismo che gestisca le parole infinite e ne permetta di verificare alcune proprietà locali: semplice.</p>]]></content><author><name></name></author><category term="articles" /><category term="article" /><category term="miscellaneous" /><summary type="html"><![CDATA[]]></summary></entry></feed>

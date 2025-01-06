@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 8 Network Security - EMAIL Security &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 8 Network Security - EMAIL Security</h1>
+  <time datetime="2024-08-17T00:00:00+02:00" class="post-date">17 Aug 2024</time>
+  <!--more-->
+<p>Vengono usati due tipi di protocolli per trasferire email:</p>
+<ul>
+  <li>SMTP e ESMTP: protocolli per muovere i messaggi attraverso Internet da una sorgente a una destinazione</li>
+  <li>IMAP e POP: usati per accedere ai messaggi da parte del client finale dal message store</li>
+</ul>
+
+<p>![[1717312139_grim.png]]</p>
+
+<h2 id="simple-mail-transfer-protocol-smtp">Simple Mail Transfer Protocol (SMTP)</h2>
+<p>È un protocollo client-server text-based</p>
+
+<p>usato per spedire i messaggi encapsulati dalla sorgente alla destinazione attraverso più MTAs (Message Transfer Agent)</p>
+
+<p>ESMTP è la versione più recente del protocollo SMTP. La E sta per Extended</p>
+
+<h2 id="mail-access-protocols">Mail Access Protocols</h2>
+<h3 id="pop-post-office-protocol">POP (Post Office Protocol)</h3>
+<p>Serve per permettere a un client di <strong>scaricare un’email da un server email (MTA)</strong>
+Dopo l’autorizzazione, un user agent può usare i comandi POP3 per <strong>recuperare o cancellare mail</strong>.</p>
+
+<h3 id="imap-internet-mail-access-protocol">IMAP (Internet Mail Access Protocol)</h3>
+<p>Anche IMAP permette a un client di <strong>accedere a mail su un server email</strong> e usa anche lui TCP.
+I due protocolli si differenziano per il fatto che <strong>IMAP è più complicato di POP3</strong> e <strong>offre più funzionalità</strong>.</p>
+
+<h2 id="rfc-5322">RFC 5322</h2>
+<p>Definisce il formato per i messaggi di testo inviati tramite email
+Un esempio di messaggio correttamente formattato seguendo lo standard RFC 5322 è il seguente:
+![[1717312824_grim.png]]</p>
+
+<p>Il problema è che RFC 5322 non prevede la trasmissione di eseguibili o oggetti binari, e ha altre varie limitazioni. Per questo è stato ideato MIME (Multipurpose Internet Message Extension).</p>
+
+<h2 id="mime">MIME</h2>
+<p>le specifiche di MIME prevedono i seguenti elementi:</p>
+<ul>
+  <li>5 nuovi message header fields:
+    <ul>
+      <li><strong>MIME-Version</strong>
+        <ul>
+          <li>Must have the parameter value 1.0</li>
+          <li>This field indicates that the message conforms to RFCs 2045 and 2046</li>
+        </ul>
+      </li>
+      <li><strong>Content-Type</strong>
+        <ul>
+          <li>Describes the data contained in the body with sufficient detail that the receiving user agent can pick an appropriate agent or mechanism to represent the data to the user or otherwise deal with the data in an appropriate manner</li>
+        </ul>
+      </li>
+      <li><strong>Content-Transfer-Encoding</strong>
+        <ul>
+          <li>Indicates the type of transformation that has been used to represent the body of the message in a way that is acceptable for mail transport</li>
+        </ul>
+      </li>
+      <li><strong>Content-ID</strong>
+        <ul>
+          <li>Used to identify MIME entities uniquely in multiple contexts</li>
+        </ul>
+      </li>
+      <li><strong>Content-Description</strong>
+        <ul>
+          <li>A text description of the object with the body; this is useful when the object is not readable</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>un numero di formati di contenuto che prevedono la rappresentazione standardizzata che supporta le multimedia electronic mail.
+![[1717314130_grim.png]]</li>
+  <li>codifiche di trasferimento che permettono la conversione di qualsiasi format content in una forma che è protetta dall’alterazione data dal sistema mail
+![[1717314151_grim.png]]</li>
+</ul>
+
+<h2 id="smime-securemultipurpose-internet-mail-extension">S/MIME (Secure/Multipurpose Internet Mail Extension)</h2>
+<p>![[1717314934_grim.png]]</p>
+
+<p>S/MIME garantisce l’autenticità con la digital signature e la confidenzialità con l’encryption tramite un misto di AES e RSA.</p>
+
+<p>![[1717322752_grim.png]]</p>
+<h2 id="pec--posta-elettronica-certificata">PEC  (Posta Elettronica Certificata)</h2>
+<p>L’idea è aggiungere il non-ripudio e il certificato di invio con timestamp.
+Quando il ricevitore riceve l’email viene inviata una conferma di ricezione al mittente, che garantisce che l’email è arrivata correttamente. Se il server è riconosciuto ufficialmente, questa conferma di ricezione ha valore legale.</p>
+
+<p>![[1717322732_grim.png]]</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

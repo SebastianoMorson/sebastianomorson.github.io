@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 4 Network Security -Cryptographic Key Management and Distribution &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 4 Network Security -Cryptographic Key Management and Distribution</h1>
+  <time datetime="2024-08-13T00:00:00+02:00" class="post-date">13 Aug 2024</time>
+  <!--more-->
+<h1 id="key-distribution-center">Key-distribution Center</h1>
+<p>Esistono varie modalità per la distribuzione delle chiavi tra due parti, A e B, in un contesto di crittografia:</p>
+
+<ol>
+  <li>A può selezionare una chiave e consegnarla fisicamente a B.</li>
+  <li>Una terza parte può selezionare la chiave e consegnarla fisicamente a A e B.</li>
+  <li>Se A e B hanno precedentemente utilizzato una chiave, una delle parti può trasmettere la nuova chiave all’altra, crittografata utilizzando la vecchia chiave.</li>
+  <li>Se A e B hanno ciascuno una connessione crittografata con una terza parte C, C può consegnare una chiave su collegamenti crittografati ad A e B.</li>
+  <li>Una variante di opzione 4 coinvolge un centro di distribuzione chiavi (KDC), che genera e distribuisce chiavi di sessione.</li>
+</ol>
+
+<p>![[1715586000_grim.png]]
+Le opzioni 1 e 2 richiedono la consegna manuale delle chiavi, una pratica ragionevole per la crittografia di collegamento ma scomoda per la crittografia end-to-end su una rete. La distribuzione manuale è problematica nei sistemi distribuiti, in cui ogni dispositivo può dover comunicare con molti altri dispositivi nel tempo.</p>
+
+<p>La distribuzione delle chiavi a livello di rete richiede una quantità significativa di chiavi, che dipende dal numero di coppie di comunicazione supportate. Per la crittografia end-to-end a livello di applicazione, il numero di chiavi necessarie può essere ancora più elevato.</p>
+
+<p>Inoltre, si discute l’utilizzo di un centro di distribuzione chiavi (KDC) per la crittografia end-to-end, dove il KDC genera e distribuisce chiavi di sessione tra le parti.</p>
+
+<p>Si vede necessario quindi autenticare le parti che scambiano chiavi e l’uso di timestamp per limitare il tempo di scambio delle chiavi e/o la durata delle chiavi scambiate.</p>
+<h1 id="man-in-the-middle-attack">Man-in-The-Middle attack</h1>
+<p>Per scegliere una chiave di sessione potrei pensare di usare un semplice schema come il seguente, dove A lascia che sia B a decidere la chiave di sessione K, per poi passarla attraverso la chiave pubblica di A ad A.
+![[1715585974_grim 1.png]]
+Il problema di questo schema è che è vulnerabile ad attacchi man-in-the-middle, difatti un soggetto C potrebbe banalmente fingersi A, intercettando la richiesta di B, inoltrando a B la chiave pubblica di C e l’ID di A, per poi intercettare la risposta di B, come si può vedere dal modello seguente 
+![[1715585957_grim.png]]
+Ovviamente questo approccio è sbagliato, ma mette in luce come sia essenziale prevenire questo genere di attacchi.</p>
+<h3 id="secured-version">Secured version</h3>
+<p>![[1715586033_grim.png]]
+L’approccio in figura è migliore del precedente. Difatti in questo caso viene usata la chiave pubblica di B e 2 nonce, che permettono di evitare man-in-the-middle e replay attacks. Il problema in questo caso è che questa architettura non è facilmente scalabile.
+Se invece di avere 2 entità ne avessimo 1000, ognuna di queste entità dovrebbe tener traccia di tutte le chiavi pubbliche degli altri 999 utenti. Chiaramente più cresce il numero più il numero di chiavi da memorizzare cresce e in generale saranno N*(N-1). Per questa ragione si è pensato di usare un’entità condivisa che gestisse i dati condivisi.</p>
+<h1 id="public-key-directory">Public-Key Directory</h1>
+<p>![[1715586171_grim.png]]
+Una “public-key directory” è un servizio o una infrastruttura che memorizza e fornisce pubblicamente chiavi pubbliche associate a identità specifiche. Nel contesto della gestione e distribuzione delle chiavi (key management and distribution), una directory delle chiavi pubbliche è fondamentale per consentire la crittografia asimmetrica, in cui una coppia di chiavi (una pubblica e una privata) viene utilizzata per crittografare e decrittografare i dati.</p>
+
+<ol>
+  <li>
+    <p><strong>Registrazione delle chiavi pubbliche:</strong> Gli utenti o le entità generano una coppia di chiavi (pubblica e privata) e registrano la loro chiave pubblica nella directory. Questo processo di registrazione può includere l’associazione della chiave pubblica con un’identità specifica, come un nome utente o un indirizzo email.</p>
+  </li>
+  <li>
+    <p><strong>Recupero delle chiavi pubbliche:</strong> Quando un mittente ha bisogno di crittografare dati per un destinatario specifico, può recuperare la chiave pubblica di quel destinatario dalla directory utilizzando la sua identità. Questo consente al mittente di crittografare i dati con la chiave pubblica del destinatario, assicurando che solo il possessore della chiave privata associata possa decifrarli.</p>
+  </li>
+  <li>
+    <p><strong>Distribuzione delle chiavi pubbliche:</strong> La directory delle chiavi pubbliche può essere accessibile tramite vari mezzi, come servizi online, protocolli di rete specifici o infrastrutture di sicurezza aziendale. È importante garantire che la directory sia affidabile e protetta da accessi non autorizzati, in modo che le chiavi pubbliche possano essere recuperate solo da chi ne ha effettivamente bisogno.</p>
+  </li>
+  <li>
+    <p><strong>Revoca delle chiavi pubbliche:</strong> In situazioni in cui una chiave pubblica non è più sicura o è stata compromessa, è necessario essere in grado di revocarla dalla directory in modo che non venga più utilizzata per crittografare i dati. Questo processo di revoca richiede una gestione accurata per garantire che le chiavi compromesse siano prontamente rimosse dalla directory.</p>
+    <h1 id="x509-certificates">X.509 Certificates</h1>
+    <p>X.509 definisce un framework per offrire servizi di autenticazione dalle directory X.500 ai suoi utenti</p>
+  </li>
+</ol>
+
+<p>È basato su cifratura a chiave pubblica e firme digitali.</p>
+
+<p>Ogni certificato contiene la chiave pubblica dell’utente ed è firmato con la chiave pubblica di un’autorità fidata di certificazione (CA).</p>
+
+<p>Il cuore dello schema X.509 è il certificato a chiave pubblica associato a ciascun utente. 
+![[1715586742_grim.png]]</p>
+
+<h2 id="certification-authority-ca">Certification Authority (CA)</h2>
+<p>L’entità che si occupa di garantire l’autenticità e della creazione dei certificati è la certification autority. Il server che contiene le associazioni utente-certificato non è responsabile per la creazione delle chiavi, ma solo del rendere disponibile una location per ottenere i certificati.</p>
+
+<p>Le caratteristiche di una CA sono:</p>
+<ul>
+  <li>versione
+    <ul>
+      <li>1, versione di default</li>
+      <li>2, versione se sono presenti i campi <em>issuer unique identifier</em> o il <em>subject unique identifier</em></li>
+      <li>3, versione se una o più estensioni sono presenti</li>
+    </ul>
+  </li>
+  <li>numero seriale
+    <ul>
+      <li>un numero che identifica univocamente il certificato da parte della CA che l’ha generato</li>
+    </ul>
+  </li>
+  <li>identificatore dell’algoritmo di signature
+    <ul>
+      <li>non ha molta utilità, specifica l’algoritmo usato per la firma</li>
+    </ul>
+  </li>
+  <li>nome della CA Che ha creato e firmato il  certificato</li>
+  <li>periodo di validità</li>
+  <li>nome dell’utente a cui appartiene il certificato</li>
+  <li>informazioni sulla chiave pubblica del soggetto</li>
+  <li>identificatore univoco del generatore</li>
+  <li>identificatore univoco del soggetto</li>
+  <li>estensioni
+    <ul>
+      <li>insieme di una o più campi</li>
+      <li>sono state aggiunte a partire dalla versione 3</li>
+    </ul>
+  </li>
+  <li>signature</li>
+</ul>
+
+<p>![[1715587983_grim.png]]</p>
+
+<h1 id="certificate-revocation">Certificate Revocation</h1>
+<p>servono per poter revocare un certificato prima della data di scadenza. Può essere utile revocare un certificato anticipatamente quando ad esempio la chiave privata viene compromessa, quando il certificato della CA si ritiene sia stato bucato, oppure quando l’utente non è più certificato dalla CA</p>
+<h1 id="public-key-infrastructure-pki">Public-Key Infrastructure (PKI)</h1>
+<p>![[1715590532_grim.png]]</p>
+
+<p>Le componenti essenziali di una PKI sono:</p>
+<ul>
+  <li><strong>End Entity</strong></li>
+  <li><strong>Certification Authority (CA)</strong>
+    <ul>
+      <li>autorità garantita da uno o più utenti che crea e assegna i certificati a chiave pubblica</li>
+      <li>responsabile anche per pubblicare i Certificate Revocation List (CRLs), che servono per identificare i certificati che sono stati revocati prima della data di scadenza</li>
+    </ul>
+  </li>
+  <li><strong>Registration Authority (RA)</strong>
+    <ul>
+      <li>componenti opzionale</li>
+      <li>serve per delegare alcuni compity del CA</li>
+      <li>verificare l’identità e ottenere certificati per una chiave pubblica</li>
+    </ul>
+  </li>
+  <li><strong>Repository</strong>
+    <ul>
+      <li>specifica ogni metodo per memorizzare e recuperare le informazioni associate a una PKI come ad esempio i certificati di chiave pubblica e i CRLs</li>
+      <li>può essere una X.500-based directory con un accesso client via LDAP (Lightweight Directory Access Protocol)</li>
+    </ul>
+  </li>
+  <li><strong>Relying party</strong>
+    <ul>
+      <li>qualsiasi utente o agente che dipende dai dati di un certificato per poter prendere decisioni</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="domande">Domande:</h2>
+
+<p><strong>Che differenza c’è tra una public-key directory e una certificate autority (CA)?</strong>
+Una public-key directory e una certificate authority (CA) sono entrambe componenti cruciali nell’infrastruttura crittografica, ma svolgono ruoli leggermente diversi:</p>
+
+<ol>
+  <li><strong>Public-Key Directory:</strong>
+    <ul>
+      <li>Una public-key directory memorizza e fornisce chiavi pubbliche associate a identità specifiche.</li>
+      <li>Le chiavi pubbliche nella directory possono essere utilizzate per crittografare dati in modo che solo il possessore della chiave privata associata possa decifrarli.</li>
+      <li>La directory fornisce un servizio di accesso pubblico per recuperare chiavi pubbliche, senza necessariamente garantire l’affidabilità o l’autenticità delle chiavi stesse.</li>
+      <li>La directory può essere utilizzata per scopi generici di crittografia e firma digitale, ma non fornisce garanzie sulla validità delle chiavi.</li>
+    </ul>
+  </li>
+  <li><strong>Certificate Authority (CA):</strong>
+    <ul>
+      <li>Una certificate authority è un’entità affidabile che emette certificati digitali che collegano una chiave pubblica a un’identità specifica (ad esempio, un’organizzazione o un sito web).</li>
+      <li>I certificati digitali sono firmati digitalmente dalla CA, fornendo una garanzia dell’autenticità delle informazioni contenute nel certificato.</li>
+      <li>Oltre alla chiave pubblica, il certificato contiene informazioni sull’entità a cui appartiene la chiave pubblica, come il nome dell’organizzazione e l’indirizzo email.</li>
+      <li>Le CA svolgono un ruolo critico nell’assicurare che le chiavi pubbliche siano autentiche e non siano state compromesse.</li>
+      <li>I certificati emessi dalle CA sono ampiamente utilizzati in contesti come HTTPS (protocollo di trasferimento sicuro ipertestuale) per garantire la sicurezza delle comunicazioni su Internet.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>In sintesi, mentre entrambe le public-key directory e le certificate authority sono fondamentali per la crittografia e la sicurezza delle comunicazioni digitali, le CA forniscono un livello aggiuntivo di affidabilità e autenticità attraverso l’emissione di certificati digitali firmati digitalmente.</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

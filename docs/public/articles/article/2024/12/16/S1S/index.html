@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Monadic Second Order theory of One's Successor &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Monadic Second Order theory of One's Successor</h1>
+  <time datetime="2024-12-16T00:00:00+01:00" class="post-date">16 Dec 2024</time>
+  <!--more-->
+<p>Partiamo con il dire perchè c’è bisogno di capire:</p>
+<ul>
+  <li>la monadic second order theory of one’s successor (S1S)</li>
+  <li>la relazione tra automi di Büchi e S1S</li>
+</ul>
+
+<p>Onestamente ancora non la so nemmeno io, quindi qua ci metto un bel #todo e appena lo scopro lo scrivo</p>
+
+<p>Prima cosa da imparare: che cosa sarebbe un linguaggio del $S1S_\cal{A}$?</p>
+
+<hr />
+<p>Un linguaggio $S1S_{\cal{A}}$ è un linguaggio composto a partire da:</p>
+<ul>
+  <li><strong>termini</strong>: 
+  praticamente sarebbero i simboli di costante costruiti a partire da 0 e usando la funzione successore (+1) e le variabili $x,y,…$ (su cui possono essere applicate le funzioni successore)</li>
+  <li><strong>formule atomiche</strong>:
+  si formano a partire dai termini e possono essere nelle forme (con $t_{1}$ e $t_{2}$ due termini)
+    <ul>
+      <li>$t_{1}=t_{2}$</li>
+      <li>$t_{1}&lt;t_{2}$</li>
+      <li>$t_1 \in X$ con X una variabile al second’ordine</li>
+      <li>$t_{1} \in Q_a$ con Q  simbolo di predicato unario (uno per ogni $a \in A$)</li>
+    </ul>
+  </li>
+  <li><strong>formule:</strong> 
+  possono comparire quantificatori $\forall, \exists$ e operatori booleani come $\lnot,\wedge,\lor$ applicati su variabili individuali o variabili insiemistiche ($\forall x$ o $\forall X$)</li>
+</ul>
+
+<hr />
+
+<p><strong>formula chiusa (enunciato)</strong>: una formula priva di variabili libere</p>
+
+<p><strong><em>! Osservazione</em></strong>:
+la definizione del simbolo 0 e del predicato &lt; non è necessario in S1S. Difatti è sufficiente usare l’operatore successore e la logica del second’ordine:</p>
+<ul>
+  <li>lo zero può essere definito come</li>
+</ul>
+
+\[\forall y(x&lt;y \lor x=y)\]
+
+<p>oppure (senza predicato &lt;)</p>
+
+\[\lnot \exists y(y+1=x)\]
+
+<ul>
+  <li>il predicato &lt; può essere riscritto come</li>
+</ul>
+
+\[\forall X(x+1 \in X \land \forall z(z\in X \to z+1 \in X)\to y \in X)\]
+
+<h3 id="come-rappresento-una-omega-parola-usando-la-logica">Come rappresento una $\omega$-parola usando la logica?</h3>
+<p>Semplicemente creiamo una sorta di “stampino” $\underline{\alpha}$ definito come</p>
+
+<p>\(\underline{\alpha} = &lt;\omega, 0,+1,&lt;,\{Q_{a}\}_{a \in A}&gt;\)
+dove il dominio $\omega$ corrisponde ai naturali e $Q_a$ è definito come l’insieme degli indici delle posizioni della $\omega$-parola $\alpha$ in cui il simbolo è $a$</p>
+
+\[Q_{a} = \{i \in \omega \; | \; \alpha(i) = a\}\]
+
+<h3 id="come-rappresento-un-linguaggio-usando-delle-parole-s1s">Come rappresento un linguaggio usando delle parole S1S?</h3>
+<p>È possibile definire un linguaggio a partire da una formula logica che dev’essere soddisfatta da ogni $\omega$-parola.
+In particolare data una formula $\varphi$, il linguaggio descritto da tale formula è definito come</p>
+
+\[L(\varphi) = \{\alpha \in A\; |\; \alpha \models \varphi \}\]
+
+<p>Facciamo degli esempi:</p>
+
+<ol>
+  <li>Sia L il linguaggio sull’alfabeto ${a, b, c}$ che contiene tutte e sole le $\omega$-parole tali che ogni occorrenza del simbolo $a$ sia seguita da un’occorrenza del simbolo $b$. $L$ è catturato dal seguente enunciato al prim’ordine:</li>
+</ol>
+
+\[\varphi = \forall i (x\in Q_{a} \to \exists j(i&lt;j \land j \in Q_{b}))\]
+
+<ol>
+  <li>Sia L il linguaggio sull’alfabeto ${a, b, c}$ che contiene tutte e sole le $\omega$-parole tali che tra ogni coppia di occorrenze successive del simbolo $a$ vi sia un numero pari di occorrenze dei simboli b e c. L è catturato dal seguente enunciato al second’ordine:</li>
+</ol>
+
+<p>\(\varphi = \forall i,j((i \in Q_{a}\land j\in Q_{a} \land i&lt;j) \land \lnot \exists z (z &lt;j \land z&lt;i \land z \in Q_{a}) \to \exists X(x \in X \land \forall (z \in X \iff z+1 \not\in X) \land y \not\in X))\)
+la clausola</p>
+
+<p>\(\lnot \exists z (z &lt;j \land z&lt;i \land z \in Q_{a})\)
+serve per escludere che siano presenti simboli $a$ tra altri due simboli $a$. L’ultima implicazione invece controlla la parità.</p>
+
+<p>La cosa interessante è che possiamo fare in modo di rendere irrilevante l’alfabeto usato. Come? Semplicemente convertendo ogni simbolo in A nella corrispettiva codifica binaria
+(ad esempio se A={a,b,c,d} posso considerare il nuovo alfabeto $A’ = {0,1}^n$ con $n = log(|A|))$.
+e ricreando l’insieme $Q_{a}$ in un nuovo insieme definito come</p>
+
+\[P_{k} = \{ i \in \omega \; | \; (\alpha(i)_{k}) = 1\}\]
+
+<p>A questo punto quindi diventa anche più facile definire il linguaggio L a partire da una formula S1S $\varphi$</p>
+
+<p>\(L(\varphi) = \{\alpha \in ({0,1}^n)^\omega \; | \; \alpha \models \varphi(X_{1}, \dots, X_{n}) \}\)</p>
+<h4 id="s1s_cala-vs-s1s">$S1S_\cal{A}$ vs $S1S$</h4>
+<p>Qualcuno potrebbe aver obiettato dicendo “ma perchè hai scritto $S1S_\cal{A}$ invece di $S1S$? Sono sinonimi?”. La risposta è NO. 
+$S1S_\cal{A}$ si riferisce a una Second-order Monadic Logic of Successor che lavora su $\omega$-parole costruite su un alfabeto $A$.</p>
+
+<p>S1S invece si riferisce alla versione “generica” che non fa uso di un alfabeto, ma di indici delle lettere dell’alfabeto (quella traduzione che avevamo visto prima). A questo punto quindi le lettere dell’alfabeto vengono sostituite da variabili del second’ordine che rappresentano l’insieme di posizioni associate ai simboli dell’alfabeto di partenza.</p>
+
+<h3 id="lemma-chiusura-per-proiezione">Lemma: Chiusura per proiezione</h3>
+<p>Sia data la formula S1S</p>
+
+\[\psi(X_{1}, \dots, X_{i-1}, X_{i+1}, \dots, X_{n}) = \exists X_{i}\varphi(X_{1},\dots,X_{n})\]
+
+<p>Se $L(\varphi)$ è $\omega$-regolare, allora anche $L(\psi)$ è $\omega$-regolare.
+!Occhio perchè nella formula $\psi$ bisogna osservare che tra le variabili di second’ordine espresse come argomento manca la variabile $X_{i}$</p>
+
+<p><strong>Che significa questa cosa?</strong> 
+Il lemma dice una cosa importante. Dice che se ho una formula $\psi$ che opera su $n$ variabili del second’ordine, posso sempre riuscire a ridurre il numero di variabili usate mediante una riscrittura della formula rimanendo comunque all’interno del potere espressivo di S1S. Perciò se posso esprimere mediante una formula S1S un certo linguaggio che usa n variabili, posso fare lo stesso anche con una formula che ne usa meno di n.</p>
+
+<p>Ad esempio se consideriamo $A = {a, b, c}$ e un linguaggio $L \subseteq A^\omega$ definito da:<br />
+“Ogni occorrenza di a è seguita da un b prima di un c”.</p>
+
+<p>La formula in S1S per L è:</p>
+
+\[\forall x. (x \in X_a \implies \exists y. (y &gt; x \land y \in X_b \land \forall z. (x &lt; z &lt; y \implies z \notin X_c)))\]
+
+<p>Se ora vogliamo proiettare L sull’alfabeto $B = {a, c}$ eliminando $b$, il nuovo linguaggio $\pi(L)$ richiede una nuova formula che verifica implicitamente la condizione rimossa.</p>
+
+<p>La nuova formula potrebbe essere:</p>
+
+<p>\(\forall x. (x \in X_a \implies \exists y. (y &gt; x \land y \in X_c))\)
+Questo dimostra che possiamo tradurre la proiezione in una nuova formula S1S.</p>
+
+<p><strong>Dimostrazione</strong>
+L’idea è dimostrare che a partire da un automa di Büchi $\cal{A}$ sull’alfabeto ${0,1}^n$ che riconosce un linguaggio $L(\varphi)$ è possibile generare un automa di Büchi $\cal{A}’$ che riconosce il linguaggio $L(\psi)$ sull’alfabeto ${0,1}^{n-1}$.
+Se tale automa esiste sappiamo che anche il linguaggio $L(\psi)$ è $\omega$-regolare.</p>
+
+<p>L’automa $\cal{A}’$ viene costruito considerando l’automa $\cal{A}$ e rimpiazzando ogni simbolo $(j_{1},\dots,j_{i},\dots,j_{n})$ con un nuovo simbolo $( j_{1},\dots,j_{i-1}, j_{i+1},\dots ,j_{n})$. 
+In pratica non si fa altro che ridurre la codifica dei simboli.
+Una parola $\alpha = ( \alpha_{1},\dots,\alpha_{i-1}, \alpha_{i+1},\dots ,\alpha_{n})$ è accettata da $\cal{A}’$ se e solo se esiste una componente $\beta$ tale che $\alpha’ = ( \alpha_{1},\dots,\alpha_{i-1}, \beta, \alpha_{i+1},\dots ,\alpha_{n})$ è accettata da $\cal{A}$.</p>
+
+<h3 id="possibili-domande">Possibili domande</h3>
+<p>Che differenza c’è tra monadic second order theory of one’s successor e monadic first order theory of one’s successor?</p>
+
+<h6 id="1-linguaggio-con-occorrenza-obbligatoria">1. <strong>Linguaggio con occorrenza obbligatoria</strong></h6>
+
+<p>Definisci un enunciato che cattura il linguaggio delle $\omega$-parole sull’alfabeto ${a,b,c}$ in cui ogni simbolo c è preceduto da almeno un simbolo b.</p>
+
+<hr />
+
+<h6 id="2-parità-delle-occorrenze">2. <strong>Parità delle occorrenze</strong></h6>
+
+<p>Definisci un enunciato per il linguaggio di $\omega$-parole sull’alfabeto ${0,1}$ in cui ogni prefisso finito della parola contiene un numero pari di occorrenze del simbolo 1.</p>
+
+<hr />
+
+<h6 id="3-evento-ciclico">3. <strong>Evento ciclico</strong></h6>
+
+<p>Trova l’enunciato che descrive il linguaggio delle $\omega$-parole sull’alfabeto ${x, y, z}$ in cui il simbolo x appare infinitamente spesso e ogni occorrenza di x è seguita (prima o poi) da un’ulteriore occorrenza di y.</p>
+
+<hr />
+
+<h6 id="4-alternanza-tra-simboli">4. <strong>Alternanza tra simboli</strong></h6>
+
+<p>Definisci un enunciato per il linguaggio delle $\omega$-parole sull’alfabeto ${a, b}$ in cui a e b compaiono in modo alternato, senza che ci siano due a o due b consecutivi.</p>
+
+<hr />
+
+<h6 id="5-suffisso-infinito">5. <strong>Suffisso infinito</strong></h6>
+
+<p>Definisci il linguaggio delle ω\omegaω-parole sull’alfabeto ${p, q, r}$ in cui, a partire da un certo punto della parola, appaiono solo i simboli p e q.</p>
+
+<hr />
+
+<h6 id="6-mai-ripetizione-consecutiva">6. <strong>Mai ripetizione consecutiva</strong></h6>
+
+<p>Trova l’enunciato per il linguaggio delle $\omega$-parole sull’alfabeto ${a, b}$ in cui il simbolo a non compare mai due volte consecutive.</p>
+
+<hr />
+
+<h6 id="7-prefissi-validi">7. <strong>Prefissi validi</strong></h6>
+
+<p>Definisci un linguaggio L sull’alfabeto ${0, 1, 2}$ in cui ogni prefisso finito di una parola $\alpha$ ha almeno tante occorrenze del simbolo 0 quante del simbolo 1.</p>
+
+<hr />
+
+<h6 id="8-eventuale-periodicità">8. <strong>Eventuale periodicità</strong></h6>
+
+<p>Trova l’enunciato che descrive le $\omega$-parole sull’alfabeto ${a, b}$ che a partire da un certo punto diventano periodiche con il ciclo ab.</p>
+
+<hr />
+
+<h6 id="9-posizioni-specifiche">9. <strong>Posizioni specifiche</strong></h6>
+
+<p>Definisci un linguaggio L sull’alfabeto ${x, y, z}$ in cui le occorrenze di x appaiono solo in posizioni pari.</p>
+
+<hr />
+
+<h6 id="10-infinitamente-molti-simboli">10. <strong>Infinitamente molti simboli</strong></h6>
+
+<p>Trova l’enunciato che descrive le $\omega$-parole sull’alfabeto ${a, b, c}$ in cui appaiono infinitamente molte b e c, ma solo un numero finito di a.</p>
+
+<hr />
+
+<h3 id="consigli-per-la-risoluzione">Consigli per la risoluzione</h3>
+
+<ol>
+  <li><strong>Strategia generale</strong>: Dividi il problema in sotto-obiettivi logici (es., “ogni a è seguito da un b”).</li>
+  <li><strong>Usa variabili monadiche</strong>:
+    <ul>
+      <li>Per definire insiemi di posizioni (X,Y,Z,…X, Y, Z, \dotsX,Y,Z,…).</li>
+      <li>Per catturare proprietà globali o locali (es., periodicità, occorrenze infinite).</li>
+    </ul>
+  </li>
+  <li><strong>Costruisci passo per passo</strong>: Parti da formule base (es., “il simbolo a compare in una certa posizione”) e componile per ottenere la formula finale.</li>
+</ol>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

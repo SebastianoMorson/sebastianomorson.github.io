@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Secondo teorema di Büchi &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Secondo teorema di Büchi</h1>
+  <time datetime="2024-12-16T00:00:00+01:00" class="post-date">16 Dec 2024</time>
+  <!--more-->
+<h1 id="teorema">Teorema</h1>
+<p>Un $\omega$-linguaggio $L \subseteq A^\omega$ è $\omega$-regolare se e solo se è definibile in $S1S$.</p>
+
+<p><strong>Dimostrazione</strong>
+<strong><em>-&gt;”Se un $\omega$-linguaggio $L \subseteq A^\omega$ è $\omega$-regolare allora è definibile in $S1S$”</em></strong></p>
+
+<p>Ovviamente direi che la dimostrazione si basa sul fatto di riuscire a definire una $S1S$ formula a partire da qualsiasi linguaggio $\omega$-regolare.</p>
+
+<p>Per prima cosa quindi bisogna dare una descrizione generale di un linguaggio in $S1S$ che descrive proprio il linguaggio riconosciuto da un automa $\cal{A} =$ ($Q$, $\Delta$, $q_{0}$,$F$,<em>A</em>).
+Consideriamo quindi il linguaggio riconosciuto dall’automa $\cal{A}$ e associamolo a una formula in $S1S$ che possa modellarne il comportamento.</p>
+
+\[L(A) = \exists Y_{0}\exists Y_{1}\dots\exists Y_{m}\varphi(Y_{0},Y_{1},\dots,Y_{m})\]
+
+<p>Perciò ogni $\omega$-parola $\alpha \in A^\omega$ accettata dall’automa $\cal{A}$ se e solo se avremo che $\underline{\alpha}$ è un modello di $\exists Y_{0}\exists Y_{1}\dots\exists Y_{m}\varphi(Y_{0},Y_{1},\dots,Y_{m})$ 
+Se vi state chiedendo cosa dovrebbero essere quegli $Y_{i}$ ebbene non sono altro che gli insiemi delle posizioni in cui la computazione finisce nello stato $i$.</p>
+
+<p>A questo punto quindi abbiamo una versione generica di una formula che possa rappresentare il mio $\omega$-linguaggio.
+Ora dobbiamo raffinare la formula $\varphi$ mostrando come dovrebbe fare per gestire</p>
+<ol>
+  <li>lo start della computazione nello stato $q_0$</li>
+  <li>il fatto che la computazione possa trovarsi in un solo stato ad ogni step</li>
+  <li>le transizioni date dalla funzione $\Delta$</li>
+  <li>il fatto che una parola è accettata solo l’automa passa infinite volte per uno stato finale</li>
+</ol>
+
+<h6 id="1-imporre-che-la-computazione-inizi-dallo-stato-0">1. imporre che la computazione inizi dallo stato 0</h6>
+
+\[\varphi_{1}(Y_{1},\dots,Y_{m}) = 0 \in Y_{0}\]
+
+<p>Semplicemente diciamo che l’istante $0$ è presente all’interno dell’insieme degli step in cui l’automa si trova nello stato $q_0$</p>
+<h6 id="2-imporre-che-la-computazione-in-ogni-istante-si-trovi-in-al-più-uno-stato">2. Imporre che la computazione in ogni istante si trovi in al più uno stato</h6>
+
+\[\varphi_{2}(Y_{1},\dots, Y_{m}) = \bigwedge_{i\neq j}\lnot\exists y(y \in Y_{i} \land y \in Y_{j})\]
+
+<p>L’idea della formula è: non possono mai esistere due stati $i$ e $j$ per $i$ quali un qualsiasi step di computazione che si trova sia nell’insieme degli step dello stato $i$, che in quello dello stato $j$</p>
+<h6 id="3-imporre-che-la-computazione-debba-procedere-sulla-base-della-relazione-di-transizione-delta-di-cala">3. Imporre che la computazione debba procedere sulla base della relazione di transizione $\Delta$ di $\cal{A}$</h6>
+
+\[\varphi_{3}(Y_{1},\dots,Y_{m}) = \forall x \bigvee_{(i,a,j)\in \Delta} (x \in Y_{i} \land x \in Q_{a} \land x+1 \in Y_{j})\]
+
+<p>L’idea della formula è: per ogni istante della computazione $x$, se esiste una transizione da uno stato $i$ a uno stato $j$, allora l’istante $x$ si trova dentro l’insieme degli step in cui si finisce nello stato $i$ e il successivo step $x+1$ si trova all’interno dell’insieme degli step in cui si finisce nello stato $j$.</p>
+
+<h6 id="4-imporre-che-una-computazione-di-successo-debba-attraversare-infinite-volte-almeno-uno-stato-finale">4. Imporre che una computazione di successo debba attraversare infinite volte almeno uno stato finale</h6>
+
+\[\varphi_{4}(Y_{1},\dots,Y_{m}) = \bigvee_{i \in F}\forall x \exists y(x&lt;y \land y \in Y_{i})\]
+
+<p>L’idea della formula è: per ogni istante della computazione $x$ esiste uno step successivo che rientra tra gli step in cui si finisce all’interno di uno stato finale.</p>
+
+<h6 id="fusione">Fusione:</h6>
+<p>A questo punto è chiaro che posso costruire una rappresentazione in S1S per ogni automa $\cal{A}$ che riconosce un linguaggio $\omega$-regolare unendo assieme le formule fin qui definite</p>
+
+\[L(A) = \exists Y_{0}\exists Y_{1}\dots\exists Y_{m}(\varphi_{1}(Y_{0},\dots,Y_{m}) \land \varphi_{2}(Y_{0},\dots,Y_{m}) \land \varphi_{3}(Y_{0},\dots,Y_{m}) \land \varphi_{4}(Y_{0},\dots,Y_{m}))\]
+
+<p>E qui finisce la dimostrazione in un verso. Ora viene il verso opposto.</p>
+
+<p><strong><em>&lt;-“Se definisco un linguaggio in $S1S$ allora è un $\omega$-linguaggio $L \subseteq A^\omega$  $\omega$-regolare”</em></strong></p>
+
+<p>In questo caso l’obiettivo è costruire un $\omega$-linguaggio $\omega$-regolare dato qualsiasi linguaggio in $S1S$. Per farlo invece di usare una qualsiasi $S1S$ usiamo $S1S_{0}$, quindi dobbiamo anche dimostrare che $S1S \equiv S1S_{0}$ (ossia una doppia inclusione)</p>
+
+<p>Ma che vuol dire $S1S_{0}$? 
+$S1S_{0}$ è una variante di $S1S$ che fa uso solo di</p>
+<ul>
+  <li>variabili del second’ordine</li>
+  <li>formula atomica nella forma Succ(X,Y)</li>
+  <li>formule atomiche nella forma $X\subseteq Y$</li>
+</ul>
+
+<p>Per chi se lo fosse dimenticato, $S1S$ usava praticamente di tutto:</p>
+<ul>
+  <li>variabili del prim’ordine (per esprimere proprietà puntuail)</li>
+  <li>variabili del second’ordine (per esprimere proprietà globali)</li>
+  <li>quantificatori esistenziali e universali</li>
+  <li>operatori booleani</li>
+</ul>
+
+<h5 id="1-dimostriamo-che-s1s_0-ha-lo-stesso-potere-espressivo-di-s1s">1. Dimostriamo che $S1S_{0}$ ha lo stesso potere espressivo di $S1S$</h5>
+<p>Vogliamo dimostrare che le due formulazioni hanno lo stesso potere espressivo perchè altrimenti sarebbe inutile dimostrare che ogni formulazione di $S1S_0$ è rappresentabile attraverso un automa di Büchi…</p>
+
+<p>Perciò</p>
+<h6 id="dimostriamo-che-ogni-formula-in-s1s-può-essere-riscritta-come-s1s_0">Dimostriamo che ogni formula in $S1S$ può essere riscritta come $S1S_0$</h6>
+<p>Qui c’è una lunga lista di traduzioni da fare, per cui usiamo delle abbreviazioni per evitare di prendere fuoco mentre scriviamo formule lunghissime.
+Useremo</p>
+
+\[\begin{equation}
+\begin{aligned}  
+X = Y &amp;\equiv X\subseteq Y \land Y \subseteq X \\
+X \neq Y &amp;\equiv \lnot (X=Y) \\
+Sing(X) &amp;\equiv \exists Y(Y\subseteq X \land Y \neq X \land \lnot \exists Z(Z \subseteq X \land Z\neq Y\land Z\neq X)) 
+\end{aligned}
+\end{equation}\]
+
+<p>Sing non fa altro che stabilire che dentro X ci sta solo un elemento.</p>
+
+<p>Dopo di che eliminiamo i simboli 0 e il predicato &lt; perchè in $S1S_0$ non compaiono.
+Trasformiamo +1 in</p>
+
+\[\exists y (y=x+1 \land y \in X)\]
+
+<p>A questo punto non facciamo altro che trasformare le formule atomiche che usano variabili del prim’ordine in formule atomiche che usano solo variabili del second’ordine. Perciò:</p>
+
+\[\begin{equation}
+\begin{aligned}
+x=y &amp;\equiv X = Y \land Sing(X) \land Sing(Y) \\
+x+1=y &amp;\equiv Succ(X,Y) \\
+\end{aligned}
+\end{equation}\]
+
+<p>Trasformiamo le quantificazioni del prim’ordine in quantificazioni del second’ordine</p>
+
+\[\begin{equation}
+\begin{aligned} \\
+\exists x &amp;\equiv \exists X(Sing(X) \land \dots) \\
+\forall x &amp;\equiv \forall X(Sing(X) \implies \dots)
+\end{aligned}
+\end{equation}\]
+
+<h6 id="dimostriamo-che-ogni-formula-in-s1s_0-può-essere-riscritta-come-s1s">Dimostriamo che ogni formula in $S1S_{0}$ può essere riscritta come $S1S$</h6>
+<ul>
+  <li>traduciamo $X \subseteq Y$</li>
+</ul>
+
+\[\forall x(x \in X \to x \in Y)\]
+
+<ul>
+  <li>traduciamo Succ(X,Y)</li>
+</ul>
+
+\[\exists x \exists y((x \in X \land \lnot \exists z \neq x \land z \in X) \land ((y \in Y \land \lnot \exists z \neq y \land z \in Y)) \land (x +1 = y))\]
+
+<h4 id="2-dimostriamo-che-ogni-formulazione-in-s1s_0-è-modellabile-tramite-automa-di-büchi">2. Dimostriamo che ogni formulazione in $S1S_{0}$ è modellabile tramite automa di Büchi</h4>
+
+<p>![[Pasted image 20241218093604.png]]</p>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

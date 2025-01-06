@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lecture 3 Network Security - Digital Signatures &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Lecture 3 Network Security - Digital Signatures</h1>
+  <time datetime="2024-08-12T00:00:00+02:00" class="post-date">12 Aug 2024</time>
+  <!--more-->
+<p>![[1715333879_grim.png]]</p>
+
+<h1 id="digital-signature-properties-and-requirements">Digital Signature Properties and requirements</h1>
+<p>Le proprietà che deve garantire una firma digitale sono:</p>
+<ul>
+  <li>deve verificare l’autorità, la data e il tempo in cui è stata effettuata la firma</li>
+  <li>deve autenticare il contenuto del messaggio nella data e nel tempo in cui è stata effettuata la firma</li>
+  <li>dev’essere verificabile da una terza parte per evitare dispute</li>
+</ul>
+
+<p>Inoltre una signature digitale deve essere un insieme di bit che dipendono dal messaggio che dev’essere firmato. Se così non fosse si potrebbe forgiare facilmente una firma che va bene per più di un messaggio.</p>
+
+<p>Inoltre bisogna che la firma sia facile da produrre, riconoscere, verificare e sia costruita in modo che chi l’ha creata non possa ripudiarla. È importante inoltre che non sia possibile forgiare una firma falsa in tempo utile.</p>
+
+<h1 id="attacks">Attacks</h1>
+<p>![[1715334307_grim.png]]</p>
+
+<h1 id="forgeries">Forgeries</h1>
+<p>![[1715334363_grim.png]]</p>
+
+<h1 id="elgamal-digital-signature">ElGamal Digital Signature</h1>
+<p>Questa firma usa la chiave privata per firmare e la chiave pubblica per verificare la firma.
+Inoltre usa un numero primo $q$ e un valore $a$ che è la radice primitiva di $q$.</p>
+
+<p>The ElGamal Digital Signature Scheme involves the following steps for generating and verifying digital signatures:</p>
+
+<ol>
+  <li>
+    <p>Key Generation: A user generates a public key and a private key. The public key consists of the values p, g, and y, where p is a large prime number, g is a generator of the multiplicative group modulo p, and y = g^x mod p, where x is the private key.</p>
+  </li>
+  <li>
+    <p>Signing: To sign a message M, the signer performs the following steps:</p>
+  </li>
+</ol>
+
+<p>a. Generate a random number k such that 1 &lt; k &lt; p-1.<br />
+b. Calculate r = g^k mod p.<br />
+c. Calculate h = hash(M), where hash is a fixed-size hash function. d. Calculate s = (h — xr) * k^-1 mod (p-1).<br />
+e. The signature of the message M is the pair (r, s).</p>
+
+<ol>
+  <li>Verifying: To verify the signature (r, s) of a message M, the verifier performs the following steps:</li>
+</ol>
+
+<p>a. Verify that 1 &lt; r &lt; p-1 and 0 &lt; s &lt; p-1. If either condition is not satisfied, the signature is invalid.</p>
+
+<p>b. Calculate h = hash(M).<br />
+c. Calculate v1 = (y^r * r^s) mod p.<br />
+d. Calculate v2 = g^h mod p.<br />
+e. If v1 = v2, the signature is valid. Otherwise, the signature is invalid.</p>
+<h1 id="schnorr-digital-signature">Schnorr Digital Signature</h1>
+
+<h1 id="nist-digital-signature-algorithm">NIST Digital Signature Algorithm</h1>
+
+<p>![[1715335024_grim.png]]</p>
+
+<p>![[1715336606_grim.png]]</p>
+
+<p>![[1715349305_grim.png]]</p>
+<h1 id="elliptic-curve-digital-signature-algorithm-ecdsa">Elliptic Curve Digital Signature Algorithm (ECDSA)</h1>
+<p>![[1715335083_grim.png]]</p>
+
+<p>In essence, four elements are involved.</p>
+<ol>
+  <li><strong>All those participating in the digital signature scheme use the same</strong> global domain parameters, which define an elliptic <strong>curve and a point of origin on the curve</strong>.</li>
+  <li>A <strong>signer</strong> must first <strong>generate a public, private key</strong> pair. For the private key, the signer <strong>selects a random or pseudorandom number</strong>. Using that random number and the point of origin, the signer <strong>computes another point on the elliptic curve</strong>. This is the signer’s public key.</li>
+  <li><strong>A hash value is generated for the message to be signed</strong>. Using the private key, the domain parameters, and the hash value, a signature is generated. <strong>The signature consists of two integers, r and s</strong>.</li>
+  <li>To verify the signature, the verifier uses as input the signer’s public key, the domain parameters, and the integer s. The <strong>output is a value v that is compared to r. The signature is verified if the v = r</strong>.</li>
+</ol>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

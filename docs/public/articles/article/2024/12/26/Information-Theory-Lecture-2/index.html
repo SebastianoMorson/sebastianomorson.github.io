@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Information Theory - Lecture 2 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Information Theory - Lecture 2</h1>
+  <time datetime="2024-12-26T00:00:00+01:00" class="post-date">26 Dec 2024</time>
+  <!--more-->
+
+<p>Dalle lezioni viste a mobile communication sappiamo che un messaggio viene trasmesso seguendo un pattern ben preciso</p>
+
+<ol>
+  <li>prima decido il messaggio</li>
+  <li>poi lo codifico in un <em>source code</em> (che ad esempio lo comprime con zip o bzip)</li>
+  <li>poi lo codifico in un <em>channel code</em> (che ad esempio applica error correction, Viterbi o Reed Soloman)</li>
+  <li>infine lo trasmetto sul canale</li>
+</ol>
+
+<p>Dalla parte del ricevente quello che succede è invece</p>
+<ol>
+  <li>ricevo il messaggio e lo decodifico attraverso un canale di decoding</li>
+  <li>trasformo il messaggio decodificato in una nuova versione <em>source decoded</em></li>
+  <li>infine leggo il messaggio che se tutto va bene è leggibile</li>
+</ol>
+
+<h2 id="problema">Problema:</h2>
+<p>immaginiamo di avere due alfabeti:</p>
+
+\[\begin{aligned}
+A &amp;= \{a_{1},a_{2},\dots,a_{n}\} \\
+B &amp;= \{b_{1}, b_{2}, \dots, b_{k}\} 
+\end{aligned}\]
+
+<p>L’encoding Source code sarà una funzione del tipo</p>
+
+\[\varphi: A^* \to B^*\]
+
+<p>ossia una funzione <strong><em>iniettiva</em></strong>.</p>
+
+<p>Ora, ci sono varie casistiche mediante le quali possiamo mappare gli elementi di $A^<em>$ in $B^</em>$</p>
+
+<h3 id="block-block">Block-Block</h3>
+<p>Semplicemente uso una funzione del tipo:</p>
+
+\[\varphi(a_{1}a_{2}\dots a_{m}) = \varphi(a_{1})\varphi(a_{2})\dots \varphi(a_{n})\]
+
+<p>In questo modo creo una funzione che mappa elementi di $A$  lunghezza $n$, con elementi di $B$ di lunghezza $n$.</p>
+<h3 id="block-variable-length">Block-variable length</h3>
+<p>Ci sono però situazioni in cui potremmo avere due alfabeti che usano un numero di elementi differente. In questo caso la mappatura non potrà essere 1 a 1, ma ci servirà un metodo differente.</p>
+
+<p>Posso usare un metodo simile a questo:</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 0 \\
+b &amp;\to 10 \\
+c &amp;\to 01  \\
+\end{aligned}\]
+
+<p>In questo modo sono in grado di mappare correttamente gli elementi di $A$ in $B$.</p>
+
+<p>Però il problema è che in questo caso la funzione di encoding <strong>NON</strong> è <strong><em>Uniquely Decodable</em></strong>, ossia non è iniettiva rispetto a $A^*$</p>
+
+<p>Ad esempio</p>
+
+\[\varphi(ab) = 010 = \varphi(ca)\]
+
+<h3 id="uniquely-decodable-with-delay-1">Uniquely Decodable with delay 1</h3>
+<p>Un metodo simile al precedente potrebbe essere usare dei prefissi comuni e dei suffissi che si modificano.</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 0 \\
+b &amp;\to 01 \\
+c &amp;\to 011  \\
+\end{aligned}\]
+
+<p>Il problema principale in questo genere di codifica è che la lunghezza del testo codificato aumenta di parecchio. 
+Difatti</p>
+
+\[\varphi(abccbba) = 00101101101010\]
+
+<h3 id="uniquely-decodable-with-unlimited-delay">Uniquely Decodable with unlimited delay</h3>
+<p>Un ulteriore metodo è quello di usare un numero di elementi differente come postfisso.
+Ad esempio</p>
+
+\[\begin{aligned}
+A &amp;= \{a,b,c\}\\
+B &amp;= \{0,1\}\\
+\\
+a &amp;\to 00 \\
+b &amp;\to 1 \\
+c &amp;\to 10  \\
+\end{aligned}\]
+
+<p>In questo caso avremmo che</p>
+
+\[\varphi(b^{3}acac\dots) = 110100100010 \dots 100 \dots 01 \dots\]
+
+<p>se abbiamo situazioni ambigue come $100$, possiamo capire a quale simbolo facciamo riferimento guardando quanti elementi ci sono postfissi al valore 1.</p>
+<ul>
+  <li>se 1 è seguito da un numero pari di 0, allora indichiamo $b$</li>
+  <li>se 1 è seguito da un numero dispari di 0, allora indichiamo $c$</li>
+</ul>
+
+<h3 id="sono-utili-i-codici-con-delay">Sono utili i codici con delay?</h3>
+<p>bè, sì perchè permettono una compressione migliore di altri possibili codici senza delay. Sì, anche se prima ho detto che in realtà allungano il messaggio iniziale. In generale sono comunque un buon compromesso (a caval donato non si guarda in bocca).</p>
+
+<h2 id="prefix-code-definition">Prefix code definition</h2>
+<p>Dato</p>
+
+\[\varphi: A^* \to B^*\]
+
+<p>Con il termine <em>prefix code</em> si intende</p>
+
+\[\forall a_{1},a_{2} \in A \;\;\;\; \varphi(a_{1})\; \text{is not a prefix of}\;\varphi(a_{2})\]
+
+<h2 id="lemma">Lemma</h2>
+<p>If $\varphi$ <strong>is prefix</strong>, the $\varphi$ uniquely decodable without delay.</p>
+
+<p><strong><em>Code representation</em></strong></p>
+
+\[B=\{b_{1}, \dots, b_{D}\} \to \text{D-ary tree}\]
+
+<p>Esempio:</p>
+
+\[\begin{aligned}
+a &amp;\to 00 \\
+b &amp;\to 1 \\
+c &amp;\to 10
+\end{aligned}\]
+
+<p>Una possibile rappresentazione è la seguente
+![[Pasted image 20240306143316.png]]</p>
+
+<p>Non è un prefix code
+esiste un path con più di una label</p>
+
+<p>Questo metodo di codifica consiste nel scansionare l’encoded message e visitare l’albero. Quando incontriamo una label la decodifichiamo stampandola e ricominciamo di nuovo a partire dalla root.</p>
+
+<h2 id="definition">Definition</h2>
+
+\[\begin{aligned}
+A &amp;= \{a_{1},a_{2},\dots,a_{k}\} \\
+l_{i} &amp;= |\varphi(a_{i})|
+\end{aligned}\]
+
+<h2 id="kraft-macmillan-theorem-inverse-theorem">Kraft MacMillan Theorem (inverse theorem)</h2>
+<p>Se $\varphi$ è <strong><em>uniquely decodable</em></strong> allora</p>
+
+\[\sum_{i=1}^k D^{-l_{i}} \le 1\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>$\varphi:A\to B^* \;\;\;\;</td>
+      <td>B</td>
+      <td>=D$ = lunghezza dell’alfabeto di output</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Praticamente il teorema di Kraft-MacMillan afferma che per una data lunghezza di codice, ci devono essere abbastanza codewords disponibili per coprire tutte le possibili combinazioni di simboli di quella lunghezza.</p>
+
+<p>Example</p>
+
+\[\begin{align}
+|A| = k &amp;&gt; |B| =D \\ \\
+l_{i} = 1 &amp;= |\varphi(a_{i})|  \\ \\ 
+\frac{1}{D}+\frac{1}{D}&amp;+\dots+\frac{1}{D} = \frac{K}{D} &gt; 1
+\end{align}\]
+
+<h3 id="proof-for-prefix-codes">Proof for prefix codes</h3>
+<p>Consideriamo un codice prefisso $\varphi$ dove</p>
+
+\[\begin{aligned}
+l(a_{1}) &amp;\le l(a_{2}) &amp;\le &amp;\dots &amp;\le l(a_{k}) \\
+l_{1} &amp;\le l_{2} &amp;\le &amp;\dots &amp;\le l_{k} = l
+\end{aligned}\]
+
+<p>Consideriamo quindi il corrispondente D-albero
+![[Pasted image 20240307090324.png]]
+Sappiamo che le foglie totali possono essere $D^{l_{k}}$. Difatti se ho un alfabeto {0,1} e voglio formare stringhe di lunghezza massima 4, so che il numero totale di stringhe componibili sarà $2^4$</p>
+
+<p>Nel nostro caso voglio avere codici prefissi, di conseguenza se ho una stringa di lunghezza $l_i &lt; l_k$ so per certo che tutto il ramo dell’albero a partire dal nodo $i$ dovrà essere inevitabilmente scartato. Il numero totale di stringhe scartate sarà $D^{l_{k}-l_{i}}$. Ad esempio se ho creato un albero binario di altezza massima 5 e il mio codice prevede una parola di output di lunghezza 3, avrò che il numero totale di parole sarà 32, ma di queste, quelle effettivamente utilizzabili sarà $32-8 = 26 = 2^5 - 2^{5-3}$</p>
+
+<p>Il numero di foglie a cui non può essere associata una label con $a_{k}$ è</p>
+
+\[\sum_{i=1}^{k-1} D^{l_{k} - l_{i}}\]
+
+<p>Considero il numero di foglie utilizzabili $D^{l_{k}}$ e sottraggo il numero di foglie inutili. Sò che se la codifica è ammissibile deve ammettere almeno una foglia, perciò</p>
+
+\[\begin{aligned}
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} D^{l_{k} - l_{i}} \ge 1 \\
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} \frac{D^{l_{k}}}{D^{l_{i}}} \ge 1 \\ \\
+&amp;D^{l_{k}} - \sum_{i=1}^{k-1} D^{l_{k}} \cdot D^{-l_{i}} \ge 1 \\ \\
+&amp;\text{raccolgo }D^{l_{k}} \\ \\
+&amp;D^{l_{k}} \left( 1-\sum_{i=1}^{k-1} D^{-l_{i}} \right) \ge 1 \\
+&amp;1-\sum_{i=1}^{k-1}D^{-l_{i}} \ge D^{-l_{k}}\\
+&amp;\text{porto } -\sum_{i}^{k-1}D^{-l_{i}} \text{ a destra } \\
+&amp;1 \ge \sum_{i=1}^{k} D^{-l_{i}}\\
+
+\end{aligned}\]
+
+<h3 id="proof-for-a-general-uniquely-decodable">Proof for a general Uniquely Decodable</h3>
+
+\[l(a_{1}) \le l(a_{2}) \le \dots \le l(a_{k}) = l\]
+
+<p>Il numero di stringhe di lunghezza $n$ ($A^n$) che corrispondono a stringhe di lunghezza n è  $N(n,h)$</p>
+
+<p>$N(n,h) \le D^h$ è il numero di stringhe di lunghezza $h$ di $B$</p>
+
+<p>Tesi: $\sum_{i=1}^k D^{-l_{i}} \le 1$
+Studio $\left(\sum_{i=1}^k D^{-l_{i}}\right)^n$ per un $n$ generico
+Il passaggio cruciale è qui. 
+Scomponendo la sommatoria, ottengo che</p>
+
+\[\begin{aligned}
+\left(\sum_{i=1}^k D^{-l_{i}}\right)^n  = \left( D^{-l_{1}} +D^{-l_{2}} + \dots + D^{-l_{k}} \right)^n = \\
+D^{n\cdot (-l_{1})}+D^{n\cdot (-l_{2})}+ \dots + D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)} + D^{n(-l_{k})} = \\
+\end{aligned}\]
+
+<p>Ora mi accorgo che $D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)}$  si può vedere come $D^{-J}$ dove $J$ è la lunghezza dell’encoding di una sequenza di $n$ simboli dell’alfabeto primario.</p>
+
+<p>Quante volte $D^{-J}$ occorre nella somma? Bè, tante volte quanto il numero di parole di lunghezza $n$ i cui encoding hanno lunghezza J, perciò occorre $N(n,J$)</p>
+
+<p>Ma allora, la formula di prima diventa</p>
+
+\[\begin{aligned}
+&amp;D^{n\cdot (-l_{1})}+D^{n\cdot (-l_{2})}+ \dots + D^{n\cdot (-l_{1}-l_{2}-\dots-l_{k}\cdot)} + D^{n(-l_{k})} = \\
+
+&amp;N(n,1)D^{-1} +N(n,2)D^{-2} + \dots + N(n,n\cdot l)D^{-n\cdot l} =  \\\\
+&amp;\text{ma sappiamo che } N(n,1) \text{ è } \le D^1 \text{e così via per tutti gli altri termini, quindi} \\ \\
+&amp;=N(n,1)D^{-1} +N(n,2)D^{-2} + \dots + N(n,n\cdot l)D^{-n\cdot l} \le \\
+&amp;\le D^1\cdot D^{-1} + D^2\cdot D^{-2} + \dots + D^{n\cdot l}\cdot D^{n\cdot l} \\
+&amp;\le n\cdot l \\
+
+&amp;\left(\sum_{i=1}^{k} D^{-l_{i}} \right)^n \le n \cdot l \text{(costant)} \\
+&amp;\implies \sum_{i=1}^k D^{-l_{i}} \le 1
+\end{aligned}\]
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

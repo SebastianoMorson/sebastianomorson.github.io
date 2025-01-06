@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Complexity Theory - Lecture 1 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Complexity Theory - Lecture 1</h1>
+  <time datetime="2025-01-02T00:00:00+01:00" class="post-date">02 Jan 2025</time>
+  <!--more-->
+<p>Nell’information theory abbiamo studiato quanta informazione è possibile rappresentare e trasmettere in modo efficiente attraverso un encoding, analizzando la relazione tra la quantità di informazione (misurata tramite l’entropia) e la lunghezza media dell’encoding.</p>
+
+<p>Successivamente, abbiamo introdotto il concetto di complessità di Kolmogorov, che misura la lunghezza del programma più corto capace di generare una certa stringa, consentendoci di quantificare quanta “casualità” contiene una stringa e quanto essa sia comprimibile.</p>
+
+<p>Ora, con la teoria della complessità computazionale, il nostro obiettivo si sposta: non studiamo quanto sia difficile generare una stringa, ma quanto sia difficile risolvere determinati problemi. Attenzione: non parliamo di misurare la complessità di un algoritmo specifico che risolve un problema, ma di analizzare quanto, <strong>indipendentemente dall’algoritmo scelto</strong>, sia intrinsecamente difficile risolvere il problema, considerando risorse come tempo e spazio.</p>
+
+<p>Esistono 3 tipi di problemi:</p>
+<ul>
+  <li>di <strong>decisione</strong>: posso raggiungere qualsiasi nodo a partire da un nodo qualsiasi?</li>
+  <li>di <strong>funzione</strong>: come posso raggiungere un qualsiasi nodo a partire da un nodo qualsiasi?</li>
+  <li>di <strong>ottimizzazione</strong>: come posso raggiungere un qualsiasi nodo a partire da un nodo qualsiasi eseguendo il numero minimo di attraversamenti?</li>
+</ul>
+
+<p>Noi ci concentreremo sui problemi decisionali.</p>
+
+<h3 id="turing-machine">Turing Machine</h3>
+<p>Vogliamo ricordare che una macchina di Turing è definita da una tupla $&lt;K,\Sigma,\delta, s&gt;$ dove:
+dove</p>
+<ul>
+  <li>$K$ è un insieme finito di stati</li>
+  <li>$\Sigma$ è un alfabeto finito tale per cui
+    <ol>
+      <li>$K\cap \Sigma = \emptyset$</li>
+      <li>$\rhd, \sqcup \in \Sigma$</li>
+    </ol>
+  </li>
+  <li>$\delta: K \times \Sigma \to (K \cup {\text{yes,no,halt}}) \times \Sigma \times {\leftarrow, \rightarrow, -}$
+  $\rhd$ cannot be changed
+  $\rhd$ cannot go to its left
+  $\delta(q,\rhd) = (q’, \rhd, \rightarrow)$</li>
+  <li>$s \in K$ starting state</li>
+</ul>
+
+<p>k-tape $\to \delta: K \times \Sigma^K \to (K \cup {y,n,h}) \times \Sigma^K \times {\leftarrow,\rightarrow,-}^k$</p>
+
+<p>Una generica configurazione è data dalla tripla $(q,w,u)$.
+Nello stato iniziale avremo una configurazione</p>
+
+\[(1, \triangleright, x)\]
+
+<p>mentre uno stato finale è descritto dalla configurazione</p>
+
+\[(H,w,u)\]
+
+<p>con $H={yes,no,halt}$</p>
+
+<p>Un passo di computazione tra due configurazioni è descritto come</p>
+
+\[(q,w,u)  \rightarrow^\delta (q',w,u')\]
+
+<p>Se dopo $t$ passi di computazione una MdT passa da uno stato iniziale a uno finale, diciamo che la MdT ha <strong>complessità di tempo</strong> $t$.</p>
+
+<h3 id="criterio-di-costo-uniforme-e-logaritmico">Criterio di costo uniforme e logaritmico</h3>
+<p>È importante osservare che nella macchina di Turing il tempo di computazione ( la sua complessità temporale) è data dal numero di passi svolti dalla macchina. Non ci interessa che l’input sia grande 10, 100 o 1 milione, ogni passo vale $\Theta$(1) <strong><em>(criterio di costo uniforme)</em></strong>.</p>
+
+<p>Ma ci sono modelli di calcolo che ci mostrano come non sia sempre adatto usare un <strong>criterio di costo uniforme</strong>.</p>
+
+<p>Partiamo con un piccolo pezzo di storia:</p>
+<h5 id="tesi-di-church-estesa">Tesi di Church estesa</h5>
+<p>La Tesi di Church-Turing Estesa afferma che tutti i modelli <strong>ragionevoli</strong> di computazione possono simulare l’un l’altro in tempo correlato polinomialmente.</p>
+
+<p>Questo implica che, se un problema può essere risolto in tempo $O(f(n))$ da un modello di computazione, allora un altro modello ragionevole risolverà lo stesso problema in tempo al massimo $O(p(f(n)))$, dove $p(f(n)$ è una funzione polinomiale.<br />
+Ad esempio, se ho un programma $P$ scritto in Python che impiega $O(f(n))$ tempo per completarsi, lo stesso programma tradotto in un altro linguaggio e sugli stessi input impiegherà un tempo diverso, ma correlato polinomialmente a quello del primo programma. Questo presuppone che entrambi i linguaggi siano implementati in modo efficiente e che non vi siano overhead artificiale non correlato alla dimensione dell’input.</p>
+
+<p>Il problema è che certi modelli potrebbero non essere ragionevoli. Ad esempio il modello URM (Unlimited Register Machine) con prodotto non è ragionevole. Ad esempio il calcolo di $x^{2^x}$ non è lineare rispetto alla dimensione di x, se lo fosse vorrebbe dire che potremmo calcolare un’operazione esponenziale in modo lineare! 
+Essendo l’operazione di prodotto un’operazione che dipende dal numero di cifre dell’input, per misurare la complessità in maniera non ambigua usiamo un <strong><em>criterio di costo logaritmico.</em></strong></p>
+
+<h5 id="definizione">Definizione</h5>
+<ul>
+  <li><strong><em>Criterio di costo uniforme:</em></strong> usato quando le operazioni non dipendono dal numero di cifre dell’input. Le operazioni non fanno crescere significativamente l’input e l’output. La complessità è data dal numero di operazioni eseguite</li>
+  <li><strong><em>Criterio di costo logaritmico:</em></strong> usato quando le operazioni fanno crescere l’input o l’output in modo più o meno veloce proporzionalmente al numero di cifre coinvolte</li>
+</ul>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Information Theory - Lecture 5 &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">Information Theory - Lecture 5</h1>
+  <time datetime="2024-12-26T00:00:00+01:00" class="post-date">26 Dec 2024</time>
+  <!--more-->
+<h1 id="kolmogorov-complexity-1965">Kolmogorov Complexity 1965</h1>
+<p>Con la complessità di Kolmogorov si cerca di descrivere la quantità di complessità di un oggetto (stringa). Fin’ora abbiamo visto quanta informazione può trasmettere una stringa, ora vogliamo studiare la sua complessità.</p>
+
+<h2 id="ripasso-sulle-turing-machines">Ripasso sulle Turing Machines</h2>
+<p>\(M = (K, \Sigma, \delta, s) \\\)
+dove</p>
+<ul>
+  <li>$K$ è un insieme finito di stati</li>
+  <li>$\Sigma$ è un alfabeto finito tale per cui
+    <ol>
+      <li>$K\cap \Sigma = \emptyset$</li>
+      <li>$\rhd, \sqcup \in \Sigma$</li>
+    </ol>
+  </li>
+  <li>$\delta: K \times \Sigma \to (K \cup {\text{yes,no,halt}}) \times \Sigma \times {\leftarrow, \rightarrow, -}$
+  $\rhd$ cannot be changed
+  $\rhd$ cannot go to its left
+  $\delta(q,\rhd) = (q’, \rhd, \rightarrow)$</li>
+  <li>$s \in K$ starting state</li>
+</ul>
+
+<p>1-tape
+k-tape $\to \delta: K \times \Sigma^K \to (K \cup {y,n,h}) \times \Sigma^K \times {\leftarrow,\rightarrow,-}^k$</p>
+
+<h3 id="definizione-mdt-universale">Definizione M.d.T. Universale</h3>
+<p>Esiste una macchina di Turing $\mathcal{U}$ che, ricevuto un input $bin(M); bin(X)$ si comporta come $M$ su un input $x$. Questa macchina è chiamata macchina di Turing universale.</p>
+
+\[\mathcal{U}(\mathcal{M};x) = \mathcal{M}(x)\]
+
+<h3 id="definizione-kolmogorov-complexity">Definizione Kolmogorov Complexity</h3>
+<p>La complessità di Kolmogorov associata a una stringa $x \in \Sigma^*$ è data dalla lunghezza minima della MdT $\mathcal{M}$ che calcola x.</p>
+
+\[K_{\mathcal{U}}(x) = min_{\mathcal{M}:\mathcal{U}(\mathcal{M})=x}\mid M \mid\]
+
+<p>A partire da questa definizione possiamo concludere alcune interessanti proprietà:</p>
+<ul>
+  <li>se $\mathcal{M}$ è calcolata senza avere informazioni a priori, allora la sua complessità di Kolmogorov sarà più alta di quella della medesima macchina, avendo una conoscenza $y$</li>
+</ul>
+
+\[K_{\mathcal{U}}(x) \ge K_{\mathcal{U}}(x\mid y)\]
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Se ho un programma che stampa $m$ volte la stringa "Hello world", ma non conosco $m$, sarà necessario scrivere $m$-volte "print(Hello world)". Ma se conosco $m$ posso scrivere un ciclo $for$ che sono sicuro termini dopo $m$ passi.
+Perciò invece di avere $m$ istruzioni, me ne bastano 2:
+for i in range(0,m):
+	print("hello world")
+</code></pre></div></div>
+
+<ul>
+  <li>se ho due macchina di Turing universali $\mathcal{U}$ e $\mathcal{A}$ avremo sempre che</li>
+</ul>
+
+\[K_{\mathcal{U}}(x\mid y) \le K_{\mathcal{A}}(x \mid y) + c_{\mathcal{UA}}\]
+
+<h4 id="limiti-alla-complessità-di-kolmogorov-sulle-stringhe">Limiti alla complessità di Kolmogorov sulle stringhe</h4>
+<p>Il problema della complessità di Kolmogorov sulle stringhe è che non è definibile in maniera precisa. In altre parole non è mai possibile dire con precisione che la complessità di Kolmogorov della stringa $x$ è “295”, perchè per dimostrarlo dovrei provare che tutte le MdT di lunghezza &lt;295 non producono in output la stringa $x$. Ma basterebbe solo che una di queste MdT non terminasse per rendere impossibile la dimostrazione e quindi impossibile stabilire con certezza che la Kolmogorov Complexity su $x$ sia esattamente “295”.</p>
+
+<p>Ma, c’è un ma.</p>
+
+<p>Non potremo dire con certezza assoluta quale sia la complessità di Kolmogorov su $x$, però possiamo dire a spanne quanto potrebbe valere: invece di dire “vale 295” diremo “è un valore tra 250 e 330”.</p>
+
+<p>Il teorema sui limiti alla complessità di kolmogorov sulle stringhe afferma più precisamente che:</p>
+
+\[\mid x \mid \leq K(x) \leq \mid x \mid + c\]
+
+<p><strong>Dimostrazione</strong> $K(x) \le \mid x \mid + c$</p>
+
+<p>L’idea è quella di considerare una</p>
+
+<p><strong>Dimostrazione</strong> $\exists x \mid x \mid \leq K(x)$</p>
+
+<p>Se considero un valore k, sappiamo che il numero di stringhe con complessità di Kolmogorov minore di k è</p>
+
+<p>\(\sum_{i=0}^{k-1} 2^i = 2^k -1\)
+Questo significa che se ho una stringa di lunghezza $\mid x \mid$, esisterono $2^{\mid x \mid} -1$ stringhe con complessità minore di $\mid x \mid$ e quindi almeno una MdT per la quale la lunghezza $\mid x \mid$ è maggiore o uguale a $K(x)$. 
+Di conseguenza esiste almeno una x per la quale $\mid x \mid \leq K(x)$.</p>
+
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>

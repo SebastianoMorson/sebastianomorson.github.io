@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      RECSYS Lecture 7 - Multi-armed bandit &middot; JustAMonkey
+    
+  </title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/font-computer.min.css" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
+  
+  <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
+<!--
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$']],
+        processEscapes: true
+      }
+    });
+  </script>
+-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</head>
+
+
+  <body>
+    <div class="image-container">
+      <a class="justamonkey" href="/"><img src="/assets/images/justamonkey-high-resolution-logo-transparent.png" alt="Logo del sito"></a>
+    </div>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="mailto:sebastianomorson@outlook.com"><i class="fa fa-envelope"></i></a>
+      <a href="https://github.com/SebastianoMorson"><i class="fa fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/sebastiano-morson-34a825221/?originalSubdomain=it"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <nav class="nav-main">
+      <ul>
+        <li class="hvr-underline-reveal"><a href="/whoami/">Whoami</a></li>
+	      <!--<li class="logo"><a class="hvr-ripple-out" href="/">H</a></li> -->
+          <li class="hvr-underline-reveal"><a href="/blog/">Projects</a></li>
+	      <li class="hvr-underline-reveal"><a href="/articles/">Articles</a></li>
+        <li class="hvr-underline-reveal"><a href="/hobbies/">Hobbies</a></li>
+	
+      </ul>
+    </nav>
+
+    <div class="container content">
+      <main>
+        <article class="post">
+  <h1 class="post-title">RECSYS Lecture 7 - Multi-armed bandit</h1>
+  <time datetime="2024-10-26T00:00:00+02:00" class="post-date">26 Oct 2024</time>
+  <!--more-->
+
+<p><img src="https://static.wixstatic.com/media/4959fd_6f400693c6e6463893125e84fb252043~mv2.png/v1/fill/w_305,h_326,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_6f400693c6e6463893125e84fb252043~mv2.png" alt="" /></p>
+
+<p>Immaginiamo di essere in una sala slot. Abbiamo davanti un certo numero di slot machines (anche chiamate one-armed bandit).</p>
+
+<p>Ogni slot machine ha una certa probabilità di farci vincere, ma chiaramente noi non sappiamo quale sia quella con le percentuali maggiori di vincita.</p>
+
+<p>Per questo motivo iniziamo a provarle tutte, ma il gestore viene da noi e ci dice “guarda che non puoi mica metterti qua a studiare le mie macchinette, sennò ti caccio”.</p>
+
+<p>Il problema ora è: come faccio a capire quale delle macchinette è quella migliore in un numero massimo di tentativi?</p>
+
+<p>E poi, una volta che sto usando una certa slot machine, mi conviene rimanere su quella e continuare a vincere bei soldoni, o spostarmi su un’altra che magari mi farà vincere ancora più soldi?</p>
+
+<p>Questo problema descrive bene il problema del “exploration-exploitation”, ossia il problema di capire se è più vantaggioso “exploitare” un metodo che sappiamo che ci soddisfa, oppure “explorare” e potenzialmente ottenre migliori benefici a lungo termine (se sei un fanatico dell’accademia della Crusca, lo so che è sbagliato e si dice “esplorare”, continua pure a mangiare cibo per cavalli e vivere una vita triste ed insignificante).</p>
+
+<p>Il problema exploration-exploitation è un fatto noto quando si parla di recommender systems. Un esempio pratico: siamo su Spotify (o Amazon, Netflix, …) e ci viene suggerita una certa canzone rock, perchè ci piace quel genere li. Se continuiamo ad ascoltare rock, può essere che prima o poi venga meno la <strong>serendipità,</strong> ossia la capacità di sorprenderci, magari perchè non riceviamo più novità interessanti o perchè esploriamo tutti i brani di quel genere (magari siamo super fan di un genere prodotto da 5 persone di cui 4 sono morte).</p>
+
+<p>Ecco quindi che ci serve un modo per inserire in qualche modo delle raccomandazioni che in qualche modo si discostino dai nostri gusti abituali o che non siano completamente attinenti, in modo da esplorare cose nuove.</p>
+
+<p>Però c’è un però.</p>
+
+<p>Chi ci dice che quello che stiamo suggerendo piaccia all’utente? Magari abbiamo a che fare con un utente anziano che non apprezza quando gli proponi cose nuove.</p>
+
+<p>Ricordandoci dell’esempio iniziale e del fatto che la slot machine si dice “one-armed bandit”, ecco a voi i metodi <strong>Multi-armed bandit.</strong></p>
+
+<p>Esistono 4 strategie di questo tipo che sono state sviluppate e hanno ottenuto buoni risultati:</p>
+
+<ul>
+  <li>
+    <p>metodo <em>ε-Greedy</em></p>
+  </li>
+  <li>
+    <p>metodo Upper Confidence Bound (UCB)</p>
+  </li>
+  <li>
+    <p>metodo di Thompson sampling</p>
+  </li>
+  <li>
+    <p>metodo Upper Confidence Bound for Matrix Factorization (UCB-MF)</p>
+  </li>
+</ul>
+
+<p>Queste strategie usano però dei concetti di base che ora vi spiego.</p>
+
+<h2 id="concetti-di-base-base-base">Concetti di base base base</h2>
+
+<p>L’idea di base è quella di pensare a un’entità e fargli compiere delle azioni (ad esempio usare una slot machine piuttosto che un’altra, oppure scegliere un item da raccomandare piuttosto che un altro) che porteranno a ottenere un premio dall’ambiente.</p>
+
+<p>Ad esempio se la nostra entità è un sistema di raccomandazione, l’ambiente potrebbe essere il nostro utente (o utenti) e i reward like, share, commenti, visualizzazioni, etc.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_2d6dd0ba944f4f8eaea5f8a3501fc4cb~mv2.png/v1/fill/w_333,h_122,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_2d6dd0ba944f4f8eaea5f8a3501fc4cb~mv2.png" alt="" /></p>
+
+<p>L’obiettivo è chiaramente quello di ottenere il maggior numero di rewards.</p>
+
+<p>Bene.</p>
+
+<p>Modelliamo questa cosa sull’idea di “bandit”.</p>
+
+<p>Un bandit non è un bandito, ma una tupla <strong>&lt; A,</strong> <strong><em>R</em></strong> <strong>&gt;</strong> dove</p>
+
+<ul>
+  <li>
+    <p><strong>A</strong> è un insieme di azioni (ad esempio “scegli la slot machine 7”)</p>
+  </li>
+  <li>
+    <p><strong><em>R</em></strong> è una funzione di rewarding (che però è sconosciuta, altrimenti sarebbe troppo facile)</p>
+  </li>
+</ul>
+
+<p>Ci serve poi un insieme di probabilità di rewarding per ogni azione, chiamiamo questo insieme <strong><em>K = {</em></strong> θ₁,θ₂, … , θₖ }<strong><em>.</em></strong></p>
+
+<p>A questo punto possiamo definire il concetto di “qualità” come una funzione <strong><em>Q</em></strong></p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_a9f3a19ae1d142869ee77a23b08cb3e0~mv2.png/v1/fill/w_332,h_68,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_a9f3a19ae1d142869ee77a23b08cb3e0~mv2.png" alt="" /></p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_c554d99156cd46ecb01bfac9011f1b4a~mv2.png/v1/fill/w_355,h_56,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_c554d99156cd46ecb01bfac9011f1b4a~mv2.png" alt="" /></p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_d2884fe9ec3a4afe87cf9c262304f6b8~mv2.png/v1/fill/w_174,h_65,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_d2884fe9ec3a4afe87cf9c262304f6b8~mv2.png" alt="" /></p>
+
+<p>Ora sappiamo capire quanto vale la nostra scelta, ma non se all’utente piace o meno. Per questo dobbiamo definire il concetto di “regret”, che non è altro che la differenza tra il valore massimo di reward associato a una certa azione e il reward ottenuto con quelle che abbiamo scelto noi.</p>
+
+<p>La formula per il calcolo del massimo reward è la seguente:</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_1bf5eea5d65b42719b661e0252c511f2~mv2.png/v1/fill/w_488,h_74,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_1bf5eea5d65b42719b661e0252c511f2~mv2.png" alt="" /></p>
+
+<p>La formula per il calcolo del valore di regret diventa quindi</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_ba23a43c2d184ef1ae00215a04d25b80~mv2.png/v1/fill/w_372,h_116,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_ba23a43c2d184ef1ae00215a04d25b80~mv2.png" alt="" /></p>
+
+<p>In poche parole prendiamo la differenza tra il valore di “apprezzabilità massimo” che l’utente poteva provare dandogli qualcosa che gli piaceva, e quello che gli abbiamo proposto. In termini ancora più semplici misuriamo quanto all’utente piace che gli diamo delle feci invece che una torta sacher.</p>
+
+<p>Questo è in sintesi e in generale, cosa fa il metodo Multi-armed bandit.</p>
+
+<p>Ora passiamo a vedere le strategie nel dettaglio</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><em>ε-Greedy</em></td>
+      <td>UCB</td>
+      <td>Thompson</td>
+    </tr>
+    <tr>
+      <td>Vantaggi</td>
+      <td>semplice</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>veloce</td>
+      <td>funziona bene con probabilità di rewards equamente distribuite</td>
+      <td>funziona bene con probabilità di rewards che non seguono una gaussiana</td>
+    </tr>
+    <tr>
+      <td>Svantaggi</td>
+      <td>non esplora completamente le soluzioni</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>non raggiunge la soluzione ottimale</td>
+      <td>più complesso da implementare</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>se le probabilità non sono distribuite non si può applicare</td>
+      <td>richiede molti samples</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>computazionalmente molto dispendioso</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ε-greedy-strategy"><em>ε-Greedy strategy</em></h2>
+
+<p>Questo metodo si basa su un’idea piuttosto semplice, ossia scegliere una percentuale <em>ε</em> di items di esplorazione e una percentuale 1-<em>ε</em> di items di exploit.</p>
+
+<p>Cosa significa:</p>
+
+<p>se abbiamo dobbiamo consigliare 10 items e consideriamo un <em>ε=0.3</em> , la strategia greedy farà in modo che il 70% delle raccomandazione siano items che sappiamo piaceranno, mentre il restante 30% saranno items di esplorazione.</p>
+
+<p>Per ottenere questa condizione, usiamo seguiamo questi passaggi:</p>
+
+<ol>
+  <li>
+    <p>scegliamo un valore p che può essere 0 o 1, con probabilità <em>ε</em> che sia 0, e probabilità 1-<em>ε</em> che sia 1</p>
+  </li>
+  <li>
+    <p>se p=1 allora suggerisco un item di exploitation</p>
+  </li>
+  <li>
+    <p>se p=0 allora suggerisco un item di exploration</p>
+  </li>
+</ol>
+
+<p>Chiaramente vogliamo capire se i suggerimenti offerti hanno migliorato o peggiorato il regret dell’utente, perciò dopo ogni suggerimento calcolo la media delle valutazioni con la formula seguente</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_50939ee47869461bbb00a69da38507df~mv2.png/v1/fill/w_432,h_90,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_50939ee47869461bbb00a69da38507df~mv2.png" alt="" /></p>
+
+<p>dove Nₜ(a) è definito come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_39a3763cc221409d8689ebfb6937aaec~mv2.png/v1/fill/w_435,h_44,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_39a3763cc221409d8689ebfb6937aaec~mv2.png" alt="" /></p>
+
+<p>Ovviamente l’obiettivo è scegliere l’azione a migliore, ossia</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_99a52427ab0a4abc862c72db05d2e640~mv2.png/v1/fill/w_494,h_140,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_99a52427ab0a4abc862c72db05d2e640~mv2.png" alt="" /></p>
+
+<p>(argmax non è altro che il massimo ottenuto cambiando il valore del parametro a)</p>
+
+<h2 id="upper-confidence-bound">Upper Confidence Bound</h2>
+
+<p>L’idea di questa strategia è quella di giocare sulla potenzialità di un’azione di essere ottenere un buon reward. Cioè, non spariamo a caso come facevamo prima, ma decidiamo di suggerire gli elementi che hanno più potenzialità di piacere all’utente.</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_ffbd12b007ef48e5a9446868075cc49d~mv2.png/v1/fill/w_592,h_218,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_ffbd12b007ef48e5a9446868075cc49d~mv2.png" alt="" /></p>
+
+<p>“Eh, ma grazie al topocazzo, se sapessi già quanto può piacere un elemento a Bob glielo suggerirei e basta”. Replica: eh grazie al gattocazzo, basta capire come fare e farlo.</p>
+
+<p>Prepariamoci perchè ora sarà un sussegguirsi di calci sulle gengive per quelli che non amano la matematica.</p>
+
+<p>Consideriamo un’azione a. Noi sappiamo che quell’azione può ricevere una certa dose di apprezzamento Q(a) che però non conosciamo. Però sappiamo che fino a quel momento l’azione a ha ricevuto una certa media di rewards. L’algoritmo inoltre deve favorire quelle azioni che sono state proposte poche volte e che quindi hanno un alto tasso di potenziale di apprezzamento (o rewarding).</p>
+
+<p>Perciò</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_db34b2a9f4074f649f685343d7063aa7~mv2.png/v1/fill/w_592,h_174,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_db34b2a9f4074f649f685343d7063aa7~mv2.png" alt="" /></p>
+
+<p>ossia l’apprezzamento finale, sarà più basso dell’apprezzamento medio sommato all’apprezzamento potenziale.</p>
+
+<p>Guardiamola in questi termini: più un criminale rimane un criminale, più non ci aspetteremo che diventi un cittadino modello. Perciò il valore di U(a) sarà legato al numero di volte che l’elemento <strong><em>a</em></strong> è stato proposto. Più grande è il numero di volte che è stato suggerito <strong><em>a</em></strong>, più basso sarà il potenziale che <strong><em>a</em></strong> migliori il reward medio.</p>
+
+<p>Ma come calcolo quindi questo benedetto potenziale? (oltrettutto ci ho appena fatto caso che U viene usato anche come simbolo per esprimere l’energia potenziale in fisica).</p>
+
+<p>Usiamo la disequazione di Hoeffding che non ho voglia di trattare, quindi dirò semplicemente che ci permette di dire che U è uguale a questa cosa qua</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_5d6e5ec628144225afe1b415b84860e0~mv2.png/v1/fill/w_275,h_94,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_5d6e5ec628144225afe1b415b84860e0~mv2.png" alt="" /></p>
+
+<p>Come si vede, compare proprio il termine Nₜ(a) a denominatore.</p>
+
+<p>Da qui possiamo calcolare l’azione migliore da applicare che è</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_075c7e710bf142b9aa254e55d3b90da0~mv2.png/v1/fill/w_405,h_90,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_075c7e710bf142b9aa254e55d3b90da0~mv2.png" alt="" /></p>
+
+<p>Ma, ma, ma. Avevamo detto che questo metodo va bene se ci sono distribuzioni di probabilità dei rewarding gaussiane. Ma che vuol dire? E che succede se non sono gaussiane? Semplice, ho omesso di spiegare la disuguaglianza di Hoeffding che ha come premessa l’utilizzo di variabili casuali indipendenti e con distribuzione uniforme. Se non ho una distribuzione normale semplicemente non posso applicare la disuguaglianza, che sta alla base del nostro bel metodo. Magari più avanti spiegherò nel dettaglio anche questo particolare, ma per il momento mi scoccia.</p>
+
+<h2 id="thompson-sampling">Thompson sampling</h2>
+
+<p>Infine ci sarebbe da parlare del metodo di Thompson. Come dice il nome, avrà a che fare con cosiderare dei sample, no?</p>
+
+<p>L’idea di questo metodo è quella di considerare le conoscenze maturate fino a un certo punto t su ciascuna macchina (o previsione) per capire quali azioni intraprendere all’istante t+1.</p>
+
+<p>Mettiamo caso di avere 3 azioni:</p>
+
+<p>a₁ -&gt; è piaciuta 3 volte su 5 tentativi -&gt; ossia è piaciuta 3/5 = 60% delle volte</p>
+
+<p>a₂ -&gt; è piaciuta 2 volte su 7 tentativi  -&gt; ossia è piaciuta 2/7 = 28 % delle volte</p>
+
+<p>a₃ -&gt; è piaciuta 5 volte su 8  tentativi -&gt; ossia è piaciuta 5/8 = 62% delle volte</p>
+
+<p>Rullo di tamburi… Doppio carpiato e … ginocchiata sui denti…</p>
+
+<p><strong>A questo punto cosa faccio: uso una distribuzione Beta per campionare un valore random da ciascuna macchina.</strong>  </p>
+
+<p>…Momento di stordimento generale…</p>
+
+<p>In parole povere non faccio altro che usare una funzione di distribuzione che genera valori distribuiti in questo modo</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_3294209fc1c84112b474fa3df5d5e75e~mv2.png/v1/fill/w_312,h_57,al_c,lg_1,q_85,enc_auto/4959fd_3294209fc1c84112b474fa3df5d5e75e~mv2.png" alt="" /></p>
+
+<p>con la funzione Beta definita come</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_1f5cb6561cad4495a974fe64af0061fe~mv2.png/v1/fill/w_475,h_95,al_c,lg_1,q_85,enc_auto/4959fd_1f5cb6561cad4495a974fe64af0061fe~mv2.png" alt="" /></p>
+
+<p>Ad esempio la Beta distribution su 2 vittorie e 10 sconfitte mi produce un grafico del genere</p>
+
+<p><img src="https://static.wixstatic.com/media/4959fd_3770753d6686424cab6ea534e62a9458~mv2.png/v1/fill/w_310,h_306,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/4959fd_3770753d6686424cab6ea534e62a9458~mv2.png" alt="" /></p>
+
+<p>Perciò se campionassi usando questa distribuzione avrei tanti valori compresi tra 0.1 e 0.3 e pochi negli altri casi. In altre parole, se avessi un’urna e dovessi estrarre dei valori tra 0 e 1, è molto più probabile che peschi tanti 0.1, 0.22, 0.33, … ma pochi 0.8, 0.9, etc.</p>
+
+<p>Cosa facciamo quindi:</p>
+
+<ol>
+  <li>
+    <p>prendiamo la macchina A e spariamo un numero a caso di quelli della distribuzione. Vuol dire che prendiamo a caso un numero tra 0 e 1 seguendo la probabilità di uscita data dalla beta distribuzione corrispondente ad A. Facciamo finta che sia uscito 0.6</p>
+  </li>
+  <li>
+    <p>rifacciamo la stessa cosa con B. Facciamo finta che sia uscito 0.5</p>
+  </li>
+  <li>
+    <p>rifacciamo la stessa cosa con C. Facciamo finta che sia uscito 0.58</p>
+  </li>
+</ol>
+
+<p>In questo caso ad essere suggerita è la macchina A perchè il numero uscito è più grande degli altri. Aggiorno quindi le frequenze in maniera corrispondente.</p>
+
+<p>Non è detto che il numero uscito sia più alto se la macchina A ci fa vincere spesso. Se la macchina A ha un grande tasso di vincita significa soltanto che è più probabile che il numero campionato sia grande, ma non significa che uscirà per forza un numero grande. Potrebbe benissimo capitare di beccare un numero piccolissimo, perchè il numero estratto è casuale.</p>
+
+<p>È evidente che a lungo andare le scelte più proposte verranno penalizzate dal fatto che il numero di tentativi aumenta, ma in ogni caso c’è sempre la possibilità che una qualsiasi delle azioni/macchine venga scelta, indipendentemente se è una macchina fruttuosa o meno.</p>
+
+<h3 id="possibili-domande">Possibili domande</h3>
+
+<ol>
+  <li>
+    <p>What is the main goal of a multi-armed bandit problem?</p>
+  </li>
+  <li>
+    <p>Explain the exploration-exploitation dilemma in the context of recommender systems.</p>
+  </li>
+  <li>
+    <p>What are the advantages and disadvantages of the epsilon-greedy algorithm?</p>
+  </li>
+  <li>
+    <p>What is regret in the context of recommendation systems, and why is it important?</p>
+  </li>
+  <li>
+    <p>Describe Hoeffding’s Inequality and its application in the context of multi-armed bandits.</p>
+  </li>
+  <li>
+    <p>What is the significance of the Thompson Sampling method in multi-armed bandit problems, and how does it utilize Bayesian inference?</p>
+  </li>
+  <li>
+    <p>Discuss the role of Upper Confidence Bounds (UCB) in the context of multi-armed bandits and how it helps in decision-making.</p>
+  </li>
+  <li>
+    <p>What are the implications of using a fixed exploration rate in the epsilon-greedy algorithm, and how can it affect the overall performance of a recommendation system?</p>
+  </li>
+  <li>
+    <p>Qual è la differenza tra un approccio statico e uno dinamico nel risolvere problemi di multi-armed bandit?</p>
+  </li>
+  <li>
+    <p>Come si calcolano le probabilità posteriori nel metodo Thompson Sampling e come influenzano la scelta del braccio?</p>
+  </li>
+  <li>
+    <p>In che modo la formulazione di UCB bilancia esplorazione ed exploitazione? Scrivi la formula e spiegane i termini.</p>
+  </li>
+  <li>
+    <p>Quali strategie si possono adottare per minimizzare il regret in un problema multi-armed bandit?</p>
+  </li>
+  <li>
+    <p>Come può un algoritmo multi-armed bandit essere utilizzato per migliorare le raccomandazioni personalizzate in presenza di utenti nuovi?</p>
+  </li>
+  <li>
+    <p>Quali sono i vantaggi di un tasso di esplorazione decrescente (ϵ\epsilonϵ) rispetto a un tasso fisso nell’epsilon-greedy algorithm?</p>
+  </li>
+  <li>
+    <p>Cos’è un contextual bandit e in che modo si differenzia da un multi-armed bandit standard? Fornisci un esempio.</p>
+  </li>
+  <li>
+    <p>Qual è il ruolo di Hoeffding’s Inequality nella definizione dei bound di confidenza per le ricompense?</p>
+  </li>
+  <li>
+    <p>Confronta gli approcci Bayesiani (es. Thompson Sampling) e frequentisti (es. UCB) nella risoluzione di problemi di multi-armed bandit.</p>
+  </li>
+  <li>
+    <p>Perché gli algoritmi greedy possono soffrire di esplorazione insufficiente nei problemi di multi-armed bandit? Come si possono mitigare questi limiti?</p>
+  </li>
+</ol>
+
+</article>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>
+          <span class="copyright"><i class="fa fa-copyright"></i> 2024-<time datetime="2025-01-06T11:35:21+01:00">2025</time> </span> &middot;
+          <span>Powered by <a href="http://jekyllrb.com/">Jekyll</a></span>
+      </small>
+
+    </footer>
+
+</html>
