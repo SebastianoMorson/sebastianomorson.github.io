@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Information Theory - Lecture 6
+title: Information Theory - Lecture 6 - Kolmogorov Complexity vs Shannon Entropy
 truncated_preview: true
 tags:
   - miscellaneous

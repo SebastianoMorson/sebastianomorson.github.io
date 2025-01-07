@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Complexity Theory - Lecture 3
+title: Turing Machines 3 - Non-deterministic Turing Machines
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Information Theory - Lecture 5
+title: Information Theory - Lecture 5 - Kolmogorov Complexity 1965
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
@@ -8,7 +8,6 @@ tags:
 categories: article
 ---
 <!--more-->
-# Kolmogorov Complexity 1965
 Con la complessità di Kolmogorov si cerca di descrivere la quantità di complessità di un oggetto (stringa). Fin'ora abbiamo visto quanta informazione può trasmettere una stringa, ora vogliamo studiare la sua complessità.
 
 ## Ripasso sulle Turing Machines

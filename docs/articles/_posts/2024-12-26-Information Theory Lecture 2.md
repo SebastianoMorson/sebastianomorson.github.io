@@ -155,7 +155,7 @@ Questo metodo di codifica consiste nel scansionare l'encoded message e visitare 
 $$
 \begin{aligned}
 A &= \{a_{1},a_{2},\dots,a_{k}\} \\
-l_{i} &= |\varphi(a_{i})|
+l_{i} &= \mid\varphi(a_{i})\mid
 \end{aligned}
 $$
 
@@ -164,7 +164,7 @@ Se $\varphi$ è ***uniquely decodable*** allora
 
 $$\sum_{i=1}^k D^{-l_{i}} \le 1$$
 
-$\varphi:A\to B^* \;\;\;\; |B|=D$ = lunghezza dell'alfabeto di output
+$\varphi:A\to B^* \;\;\;\; \mid B\mid=D$ = lunghezza dell'alfabeto di output
 
 Praticamente il teorema di Kraft-MacMillan afferma che per una data lunghezza di codice, ci devono essere abbastanza codewords disponibili per coprire tutte le possibili combinazioni di simboli di quella lunghezza.
 
@@ -173,8 +173,8 @@ Example
 
 $$
 \begin{align}
-|A| = k &> |B| =D \\ \\
-l_{i} = 1 &= |\varphi(a_{i})|  \\ \\ 
+\mid A\mid = k &> \mid B\mid =D \\ \\
+l_{i} = 1 &= \mid\varphi(a_{i})\mid  \\ \\ 
 \frac{1}{D}+\frac{1}{D}&+\dots+\frac{1}{D} = \frac{K}{D} > 1
 \end{align}
 $$

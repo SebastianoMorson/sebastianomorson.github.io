@@ -12,10 +12,9 @@ categories: article
 Se $l_{1},l_{2},\dots,l_{k}$ sono tali che $\sum_{i=1}^k D^{-l_{i}} \le 1$, allora esiste un prefix code dove le lunghezze degli encoding sono $l_{1},l_{2},\dots,l_{k}$
 
 ***Dimostrazione***
-La dimostrazione si basa sullo stesso concetto della dimostrazione del [[2024-12-26-Information Theory Lecture 2#Proof for prefix codes|teorema di Kraft MacMillan per i prefix code ]]
+La dimostrazione si basa sullo stesso concetto della dimostrazione del teorema di Kraft MacMillan per i prefix code.
 ![[Pasted image 20240307095131.png]]
 ## Remark
-Ricordiamo la definizione di [[2024-12-26-Information Theory Lecture 2#Uniquely Decodable with delay 1|Uniquely Decodable]].
 I prefix code ***hanno lo stesso potere dei U.D. codes***.
 Possiamo raggiungere gli stessi livelli di compressione e non abbiamo delay nel decoding usando i prefix codes.
 

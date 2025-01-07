@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Complexity Theory - Lecture 2
+title: Turing Machines 2 - Deterministic Turing Machines, Complexity, Speed-up Theorem
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
