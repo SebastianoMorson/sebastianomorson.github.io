@@ -54,6 +54,7 @@ $$
 &(H,\triangleright,x,w_{1},u_{1},\dots,w_{k}, u_{k}) \text{ nel caso generico di una Mdt non deterministica con I/O} 
 \end{aligned}
 $$
+
 Perciò le configurazioni di $\mathcal{N}$ sono del tipo
 
 $$
@@ -82,6 +83,7 @@ NumConf = (\mid K \mid +2)\cdot(\mid x \mid +2)\cdot \prod_{k=2}^{k-1} \Sigma^{f
 $$
 
 Perciò il numero totale è dato da
+
 $$
 \begin{aligned}
 &NumConf = (\mid K \mid +2)\cdot(\mid x \mid +2)\cdot \prod_{k=2}^{k-1} \Sigma^{f(n)}_{\mathcal{N}}\cdot\Sigma^{f(n)}_{\mathcal{N}} \\ \\

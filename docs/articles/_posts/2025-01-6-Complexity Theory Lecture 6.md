@@ -19,6 +19,7 @@ $$
 
 # -- GAP THEOREM --
 Esiste una funzione $f$ ricorsiva tale che
+
 $$
 TIME(f(n)) = TIME(2^{f(n)})
 $$
@@ -32,6 +33,7 @@ Partiamo con definire un semplice predicato:
 $$
 P(i,k) = \forall \mathcal{M}_{h} \text{ con } h<i \text{ e } \forall x \text{ tale che } \mid x\mid=i, \text{ ho che }\mathcal{M}_{h}(x)\downarrow \text{ in al più k passi}
 $$ 
+
 Ciò significa che 
 
 $$
@@ -52,9 +54,11 @@ Perciò considerata una certa $i$ possiamo enumerare le macchine $\mathcal{M}$ c
 $$
 \mathcal{M}_{1}, \mathcal{M}_{2},\dots,\mathcal{M_{h}},\dots\mathcal{M}_{i}
 $$
+
 Sappiamo che ciascuna di queste può terminare oppure no. Se termina, lo fa all'interno di un certo intervallo di tempo.
 
 Ora consideriamo quindi una bella successione di valori $k$ 
+
 $$
 \begin{aligned}
 k_{1} &= 2i\\ 
@@ -63,11 +67,13 @@ k_{2} &= 2^{k_{1}}+1\\
 k_{n} &= 2^{k_{n-1}}+1
 \end{aligned}
 $$
+
 Consideriamo quante stringhe possiamo avere per ogni $x$ tale che $\mid x \mid = i$  per ogni macchina $\mathcal{M}_{h}$.
 
 $$
 N(i) = \sum_{h=0}^i \mid \text{alfabeto di }\mathcal{M}_h \mid ^h = \sum_{h=0}^i \mid \Sigma_{h} \mid^h
 $$
+
 Quindi in parole povere sto contando quante diverse computazioni potrebbero andarmi bene, indipendentemente dalla macchina che sto usando. 
 
 Consideriamo $N(i)$ intervalli della successione dei k. 
@@ -78,6 +84,7 @@ Gli intervalli sono di dimensione crescente, difatti possono essere rappresentat
 $$
 [\dots)[\;\dots\;\;)[\;\;\;\dots\;\;\;)[\;\;\;\;\dots\;\;\;\;\;)[\;\;\;\;\;\dots\;\;\;\;\;\;\;)[\;\;\;\;\;\;\;\dots\;\;\;\;\;\;\;\;)[\;\;\;\;\;\;\;\;\dots\;\;\;\;\;\;\;\;\;\;)[ \dots
 $$ 
+
 Potrebbe succedere che tutte le computazioni finiscano all'interno dello stesso intervallo, ma potrebbe anche succedere che ciascuna computazione caschi all'interno di un intervallo specifico. In questo caso non sarebbe un problema, perchè abbiamo fatto in modo di avere un intervallo per ciascuna computazione. 
 
 Facciamo però una cosa strana. Consideriamo $N(i)+1$ intervalli. In questo modo se ciascuna computazione finisce in un distinto intervallo, almeno uno di questi intervalli non verrà raggiunto da nessuna computazione della macchina $\mathcal{M}_{h}$ (perchè se gli intervalli non si intersecano tra loro non è possibile che una computazione finisca in due intervalli...).
