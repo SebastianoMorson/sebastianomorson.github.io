@@ -59,9 +59,11 @@ $$
 &\le 1 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\text{ essendo }\frac{1}{D^{\beta_{i}}} \le 1
 \end{aligned}
 $$
+
 Se $\beta_{i}=0$ significa che la lunghezza di encoding è identica alla lunghezza di encoding ottimale, perciò ci troviamo nel caso migliore, mentre se $\beta_{i}=1$ ci troviamo nel caso peggiore perchè significa che l'encoding del simbolo $i$ è più lungo del necessario.
 
 Esempio:
+
 $$
 \begin{aligned}
 &A = \{a,b\} \\
@@ -75,6 +77,7 @@ $$
 ![[Pasted image 20241229124133.png]]
 
 ### Shannon Encoding
+
 $$
 \begin{aligned}
 EL(S) &= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i} + \beta_{i}) \\
@@ -82,6 +85,7 @@ EL(S) &= \sum_{i=1}^k p_{i}\cdot(-\log_{D}p_{i} + \beta_{i}) \\
 &= H_{D}(P) + \sum_{i=1}^k p_{i} \beta_{i} < H_{D}(P)+1 \\
 \end{aligned}
 $$
+
 $$
 H_{D}(P) \le EL(S) < H_{D}(P)+1 \;\;\;\;\;\;\;\; \text{(sub-optimum)}
 $$
@@ -92,11 +96,13 @@ $B = \{0,1\}$
 Split $A$ trying to have $\frac{1}{2}$ probability in each
 ![[Pasted image 20240307141013.png]]
 Ordino le probabilità e dividere quando la somma arriva a $\frac{1}{2}$
+
 $$
 p_{1} \le p_{2} \le p_{3} \le \dots \le p_{k}
 $$
 
 Esempio:
+
 $$
 \begin{aligned}
 A &= \{a,b,c,d,e,f\} \\ 
@@ -104,15 +110,19 @@ B &= \{0,1\} \\
 P &= \left\{ \frac{40}{100}, \frac{18}{100}, \frac{15}{100}, \frac{13}{100}, \frac{10}{100}, \frac{4}{100} \right\} \\
 \end{aligned}
 $$
+
 ![[Pasted image 20240307141356.png]]
 
 $$
 \left| \sum_{i=1}^k p_{i} - \sum_{i = h+1}^k p_{i} \right| = \text{ find h such that result is the minimum}
 $$
+
 ***Be careful Sub-Set-Sum problem is NP-complete***
+
 $$
 H_{D}(P) \le EL(SF) < H_{D}(P)+1
 $$
+
 [[Nota 8 ott 2020.pdf#page=5|Esempio]]
 
 
@@ -120,7 +130,10 @@ Cosa succede quando dobbiamo codificare tuple di n caratteri?
 
 [[Nota 8 ott 2020.pdf#page=7|Esercizio]]
 Ho due variabili X,Y con distribuzioni P e Q indipendenti 
-$$H(X\land Y) = H(X) + H(Y)$$
+
+$$
+H(X\land Y) = H(X) + H(Y)
+$$
 
 ### Huffman Code
 L'idea è quella di giocare sulle probabilità associate agli elementi dell'alfabeto primario.

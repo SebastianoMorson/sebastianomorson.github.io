@@ -38,7 +38,8 @@ $$
 
 ossia una funzione ***iniettiva***.
 
-Ora, ci sono varie casistiche mediante le quali possiamo mappare gli elementi di $A^*$ in $B^*$ 
+Ora, ci sono varie casistiche mediante le quali possiamo mappare gli elementi di 
+$A^* \text{ in } B^*$ 
 
 ### Block-Block
 Semplicemente uso una funzione del tipo:
