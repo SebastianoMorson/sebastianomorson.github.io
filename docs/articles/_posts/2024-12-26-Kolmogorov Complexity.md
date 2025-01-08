@@ -84,6 +84,7 @@ Se considero un valore k, sappiamo che il numero di stringhe con complessità di
 $$
 \sum_{i=0}^{k-1} 2^i = 2^k -1
 $$
+
 Questo significa che se ho una stringa di lunghezza $\mid x \mid$, esisterono $2^{\mid x \mid} -1$ stringhe con complessità minore di $\mid x \mid$ e quindi almeno una MdT per la quale la lunghezza $\mid x \mid$ è maggiore o uguale a $K(x)$. 
 Di conseguenza esiste almeno una x per la quale $\mid x \mid \leq K(x)$.
 
