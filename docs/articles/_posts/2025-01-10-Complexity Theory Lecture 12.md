@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Problemi NP-completi
+title: Problemi NL-completi
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

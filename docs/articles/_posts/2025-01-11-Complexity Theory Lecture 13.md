@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Problemi NP-completi
+title: Appartenenza a NP per certificato
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
