@@ -36,8 +36,8 @@ $$
 \text{ Working tape k } &\mid \triangleright \mid \sqcup \mid \sqcup \mid \sqcup \mid \sqcup \mid\ \sqcup  \mid \dots \\
 \text{ Output tape } &\mid \triangleright \mid \sqcup \mid \sqcup \mid \sqcup \mid \sqcup \mid\ \sqcup  \mid \dots 
 \end{aligned}
-
 $$
+
 Ragioniamo sul problema:
 dato un grafo e due sue nodi u e v possiamo stabilire se esiste un path tra u e v semplicemente agendo ricorsivamente. Ad esempio immaginiamo di avere un grafo come 
 
@@ -47,6 +47,7 @@ Consideriamo un predicato
 $$
 P(u,v,i) = \text{"esiste un path tra i nodi u e v di al massimo lunghezza } 2^i \text{ "}
 $$
+
 i casi sono quindi 
 
 $$
@@ -58,6 +59,7 @@ P(u,v, i+1) &\to \text{u è raggiungibile da v in }2^{i+1} \text{ passi al massi
 \end{aligned}
 $$
 Un esempio di predicati per il grafo sopra potrebbe essere 
+
 $$
 \begin{aligned}
 (A, B, 0) &\to true / false\\
@@ -75,6 +77,7 @@ Perciò possiamo rappresentare ogni passo di ricorsione da una tripla costruita 
 $$
 (u, v, i)
 $$
+
 dove:
 - $u, v$ sono due nodi che possono essere rappresentati da degli indici di dimensione $log(\mid V \mid)$
 - $i$ è un indice che abbiamo detto essere limitato da $\log \mid V \mid$ quindi anch'esso rappresentabile in spazio logaritmico rispetto alla dimensione di V 
@@ -82,6 +85,7 @@ dove:
 Su ciascun nastro della macchina di input posso inserire le possibili combinazioni di passi ricorsivi e verificarne la veridicità. Sappiamo che i passi ricorsivi sono $log(\mid V \mid)$ quindi su un singolo nastro occuperemo $O(log \mid V \mid \cdot 3\log \mid V \mid) = O((\log \mid V \mid)^2)$ spazio.
 
 Quindi
+
 $$
 Reachability \in SPACE((\log n)^2)
 $$
