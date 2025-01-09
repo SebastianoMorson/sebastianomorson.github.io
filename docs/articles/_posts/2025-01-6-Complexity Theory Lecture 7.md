@@ -7,6 +7,7 @@ tags:
   - miscellaneous
 categories: article
 ---
+<!--more-->
 Dallo Hierarchy Theorem siamo riusciti a dimostrare alcune relazioni interessanti tra le classi di complessità che ora elencherò e che sappiamo valere nel caso $f$ sia propria:
 
 $$
