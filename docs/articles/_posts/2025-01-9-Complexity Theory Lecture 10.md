@@ -55,7 +55,6 @@ Termina così la dimostrazione.
 $$
 \text{CIRCUIT-SAT è NP-complete}
 $$
-La soddisfacibilità di una circuito si ottiene verificando se esiste un assegnamento valido. Normalmente attraverso una MdT non deterministica possiamo completare la richiesta in tempo polinomiale, ma sarà anche possibile .
 
 Il ragionamento in questo caso non cambia rispetto a prima, semplicemente cambiamo il nostro circuito per indicare anche quale scelta non deterministica stiamo considerando. Difatti in una NMdT potremmo avere due transizioni diverse anche se lo stato è lo stesso, Perciò aggiungiamo un ulteriore ingresso al circuito.
 
