@@ -106,6 +106,17 @@ Quindi, assumere $k \leq O(f(n))$ è una convenzione utile per evitare casi pato
 **Dimostrazione**
 
 La dimostrazione in questo caso avviene per diagonalizzazione e assurdo.
+
+La macchina D è così costruita:
+1. in input prende la codifica della macchina $\mathcal{M}$
+2. copia l'input $(\mathcal{M};\mathcal{M})$ come input della macchina universale $\mathcal{U}$
+
+Per copiare l'input della macchina $\mathcal{D}$ è necessario:
+- leggere l'input (tempo = n)
+- leggere il simbolo $\sqcup$ per capire dove finisce M (tempo 1)
+- scrivere n sull'input tape della macchina $\mathcal{U}$ 
+- scrivere il simbolo ; sull'input tape 
+
 Consideriamo quindi la macchina M costruita come nella dimostrazione del primo lemma, e una seconda macchina D.
 
 $$

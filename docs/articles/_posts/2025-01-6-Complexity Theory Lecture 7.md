@@ -15,7 +15,7 @@ $$
 &1.\;\; TIME(f(n)) \subseteq NTIME(f(n))\\ \\
 &2 \;\; SPACE(f(n)) \subseteq NSPACE(f(n)) \\ \\
 &3 \;\; TIME(f(n)) \subseteq SPACE(f(n)) \\ \\
-&4 \;\; NTIME(f(n)) \subseteq TIME(c^{f(n)+\log(n)}) \\ \\
+&4 \;\; SPACE(f(n)) \subseteq TIME(c^{f(n)+\log(n)}) \\ \\
 &5 \;\; NTIME(f(n)) \subseteq SPACE(f(n)) \\ \\
 &6 \;\; NSPACE(f(n)) \subseteq TIME(c^{f(n)+\log(n)}) 
 \end{aligned}
@@ -33,12 +33,12 @@ Anche in questo caso è evidente che non ci siano ragioni per le quali la simula
 Questa considerazione era stata data per scontata. È piuttosto ovvio che se ho una MdT che esegue al più f(n) operazioni non potrà eseguirle su un numero di celle superiore a f(n). Se lo facesse vorrebbe dire che le operazioni che esegue non sono atomiche, ma sono combinazioni di più operazioni. 
 In una MdT le operazioni possibili vengono eseguite su celle singole e possono essere solo di scrittura e lettura o spostamento, quindi non sono previste operazioni combinate. 
 
-## 4. $NTIME(f(n)) \subseteq TIME(c^{f(n)+\log n})$
+## 4. $SPACE(f(n)) \subseteq TIME(c^{f(n)+\log n})$
 Questo è dimostrato nella lezione 4. 
 L'idea è quella di mostrare come sia necessario copiare tutte le configurazioni della macchina non deterministica sul working tape della macchina deterministica. A quel punto è facile osservare come il linguaggio viene deciso dalla macchina non deterministica seguendo ogni possibile diramazione dell'albero delle scelte non deterministiche. Se ho un grado di non determinismo $d$ e ho $n$ variabili, allora otterrò un albero composto da $d^{n}$ possibili percorsi radice-foglia. Perciò simulando la macchina non deterministica dovrò eseguire tutti i percorsi senza godere però della possibilità di esplorarli contemporaneamente. Quindi tramite backtracking esplorerò tutti i path (che sono $O(d^{f(n)})$.
 
-## 5. $NTIME(f(n)) \subseteq SPACE(f(n))$
-Se ho $\mathcal{L} \in NTIME(f(n))$ allora esiste una macchina di Turing a k nastri $\mathcal{N}$ che decide il linguaggio in al più f(n) step. Essendo non deterministica, significa che la computazione di uno dei path non deterministici è computabile in al più O(f(n)) steps. Cerchiamo quindi di simulare la macchina $\mathcal{N}$ con una macchina deterministica $\mathcal{M}$. Possiamo a questo punto tenere traccia su un tape delle nostre scelte non deterministiche e quando arriviamo a una foglia "no" eseguiamo backtracking. In questo modo lo spazio usato è sempre quello che useremmo per verificare se un singolo path porta a una foglia "yes" o a una foglia "no". Il problema di stabilire se un path è "no" o "yes" è un problema computabile in f(n) step e quindi lo spazio richiesto è al massimo f(n). Da qui $NTIME(f(n)) \subseteq SPACE(f(n))$.
+## 5. $SPACE(f(n)) \subseteq SPACE(f(n))$
+Se ho $\mathcal{L} \in NTIMES(f(n))$ allora esiste una macchina di Turing a k nastri $\mathcal{N}$ che decide il linguaggio in al più f(n) step. Essendo non deterministica, significa che la computazione di uno dei path non deterministici è computabile in al più O(f(n)) steps. Cerchiamo quindi di simulare la macchina $\mathcal{N}$ con una macchina deterministica $\mathcal{M}$. Possiamo a questo punto tenere traccia su un tape delle nostre scelte non deterministiche e quando arriviamo a una foglia "no" eseguiamo backtracking. In questo modo lo spazio usato è sempre quello che useremmo per verificare se un singolo path porta a una foglia "yes" o a una foglia "no". Il problema di stabilire se un path è "no" o "yes" è un problema computabile in f(n) step e quindi lo spazio richiesto è al massimo f(n). Da qui $NTIME(f(n)) \subseteq SPACE(f(n))$.
 
 ## 6. $NSPACE(f(n)) \subseteq TIME(c^{f(n)+\log n})$
 Se un linguaggio $\mathcal{L}$ appartiene a $NSPACE(f(n))$ significa che esiste una macchina di Turing non deterministica con I/O $\mathcal{N}$ che decide $\mathcal{L}$ usando spazio al più $f(n)$ .

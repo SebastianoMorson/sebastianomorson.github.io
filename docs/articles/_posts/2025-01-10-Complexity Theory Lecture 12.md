@@ -57,13 +57,56 @@ Perciò possiamo concludere che esiste una relazione R polinomialmente bilanciat
 3-SAT è quindi NP-completo.
 
 ## INDIPENDENT SET
+Il problema INDIPENDENT-SET è il problema di stabilire se dato, un grafo G = (V,E) e un intero k, nel grafo esiste un insieme di nodi indipendente di cardinalità k. 
+Per insieme indipendente intendiamo un insieme $I$ tale che 
 
+$$
+G=(V,E), I\subseteq V, \forall u,v\in I, (u,v) \not\in E
+$$
 
+#### Dimostrazione appartenenza a NP
+Per dimostrare l'appartenenza è sufficiente portare un certificato $(G,k; I)$
+#### Dimostrazione NP-completezza $3\text{-SAT} \preceq \text{IND-SET}$
+Consideriamo una formula logica in CNF con clausole da 3 letterali. 
+
+$$
+\varphi = (l_{1.1} \lor l_{1,2} \lor l_{1,3}) \land\dots \land(l_{k,1} \lor l_{k,2} \lor l_{k,3})
+$$
+
+A questo punto costruiamo un grafo in cui ciascun letterale corrisponde a un nodo:
+- connettiamo tutti i nodi che si trovano all'interno di una stessa clausola. 
+- connettiamo tra loro i nodi corrispondenti a letterali opposti (ad esempio $x$ e $\lnot x$)
+
+Fatto ciò consideriamo positivi soltanto un letterale per ciascuna clausola (e quindi un nodo per ciascun triangolo). Se abbiamo $m$ clausole consideriamo $m$ letterali positivi e gli altri negativi, non ché $k=m$.
+
+Il grafo ottenuto presenta un insieme indipendente se e solo se la formula $\varphi$ è soddisfacibile. 
+
+Per ogni problema in 3-SAT possiamo costruire un corrispettivo problema in IND-SET usando un algoritmo che opera in tempo polinomiale. Abbiamo dimostrato la completezza. 
 ## CLIQUE
+Il problema CLIQUE è stabilire se, dato un grafo $G = (V,E)$, esiste un insieme di nodi di cardinalità $k$ che sia fortemente connesso.
+Perciò 
+$$
+G = (V,E), I\subseteq V, \forall u,v\in I, (u,v)\in E
+$$
 
+#### Dimostrazione di appartenenza a NP
+Basta fornire un certificato.
 
+#### Dimostrazione di NP-completezza $IND-SET \preceq CLIQUE$
+In questo caso è sufficiente ragionare al contrario rispetto al problema di IND-SET. 
+Dato un grafo di IND-SET costruiamo il suo complementare e stabiliamo 
+Essendo IND-SET il problema complementare di CLIQUE, se esiste una IND-SET esiste anche CLIQUE. 
 ## INTEGER PROGRAMMING
+In questo caso l'appartenenza a NP è dimostrata attraverso un certificato. La completezza si ottiene riducendo 3-SAT a INT-PROG. Si considera una qualsiasi formula in 3-SAT e si costruisce un integer program come un sistema di disequazioni dove i vincoli sulle variabili sono formalizzate come (ad esempio):
+
+$$
+\begin{aligned}
+x_{p}+x_{\lnot p} = 1 \\
+x_{l_{i,1}} +x_{l_{i,2}} +x_{l_{i,3}} \geq 1 \\
+0\leq l_{i,j} \leq 1
 
 
-## KNAPSACK
+\end{aligned}
+$$
+
 
