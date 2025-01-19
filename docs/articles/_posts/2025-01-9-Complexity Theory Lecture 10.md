@@ -26,6 +26,10 @@ Questa dimostrazione è un po' più articolata, ma non troppo.
 Per cominciare bisogna considerare un generico linguaggio $\mathcal{L} \in P$. Essendo incluso in $P$, esiste una macchina di Turing $\mathcal{M}$ a k-nastri deterministica, che decide il linguaggio $\mathcal{L}$ in al più $n^k$ steps.  
 Questo significa che ogni nastro è lungo al più $n^k$ celle e che è possibile rappresentare il comportamento della macchina $\mathcal{M}$ sull'input $x$ mediante una tabella $T_{\mathcal{M}}$ di dimensione $n^k \cdot n^k$ .
 
+**OBBIEZIONE**
+
+Qualcuno potrebbe obbiettare dicendo "eh, ma se la macchina è a k nastri abbiamo detto che ciascun nastro è lungo al più quanto il numero di step impiegati per terminare. Inoltre possiamo avere tanti nastri quanti sono il numero di passi impiegati dalla macchina per terminare. Quindi in totale il numero di celle complessivo dovrebbe essere $O(f(n))\cdot k = O(f(n))\cdot O(f(n)) = O(f(n)^2)$. Quindi se creiamo la tabella, questa dovrebbe avere dimensione $n^k \cdot n^{2k}$ ". Questa obbiezione è legittima, anche se in realtà ogni nastro contribuisce solo localmente alla modifica della configurazione successiva (non è che mi servono tutte le celle del nastro per poter calcolare le celle del nastro successivo, perchè al più viene modificata una singola cella). 
+
 $T_{\mathcal{M}}$ è così costruita:
 - ogni colonna rappresenta una stessa cella del working tape 
 - ogni riga rappresenta un istante diverso di computazione

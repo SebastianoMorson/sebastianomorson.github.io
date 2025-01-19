@@ -23,5 +23,3 @@ $$
 $$
 Ossia ogni linguaggio/problema appartenente alla stessa classe di complessità può essere ridotto al problema considerato.
 
-
-Esempio di 
