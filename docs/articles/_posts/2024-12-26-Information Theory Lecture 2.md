@@ -144,7 +144,7 @@ c &\to 10
 $$
 
 Una possibile rappresentazione è la seguente
-![[Pasted image 20240306143316.png]]
+![](/assets/images/Pasted image 20240306143316.png)
 
 Non è un prefix code
 esiste un path con più di una label
@@ -191,7 +191,7 @@ l_{1} &\le l_{2} &\le &\dots &\le l_{k} = l
 $$
 
 Consideriamo quindi il corrispondente D-albero
-![[Pasted image 20240307090324.png]]
+![](/assets/images/Pasted image 20240307090324.png)
 Sappiamo che le foglie totali possono essere $D^{l_{k}}$. Difatti se ho un alfabeto {0,1} e voglio formare stringhe di lunghezza massima 4, so che il numero totale di stringhe componibili sarà $2^4$
 
 Nel nostro caso voglio avere codici prefissi, di conseguenza se ho una stringa di lunghezza $l_i < l_k$ so per certo che tutto il ramo dell'albero a partire dal nodo $i$ dovrà essere inevitabilmente scartato. Il numero totale di stringhe scartate sarà $D^{l_{k}-l_{i}}$. Ad esempio se ho creato un albero binario di altezza massima 5 e il mio codice prevede una parola di output di lunghezza 3, avrò che il numero totale di parole sarà 32, ma di queste, quelle effettivamente utilizzabili sarà $32-8 = 26 = 2^5 - 2^{5-3}$

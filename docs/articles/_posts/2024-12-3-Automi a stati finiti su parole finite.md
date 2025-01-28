@@ -48,16 +48,21 @@ Dunque:
 - per riconoscere una stringa vuota mi basta un automa tipo questo
 	#todo fixare le immagini nella pagina web
 
-![[/home/justamonkey/documenti/sebastianomorson.github.io/docs/assets/images/img_verification/Thompson-a-symbol.svg]]
-- per riconoscere un linguaggio vuoto mi basta un automa come quello sopra, ma senza nessun arco tra i due stati iniziale e finale 
-- per riconoscere un linguaggio $\{a\}$ mi serve un automa come questo
-![[Pasted image 20241208223559.png]]
-- per riconoscere l'unione di due linguaggi mi serve un automa un po' più complesso, con delle  $\epsilon$-transizioni come questo qua
-![[Pasted image 20241208223620.png]]
-- per riconoscere la concatenazione di due linguaggi mi serve un automa un po' più complesso, con delle  $\epsilon$-transizioni come questo qua
-![[Pasted image 20241208223638.png]]
-- per riconoscere la chiusura di Kleene di un linguaggio mi serve un automa un po' più complesso, con delle $\epsilon$-transizioni come questo qua
-![[Pasted image 20241208223647.png]]
+![Thompson-a-symbol](/assets/images/Thompson-a-symbol.svg)  
+- Per riconoscere un linguaggio vuoto mi basta un automa come quello sopra, ma senza nessun arco tra i due stati iniziale e finale.  
+
+![Automa per il linguaggio {a}](/assets/images/Pasted%20image%2020241208223559.png)  
+- Per riconoscere un linguaggio $\{a\}$ mi serve un automa come questo.  
+
+![Automa per l'unione di due linguaggi](/assets/images/Pasted%20image%2020241208223620.png)  
+- Per riconoscere l'unione di due linguaggi mi serve un automa un po' più complesso, con delle $\epsilon$-transizioni come questo qua.  
+
+![Automa per la concatenazione di due linguaggi](/assets/images/Pasted%20image%2020241208223638.png)  
+- Per riconoscere la concatenazione di due linguaggi mi serve un automa un po' più complesso, con delle $\epsilon$-transizioni come questo qua.  
+
+![Automa per la chiusura di Kleene](/assets/images/Pasted%20image%2020241208223647.png)  
+- Per riconoscere la chiusura di Kleene di un linguaggio mi serve un automa un po' più complesso, con delle $\epsilon$-transizioni come questo qua.  
+
 
 Un esempio carattaristico (i veri intenditori capiranno che non ho sbagliato a digitare) si può trovare [qua](http://cgosorio.es/Seshat/thompson?expr=a.(a%7Cb.a)*%7Cc*.a)
 

@@ -74,7 +74,7 @@ $$
 \end{aligned}
 $$
 
-![[Pasted image 20241229124133.png]]
+![](/assets/images/Pasted image 20241229124133.png)
 
 ### Shannon Encoding
 
@@ -94,7 +94,7 @@ $$
 $B = \{0,1\}$
 
 Split $A$ trying to have $\frac{1}{2}$ probability in each
-![[Pasted image 20240307141013.png]]
+![](/assets/images/Pasted image 20240307141013.png)
 Ordino le probabilità e dividere quando la somma arriva a $\frac{1}{2}$
 
 $$
@@ -111,7 +111,7 @@ P &= \left\{ \frac{40}{100}, \frac{18}{100}, \frac{15}{100}, \frac{13}{100}, \fr
 \end{aligned}
 $$
 
-![[Pasted image 20240307141356.png]]
+![](/assets/images/Pasted image 20240307141356.png)
 
 $$
 \left| \sum_{i=1}^k p_{i} - \sum_{i = h+1}^k p_{i} \right| = \text{ find h such that result is the minimum}
@@ -123,13 +123,8 @@ $$
 H_{D}(P) \le EL(SF) < H_{D}(P)+1
 $$
 
-[[Nota 8 ott 2020.pdf#page=5|Esempio]]
-
 
 Cosa succede quando dobbiamo codificare tuple di n caratteri?
-
-[[Nota 8 ott 2020.pdf#page=7|Esercizio]]
-Ho due variabili X,Y con distribuzioni P e Q indipendenti 
 
 $$
 H(X\land Y) = H(X) + H(Y)
@@ -147,10 +142,10 @@ Alla fine dovrei ottenere qualcosa come quella dell'esempio linkato.
 
 # LZ77 Algorithm
 [Link utile](https://www.dei.unipd.it/~capri/LDS/MATERIALE/lez0606.pdf)
-![[Pasted image 20240307145023.png]]
+![](/assets/images/Pasted image 20240307145023.png)
 
 
-![[Pasted image 20240307145056.png]]
+![](/assets/images/Pasted image 20240307145056.png)
 
-![[Pasted image 20240307145122.png]]
+![](/assets/images/Pasted image 20240307145122.png)
 

@@ -11,7 +11,7 @@ html {
   font-family: $font-stack;
   font-size: $font-size;
   line-height: 1.5;
-
+  width: 100%;
   @media (max-width: 10em) {
     font-size: $font-size-mobile;
   }
@@ -26,6 +26,7 @@ body {
   height: 100%;          /* Altezza totale del viewport */
   display: flex;         /* Layout con flexbox */
   flex-direction: column; /* Posiziona gli elementi in verticale */
+  width: 100%;
 }
 
 a {
