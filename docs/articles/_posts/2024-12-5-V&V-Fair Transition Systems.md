@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fair Transition System
+title: V&V-Fair Transition System
 truncated_preview: true
 excerpt_separator: <!--more-->
 categories: article
@@ -9,8 +9,12 @@ tags:
 ---
 <!--more-->
 Una volta mi faceva schifo la matematica e ora invece trovo che sia fondamentale.
+
 I Fair Transition Systems sono un modello utile a rappresentare sistemi/programmi reattivi, ossia che variano in base alle condizioni del contesto in cui si trovano e che non ci si aspetta abbiano una terminazione. 
-Un sistema/programma tradizionale è un sistema che dato un input termina producendo un output, mentre un sistema reattivo è un programma che dato un contesto iniziale, esegue certe operazioni che possono variare in base agli stati in cui si troverà. Un esempio di sistema reattivo è un sistema operativo, il sistema SCADA di un automobile o cose di questo genere.
+
+Un sistema/programma tradizionale è un sistema che dato un input termina producendo un output, mentre un sistema reattivo è un programma che dato un contesto iniziale, esegue certe operazioni che possono variare in base agli stati in cui si troverà. 
+
+Un esempio di sistema reattivo è un sistema operativo, il sistema SCADA di un automobile o cose di questo genere.
 
 ### Come definisco un FTS?
 Un FTS è definito da una tupla così composta

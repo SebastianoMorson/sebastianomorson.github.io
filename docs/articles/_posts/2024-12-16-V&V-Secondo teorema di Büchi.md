@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Secondo teorema di Büchi
+title: V&V-Secondo teorema di Büchi
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

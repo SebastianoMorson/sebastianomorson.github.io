@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Domino Undecidability
+title: V&V-Domino Undecidability
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
@@ -8,3 +8,4 @@ tags:
 categories: article
 ---
 <!--more-->
+

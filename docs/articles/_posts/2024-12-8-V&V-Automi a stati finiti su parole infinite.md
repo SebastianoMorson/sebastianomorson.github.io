@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Automi a stati finiti su parole infinite
+title: V&V-Automi a stati finiti su parole infinite
 excerpt_separator: <!--more-->
 categories: article
 truncated_preview: true
@@ -8,14 +8,36 @@ tags:
   - miscellaneous
 ---
 <!--more-->
-## Automi di Büchi (non deterministici)
+# Automi di Büchi (non deterministici)
 Perchè non ci bastano DFA,NFA e epsilon-NFA?
 Quali sono le situazioni reali modellabili solo attraverso l'uso di automi a parole infinite?
+
+## Definizione di automa di Büchi 
+Un automa di Büchi è una cosa di questo genere
+
+![BuchiAutomata](/assets/images/Automate_de_Buchi.jpg)
+
+Voi direte: "ma quello non è un NFA"?
+Bè, in realtà sì, la forma è quella, ma a conti fatti:
+- un **NFA** accetta una <u>parola finita</u> $x$ se <u>almeno una computazione</u> termina in uno stato finale.
+
+- un **automa di Büchi** tanto per cominciare non lavora su parole finite, ma invece lavora su <u>parole infinite</u> e poi accetta una parola <u>se uno stato finale viene visitato infinite volte</u> durante la computazione della parola infinita.
+
+
+## Linguaggi regolari e linguaggi $\omega$-regolari
+Se ben ricordiamo, i linguaggi regolari erano definiti come quei linguaggi riconosciuti da un automa a stati finiti. In particolare a partire da un linguaggio regolare avevamo detto che era sempre possibile costruire il suo corrispettivo DFA e a partire da un DFA è sempre possibile ricondursi all'espressione regolare che identifica il linguaggio riconosciuto dall'automa (che è ovviamente regolare).
+
+Ecco, un linguaggio $\omega$-regolari non è altro che un linguaggio riconosciutio da un automa che opera su parole infinite. Perciò un linguaggio $\omega$-regolare sarà composto da parole infinite.
+
+Dato un automa di Büchi, il linguaggio da esso riconosciuto sarà $\omega$-regolare.
+
+Ora però ci vogliamo domandare: che relazioni ci sono tra linguaggi regolari e $\omega$-regolari? 
+
 ### Proprietà di chiusura
 Per i linguaggi regolari e $\omega$-regolari valgono le seguenti proprietà:
 1. se $V\subseteq A^*$ è regolare allora $V^{\omega}$ è $\omega$-regolare
 2. se $V \subseteq A^*$ è regolare e $L \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot L$ è $\omega$-regolare
-3. se $L_{1},L_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $L_{1}\cup L_{2}$ e $L_{1}\cap L_{2}$ sono $\omega$-regolari
+3. se $L_{1},L_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $L_{1}\cup L_{2}$ e $L_{1}\cap L_{2}$ sono $\omega$-regolari.
 La costruzione degli automi è **effettiva** (ossia esiste un algoritmo che in modo sistematico e non ambiguo permette di costruire un automa a partire da un'espressione).
 
 ##### Dimostrazione 1 
@@ -38,6 +60,8 @@ $$
 dove $\forall\; 1<i<n$ abbiamo che $U_{i}$ e $V_i$ sono espressioni regolari.
 
 Esistono linguaggi di parole infinite non $\omega$-regolari? 
+
+Bè, a rigor di logica sì. Ad esempio se considerassi le parole con un numero finito di $a$ e $b$ non sarei in grado di definire un automa di Büchi in grado di riconoscerlo. Questo perchè l'automa dovrebbe essere in grado di determinare quando sono state incontrate un numero finito di occorrenze di $a$ e $b$, ma questo va oltre le capacità del modello. 
 
 ### Equivalenza tra automi di Büchi e linguaggi $\omega$-regolari
 
@@ -128,7 +152,7 @@ Se $L\subseteq A^\omega$ e $\sim$ è una relazione di congruenza di indice finit
 
 
 
-### Teorema di Büchi sulla chiusura rispetto alla complementazione (IMPORTANTE)
+## Teorema di Büchi sulla chiusura rispetto alla complementazione (IMPORTANTE)
 Se $L\subseteq A^\omega$ è $\omega$-regolare, allora $\bar{L}$ è $\omega$-regolare.
 Inoltre se ho un automa di Büchi che riconosce L, sono in grado di costruirne uno che riconosce il suo complementare $\bar{L}$.
 
@@ -149,7 +173,8 @@ Di conseguenza L è regolare e possiamo usare il teorema sulle chiusure dei ling
 
 *"se ho un automa di Büchi che riconosce L, posso costruirne uno che riconosce $\bar{L}$."*
 È sufficiente invertire gli stati finali.
-## Automi di Büchi deterministici
+
+# Automi di Büchi (deterministici)
 L'unica roba che cambia rispetto agli automi di Büchi non deterministici è la funzione di transizione, che prima era 
 $$
 \Delta \subseteq Q×A×Q
@@ -192,7 +217,7 @@ Consideriamo una parola $\alpha \in \overrightarrow{W}$. Questo significa che es
 
 
 
-## Automi di Muller
+# Automi di Muller
 Gli automi di Muller sono una variante degli automi di Buchi. La cosa particolare che cambia sta nella definizione dell'insieme degli stati finali.
 
 La definizione di automa di Buchi era data da una tupla costituita come segue
@@ -224,7 +249,7 @@ Rispetto agli automi di Buchi deterministici, i Muller automata deterministici g
 La dimostrazione è banale, è sufficiente considerare un linguaggio $L\subseteq A^\omega$ e un Muller automata $\mathcal{A}= <Q,A, q_{0}, \delta, \mathcal{F}>$ che lo riconosce.  A questo punto se costruissimo un Muller automata $\mathcal{A}' = <Q,A,q_{0},\delta, \mathcal{F}'>$ dove l'insieme $\mathcal{F}$ è definito come $\mathcal{F}' = 2^Q\setminus \mathcal{F}$ , otterremmo proprio un automa di Muller che accetta il complemento del linguaggio $L$.
 
 
-## Automi di Rabin
+# Automi di Rabin
 
 
 
