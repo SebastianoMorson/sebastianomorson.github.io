@@ -154,4 +154,5 @@ $$
 
 #### 2. Dimostriamo che ogni formulazione in $S1S_{0}$ è modellabile tramite automa di Büchi 
 
-![[Pasted image 20241218093604.png]]
+![riformulation](/assets/images/automa.png)
+
