@@ -34,14 +34,15 @@ Dato un automa di Büchi, il linguaggio da esso riconosciuto sarà $\omega$-rego
 Ora però ci vogliamo domandare: che relazioni ci sono tra linguaggi regolari e $\omega$-regolari? 
 
 ### Proprietà di chiusura
-Per i linguaggi regolari e $\omega$-regolari valgono le seguenti proprietà:
-1. se $V\subseteq A^*$ è regolare allora $V^{\omega}$ è $\omega$-regolare
-2. se $V \subseteq A^*$ è regolare e $L \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot L$ è $\omega$-regolare
-3. se $L_{1},L_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $L_{1}\cup L_{2}$ e $L_{1}\cap L_{2}$ sono $\omega$-regolari.
+>**Per i linguaggi regolari e $\omega$-regolari valgono le seguenti proprietà:**
+>1. **se $V\subseteq A^*$ è regolare allora $V^{\omega}$ è $\omega$-regolare**
+>2. **se $V \subseteq A^*$ è regolare e $L \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot L$ è $\omega$-regolare**
+>3. **se $L_{1},L_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $L_{1}\cup L_{2}$ e $L_{1}\cap L_{2}$ sono $\omega$-regolari.**
+
 La costruzione degli automi è **effettiva** (ossia esiste un algoritmo che in modo sistematico e non ambiguo permette di costruire un automa a partire da un'espressione).
 
 ---
-###### 👁️ Osservazione: 
+#### 👁️ Osservazione: 
 Quando giocavamo con i linguaggi regolari, abbiamo visto che $\mathcal{L}^*$ indica il linguaggio composto da parole formate  concatenando un numero indefinito (ma finito) di elementi di L.
 
 Ebbene con i linguaggi $\omega$-regolari non possiamo usare la stessa notazione della chiusura di Kleene per indicare la concatenazione di un numero indefinito di elementi di $\mathcal{L}$, perchè la concatenazione potrebbe essere di un numero <u>infinito</u> di elementi di $\mathcal{L}$.
@@ -49,18 +50,18 @@ Per questo usiamo la notazione $\mathcal{L}^\omega$ per definire l'operazione di
 
 ---
 
-##### Dimostrazione 1 
+#### Dimostrazione 1 
 È sufficiente osservare che V è regolare esiste un DFA che lo riconosce. Ma allora per riconoscere una parola infinita è sufficiente sostituire ogni arco che porta a uno stato finale con un arco che porta allo stato iniziale dell'automa, imponendo che l'unico stato finale sia proprio lo stato iniziale.
 
 $\square$
 
-##### Dimostrazione 2
+#### Dimostrazione 2
 Se V è regolare allora esiste una automa $\cal{M}$ che lo riconosce e se V è anch'esso regolare esiste un secondo automa $\cal{M}'$ che lo riconosce. Ma allora se costruissimo $\cal{M}''$ come l'automa $\cal{M}$ a cui ogni stato finale porta allo stato iniziale di $\cal{M}'$, avremmo che $\cal{M}''$ riconosce la concatenazione di V e L. Perciò $V\cdot L$ è $\omega$-regolare.
 
 $\square$
 
 
-##### Dimostrazione 3
+#### Dimostrazione 3
 Per dimostrare la chiusura rispetto all'unione è sufficiente costruire un automa $\cal{M}$ come la composizione dei due automi $\cal{M}',\cal{M}''$ (gli automi che riconoscono $L_{1}$ e $L_{2}$ ). In particolare lo stato iniziale di $\cal{M}$ raggiunge tramite una $\epsilon$-transizione sia lo stato iniziale di $\cal{M}'$ che quello di $\cal{M}''$
 
 
@@ -71,61 +72,133 @@ $\square$
 ### Espressioni $\omega$-regolari 
 Un'espressione regolare è un'espressione per cui esiste un DFA che accetta tale espressione. 
 
-Un'espressione $\omega$-regolare invece è un'espressione strutturata come
+>Un'espressione $\omega$-regolare invece è un'espressione strutturata come
+>$$
+>\bigcup_{i=1}^n U_{i}\cdot V_{i}^\omega
+>$$
+>dove $\forall\; 1<i<n$ abbiamo che $U_{i}$ e $V_i$ sono espressioni regolari. 
+>
+>$n$ indica il numero di unioni che vogliamo considerare.
+
+---
+**🎯Esempio:**
+
+Consideriamo un alfabeto $A=\{a,b\}$ e immaginiamo di descrivere un linguaggio $\omega$-regolare composto da parole infinite che:
+
+- Possono iniziare con una sequenza arbitraria di a (cioè U1=a^*).
+    - Poi ripetono all'infinito solo la parola ab (cioè $V_1=ab$).
+- Oppure possono iniziare con una sequenza arbitraria di $b$ (cioè $U_2=b^∗$).
+    - Poi ripetono all'infinito solo la parola baba (cioè $V_2=ba$).
+
+L'espressione $\omega$-regolare corrispondente sarebbe:
+
 $$
-\bigcup_{i=1}^n U_{i}\cdot V_{i}^\omega
+(a^∗\cdot(ab)^\omega)\cup(b^*⋅(ba)^\omega)
 $$
-dove $\forall\; 1<i<n$ abbiamo che $U_{i}$ e $V_i$ sono espressioni regolari.
+
+dove n=2, perché abbiamo due componenti nell'unione.
+
+---
 
 **Esistono linguaggi di parole infinite non $\omega$-regolari?**
 
-Bè, a rigor di logica sì. Ad esempio se considerassi le parole con un numero finito di $a$ e $b$ non sarei in grado di definire un automa di Büchi in grado di riconoscerlo. Questo perchè l'automa dovrebbe essere in grado di determinare quando sono state incontrate un numero finito di occorrenze di $a$ e $b$, ma questo va oltre le capacità del modello. 
+Bè, a rigor di logica sì. Esempio se considerassi le parole con un numero finito di $a$ e $b$ non sarei in grado di definire un automa di Büchi in grado di riconoscerlo. Questo perchè l'automa dovrebbe essere in grado di determinare quando sono state incontrate un numero finito di occorrenze di $a$ e $b$, ma questo va oltre le capacità del modello. 
 
 ### Equivalenza tra automi di Büchi e linguaggi $\omega$-regolari
 
 #todo
 
+## PROPRIETÀ DI CHIUSURA
+
+### $\omega$-chiusura
+L'$\omega$-chiusura corrisponde a modificare l'automa di Buchi corrispondente sostituendo ogni stato finale con lo stato iniziale.
+
+
+### Concatenazione
+Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono i linguaggi $\omega$-regolari $\mathcal{L}$ e $\mathcal{L}'$ è possibile costruire l'automa che riconosce la loro concatenazione semplicemente modificando l'automa $\mathcal{A}$ in modo che gli stati finali siano sostituiti dagli stati iniziali dell'automa $\mathcal{B}$.
+
+
+### Unione
+Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono i linguaggi $\omega$-regolari $\mathcal{L}$ e $\mathcal{L}'$ è possibile costruire l'automa che riconosce la loro unione semplicemente fondendo assieme l'insieme degli stati (assumendo che siano disgiunti).
+
+
+### Intersezione
+In modo simile a come fatto per l'unione, è possibile creare un automa che invece di unire gli stati finali, modifica gli stati iniziali sostituendoli con il prodotto cartesiano degli stati dei due automi e che modifica analogamente anche la funzione di transizione.
+
+
 ## Complementazione 
 Prima di capire cosa vuol dire "complementazione" bisogna dare alcune definizioni:
 
 #### CONGRUENZA: 
-una relazione di equivalenza $\sim$ su un generico insieme A si dice di congruenza se $\forall x,y,x',y' \in A$ si ha che se $x \sim y$ e $x' \sim y'$ allora $xx' \sim yy'$ 
+>Una relazione di equivalenza $\sim$ su un generico insieme A si dice di congruenza se $\forall x,y,x',y' \in A$ si ha che se $x \sim y$ e $x' \sim y'$ allora $xx' \sim yy'$ 
 
 In altre parole, definita una relazione di equivalenza su A è necessario verificare se ogni coppia di equivalenza è invariante rispetto all'operazione di concatenazione.
 
-Esempio:
+---
+
+**🎯Esempio:**
+
 $A = \{a,b\}$ 
 $x \sim y \iff  \text{"x e y hanno la stessa lunghezza"}$
 Assumendo $x = a \;\; y=b$ 
 Assumendo $x' = b \;\; y' = a$
 Si ha che $x\sim y$ e $x'\sim y'$ e $xx' \sim yy'$
 
+---
+
 Si può verificare che ogni possibile coppia di equivalenza è invariante rispetto alla concatenazione, perciò $\sim$ è una relazione di congruenza
 
 #### SATURAZIONE:
-Dato un linguaggio $L\subseteq A^\omega$ e una congruenza $\sim$, diciamo che $\sim$ satura L se per ogni coppia di $\sim$-classi U e V, $U\cdot V^\omega \cap L \neq \emptyset$ allora $U\cdot V^\omega \subseteq L$.
+>Dato un linguaggio $L\subseteq A^\omega$ e una congruenza $\sim$, diciamo che $\sim$ satura $\mathcal{L}$ se per ogni coppia di $\sim$-classi U e V, $U\cdot V^\omega \cap L \neq \emptyset$ allora $U\cdot V^\omega \subseteq L$.
 
 Spieghiamoci meglio:
 - quando dico $\sim$-classi intendo, nell'esempio in cui $\sim$ è la relazione "x e y hanno la stessa lunghezza", gli insiemi del tipo "tutte le stringhe di lunghezza 1", "tutte le stringhe di lunghezza 2", ... 
 - in teoria le $\sim$-classi sono costruite a partire all'insieme di parole finite $A^*$ 
 
-Da quello che ho capito, è importante specificare che $U\cdot V^\omega \cap L \neq \emptyset$ perchè in questo modo basta trovare una parola che si trovi all'interno di L, per poter concludere che tutte le parole in $U\cdot V^\omega \subseteq L$. 
+Da quello che ho capito, è importante specificare che $U\cdot V^\omega \cap L \neq \emptyset$ perchè in questo modo basta trovare una parola che si trovi all'interno di L, per poter concludere che tutte le parole in $U\cdot V^\omega \subseteq L$.  
+Questa cosa però non torna: anche se una parola si trova dentro L, non vuol dire che i due insiemi sono inclusi uno nell'altro. Potrebbero avere solo quell'elemento in comune. Cosa fa quindi la differenza?
+ 
+La differenza la fa la presenza della relazione di conguenza $\sim$ .
+$U$ e $V$ sono due classi di equivalenza, quindi gli elementi al loro intero possiedono le medesime proprietà (ad esempio $U$ è composta da tutte e sole le stringhe di lunghezza 2, mentre $V$ da tutte e sole le stringhe di lunghezza 3). Perciò ogni stringa della classe di equivalenza può essere sostituita con una qualsiasi altra parola della stessa classe. 
+
+Ma quindi se l'intersezione tra $\mathcal{L}$ e $U\cdot V^\omega$ non è vuota, significa che almeno una parola $x$ appartiene a entrambi gli insiemi, ma essendo che  $x$ è costruita a partire da 2 classi di equivalenza, posso riscrivere $x$ sostituendo qualsiasi elemento delle classi di equivalenza di partenza, e quindi posso saturare il linguaggio $\mathcal{L}$. 
+
+Pensare a questa cosa mi ricorda un virus dentro una cellula. Una volta che è dentro inizia a moltiplicarsi fino a saturare completamente il suo contenuto con tante copie di sè stesso.
 
 
-#### Proposizione
-Siano $\sim$ una congruenza e $L \subseteq A^\omega$. Se $\sim$ satura L allora $\sim$ satura pure $\bar{L}$
+--- 
+
+##### 🎯 Esempio pratico
+Congruenza: stessa lunghezza
+
+Supponiamo che $\omega$ sia la relazione "due parole hanno la stessa lunghezza".
+Allora le $\omega$-classi sono insiemi del tipo:
+```
+U={a,b}U={a,b} (parole di lunghezza 1)
+V={aa,bb,ab,ba}V={aa,bb,ab,ba} (parole di lunghezza 2)
+```
+Allora $V^\omega$ è l'insieme di tutte le parole infinite ottenute concatenando ripetutamente parole di lunghezza 2.
+
+Ora consideriamo un linguaggio $\mathcal{L}$ che accetta solo parole infinite in cui ogni coppia di lettere consecutive ha la stessa lunghezza di ciclo, e supponiamo che una parola $a(aa)(bb)(ab)(ba)^\omega$ appartenga a $\mathcal{L}$.
+Poiché qualsiasi parola in $U⋅V^\omega$ ha la stessa struttura e proprietà, allora tutto $U\cdot V^\omega$ deve essere incluso in $\mathcal{L}$, altrimenti $\mathcal{L}$ non sarebbe coerente con la classe di equivalenza.
+
+--- 
+
+
+### Proposizione
+>Siano $\sim$ una congruenza e $L \subseteq A^\omega$. Se $\sim$ satura $L$ allora $\sim$ satura pure $\overline{L}$
 
 **Dimostrazione:**
 
 Assumiamo che L sia saturato da $\sim$
 Se $U\cdot V^\omega \cap L \neq \emptyset$  allora $U\cdot V^\omega \subseteq L$
 
-Assumiamo per assurdo che $\bar{L}$ non sia saturato da $\sim$.
-Perciò se $U\cdot V^\omega \cap L \neq \emptyset$ allora $U\cdot V^\omega \nsubseteq \bar{L}$ 
+Assumiamo per assurdo che $\overline{L}$ non sia saturato da $\sim$.
+Perciò se $U\cdot V^\omega \cap L \neq \emptyset$ allora $U\cdot V^\omega \nsubseteq \overline{L}$ 
 
-Se $U\cdot V^\omega \nsubseteq L$ significa che esiste una parola $\alpha \in U\cdot V^\omega$ che non appartiene a $\bar{L}$. Ma se non appartiene a $\bar{L}$ allora appartiene a $L$.
+Se $U\cdot V^\omega \nsubseteq \overline{L}$ significa che esiste una parola $\alpha \in U\cdot V^\omega$ che non appartiene a $\bar{L}$. Ma se non appartiene a $\bar{L}$ allora appartiene a $L$.
 
-Essendo che $\sim$ satura L vorrebbe dire che $U\cdot V^\omega \subseteq L$ che è contraddittorio. 
+Essendo che $\sim$ satura $L$ vorrebbe dire che $U\cdot V^\omega \subseteq L$ che è contraddittorio. 
 All'inizio non vedevo la contraddizione, perchè mi concentravo sul punto sbagliato.
 
 Avevamo detto che $\alpha$ appartiene solo a $L$, ma se $U\cdot V^\omega$ è un sottoinsieme di $L$, allora l'intersezione con $\bar{L}$  sarà sempre vuota ($U\cdot V^\omega \cap \bar{L} = \emptyset$), ma avevamo detto che $U\cdot V^\omega \cap \bar{L} \neq \emptyset$. Contraddizione.
@@ -142,7 +215,7 @@ $\square$
 
 #### RELAZIONE $\approx_{\cal{A}}$
 La definizione è piuttosto semplice:
-prendiamo un automa di Büchi $A = (Q, A, q_{0}, \Delta, F)$. Se due parole u e v sono in relazione $\approx_{\cal{A}}$ significa che per ogni $s, s' \in Q$, abbiamo che 
+prendiamo un automa di Büchi $A = (Q, A, q_{0}, \Delta, F)$. Se due parole $u$ e $v$ sono in relazione $\approx_{\cal{A}}$ significa che per ogni $s, s' \in Q$, abbiamo che 
 1. $s\to_{u}s'$ sse $s\to_{v} s'$ 
 2. $s \to_{u}^F s'$ sse $s \to_{v}^F s'$ 
 
@@ -167,6 +240,11 @@ Sembra strano a primo impatto. Che vuol dire che $V\cdot V \subseteq V$?
 
 Significa che la forma di $\alpha$ è ripetitiva nella parte di V, perciò possiamo concatenare elementi di V avendo la certezza che continuino a rimanere dentro V. 
 
+🎯 Esempio per visualizzare la situazione. 
+
+Se ho ad esempio $A=\{a,b\} e una classe $V=\{x \mid x \text{ inizia e finisce per } a\}$ posso osservare come $V$ contiene un insieme infinito di elementi, ma possiamo renderci conto che concatenando qualsiasi elemento di $V$ con qualsiasi altro elemento di $V$ otteniamo una parola che rimane dentro a $V$.
+
+
 Il lemma ci dice che, dato che $\sim$ ha indice finito:
 
 1. Ogni parola infinita può essere vista come:
@@ -178,7 +256,7 @@ Se $L\subseteq A^\omega$ e $\sim$ è una relazione di congruenza di indice finit
 
 
 
-## Teorema di Büchi sulla chiusura rispetto alla complementazione (IMPORTANTE)
+### Teorema di Büchi sulla chiusura rispetto alla complementazione (IMPORTANTE)
 Se $L\subseteq A^\omega$ è $\omega$-regolare, allora $\bar{L}$ è $\omega$-regolare.
 Inoltre se ho un automa di Büchi che riconosce L, sono in grado di costruirne uno che riconosce il suo complementare $\bar{L}$.
 
@@ -196,11 +274,18 @@ $$
 dove U e V sono proprio delle classi di equivalenza indotte da una relazione invariante a destra. 
 Di conseguenza L è regolare e possiamo usare il teorema sulle chiusure dei linguaggi $\omega$-regolari per costruire un automa per $L$ e di conseguenza anche un automa di Büchi per il complementare $\bar{L}$.
 
+In alternativa possiamo il lemma che diceva "se $\sim$ è una relazione di congruenza che satura $\mathcal{L}$ allora satura anche $\overline{\mathcal{L}}$ e applicare lo stesso ragionamento alla classe complementare. 
 $\square$
 
 
 *"se ho un automa di Büchi che riconosce L, posso costruirne uno che riconosce $\bar{L}$."*
-È sufficiente invertire gli stati finali.
+
+---
+##### 👁️ ATTENZIONE
+
+Non è sufficiente invertire gli stati per far sì che l'automa di Büchi riconosca il suo complementare. 
+
+---
 
 # Automi di Büchi (deterministici)
 L'unica roba che cambia rispetto agli automi di Büchi non deterministici è la funzione di transizione, che prima era 
@@ -211,42 +296,85 @@ e ora diventa
 $$
 \delta: Q×A \to Q
 $$
-C'è un'altra cosa piuttosto importante che distingue gli automi di Buchi non deterministici da quelli deterministici: i primi sono chiusi rispetto alla ***complementazione***, i secondi NO.
+C'è un'altra cosa piuttosto importante che distingue gli automi di Buchi non deterministici da quelli deterministici: <u>i primi sono chiusi rispetto alla ***complementazione***, i secondi NO</u>. Vedremo la dimostrazione di questa cosa dopo la definizione di caratterizzazione dei linguaggi riconosciuti da automi di Büchi deterministici.
 
-**Dimostrazione:**
+## Proprietà di chiusura
+> **Gli  automi di Büchi deterministici godono di 3 chiusure fondamentali:**
+>- **unione**
+>- **intersezione**
 
-L'idea è quella di mostrare un linguaggio $\omega$-regolare che non viene accettato da un automa di Buchi deterministico, per poi mostrare che il complementare dello stesso linguaggio invece viene accettato. Se l'automa di Buchi deterministico fosse chiuso per complementazione avremmo che entrambi i linguaggi possono essere riconosciuti da un automa di Buchi deterministico. 
+Le dimostrazioni sono piuttosto semplici:
+- nel primo caso è sufficiente osservare come l'unione di due linguaggi riconosciuti da due distinti automi di Büchi sia possibile mediante la costruzione di un nuovo automa di Büchi in cui l'insieme degli stati finali è costruito come 
 
-$\square$
+$$
+F = \{(f_1, q_2) \mid f_1 \in F_1 \land q_2 \in Q_2\} \cup \{(q_1, f_2) \mid q_1 \in Q_1 \land f_2 \in F_2\}
+$$
 
-Consideriamo il linguaggio $L = \{\alpha \in A^\omega | \exists^{<\omega}n\; \alpha(n)=a \}$ 
-(la simbologia $\exists^{<\omega}$ sta a significare che esiste un numero finito di $n$) 
-L non può essere scritto come $\overrightarrow{W}$.
-Assumiamo $L = b^\omega$ allora esiste un valore $n_{1}$ tale per  cui $b^{n_{1}} \in W$.
-Considerato $b^{n_{1}}ab^{\omega} \in L$ anche in questo caso dovrà esistere $n_{2}$ tale per  cui $b^{n_{1}}ab^{n_{2}} \in W$.
-Posso andare avanti all'infinito e finirò sempre per ottenere che esiste un n finito. Il punto però è che a quel punto esistono un'infinità di prefissi che appartengono a $W$.
-In conclusione possiamo dire che $DBA \subset NDBA$
+- nel secondo caso l'insieme degli stati finali è invece composto come
 
-#### Caratterizzazione dei linguaggi riconosciuti dagli Automi di Büchi deterministici
+$$
+F = \{(f_1,f_2) \mid f_1 \in F_1 \land f_2 \in F_2\}
+$$
+
+
+## Caratterizzazione dei linguaggi riconosciuti dagli Automi di Büchi deterministici
 Definiamo a partire dall'insieme $W\subseteq A^*$:
 - $W^\omega = \{\alpha \in A^\omega \mid \alpha =  \alpha_{0} \alpha_{1} \dots\alpha_{i} \in W\}$ $\omega$-chiusura di W
 - $\overrightarrow{W} = \{\alpha \in W^\omega \mid \exists^\omega n \; \alpha (0,n) \in W \}$ chiusura vettoriale di W
-- $In(\alpha) = \{\alpha \in A^\omega\ \mid \exists^\omega n \; \alpha(n) = a\}$ infinità di $\alpha$
+- $In(\alpha) = \{a \in A\ \mid \exists^\omega n \; \alpha(n) = a\}$ infinità di $\alpha$
 
-***Diciamo che un linguaggio $L \subseteq A^\omega$ è riconosciuto da un automa di Büchi deterministico se e solo se $L = \overrightarrow{W}$ per qualche $W \subseteq A^*$***.
+
+>**Diciamo che un linguaggio $L \subseteq A^\omega$ è riconosciuto da un automa di Büchi deterministico se e solo se $L = \overrightarrow{W}$ per qualche $W\subseteq A^{*}$**.
 
 **Dimostrazione**
 
--> se un linguaggio $L \subseteq A^\omega$ è riconosciuto da un automa di Büchi deterministico allora $L = \overrightarrow{W}$ per qualche $W \subseteq A^*$
+
+$(\rightarrow)$ se un linguaggio $L \subseteq A^\omega$ è riconosciuto da un automa di Büchi deterministico allora $L = \overrightarrow{W}$ per qualche $W \subseteq A^*$
 
 Consideriamo un linguaggio $L \subseteq A^\omega$ e un automa di Buchi $\cal{A}$ deterministico che lo riconosce. Consideriamo anche un DFA $\mathcal{A}'$ con struttura uguale ad $\cal{A}$. 
 Per definizione di accettazione, per ogni parola $\alpha \in L$ abbiamo che $In(\alpha) \cap F \neq \emptyset$. Ovverosia, per ogni parola si passa infinite volte per uno stato finale di $\cal{A}$ e di conseguenza  esistono infiniti prefissi $w$ di $\alpha$ che passano per uno stato finale. Essendo $\cal{A}'$ un DFA strutturalmente uguale ad $\cal{A}$ abbiamo che $w \in \cal{A}'$ e quindi $L \subseteq \overrightarrow{W}$ per definizione. 
 
-<- se un linguaggio $L\subseteq A^\omega$ è tale per cui $L = \overrightarrow{W}$ per qualche $W \subseteq A^*$ allora L è riconosciuto da un automa di Büchi deterministico.
+$(\leftarrow)$ se un linguaggio $L\subseteq A^\omega$ è tale per cui $L = \overrightarrow{W}$ per qualche $W \subseteq A^*$ allora L è riconosciuto da un automa di Büchi deterministico.
 
 Consideriamo una parola $\alpha \in \overrightarrow{W}$. Questo significa che esistono infiniti prefissi di $\alpha$ tali che $w \in W \subseteq A^*$. Ma allora $W = L(\cal{A}')$ e una computazione $\sigma$ di $\cal{A}'$ può essere vista come un prefisso della computazione di $\cal{A}$. Perciò $\cal{A} \cap F \neq \emptyset$.
 
 
+## Non-chiusura per complementazione
+Come ho detto all'inizio, <u>gli automi di Büchi deterministici non godono della proprietà di chiusura per complementazione</u>.
+
+Vediamo ora la dimostrazione.
+
+**Dimostrazione:**
+
+L'idea è quella di mostrare un linguaggio $\omega$-regolare che non viene accettato da un automa di Büchi deterministico, per poi mostrare che il complementare dello stesso linguaggio invece viene accettato. Se l'automa di Büchi deterministico fosse chiuso per complementazione avremmo che entrambi i linguaggi possono essere riconosciuti da un automa di Büchi deterministico. 
+
+Ricordiamoci che affinchè un linguaggio $\mathcal{L}$ sia accettato da un automa di Büchi deterministico, $\mathcal{L} \subseteq \overrightarrow{W}$ per quale $W\subseteq A^*$
+
+Consideriamo il linguaggio 
+
+$$
+\mathcal{L} = \{\alpha \in A^\omega | \exists^{<\omega}n\; \alpha(n)=a \}
+$$
+
+La simbologia $\exists^{<\omega}$ sta a significare che esiste un numero finito di $n$.
+
+Ricordiamo che $\overrightarrow{W}$ è definito come
+
+$$
+\overrightarrow{W} = \{\alpha \in A^\omega \mid \exists^\omega n\;\alpha(0,n) \in W\}
+$$
+
+$\mathcal{L}$ non può essere scritto come $\overrightarrow{W}$ e ora dimostreremo per assurdo che è così.
+
+1. Assumiamo $L = b^\omega$
+2.  allora esiste un valore $n_{1}$ tale per  cui $b^{n_{1}} \in W$.
+3. Considerato $b^{n_{1}}ab^{\omega} \in L$ anche in questo caso dovrà esistere $n_{2}$ tale per  cui $b^{n_{1}}ab^{n_{2}} \in W$.
+4. Posso andare avanti all'infinito e finirò sempre per ottenere che esiste un $n$ finito. A quel punto però esistono un'infinità di prefissi che appartengono a $W$ e quindi non è possibile che un qualsiasi simbolo sia considerato una sola volta a meno che l'alfabeto non sia infinito, che non è possibile.
+
+D'altra parte però il complementare di $\mathcal{L}$ è il linguaggio composto da stringhe k 
+In conclusione possiamo dire che $DBA \subset NDBA$
+
+$\square$
 
 # Automi di Muller
 Gli automi di Muller sono una variante degli automi di Buchi. La cosa particolare che cambia sta nella definizione dell'insieme degli stati finali.
@@ -260,6 +388,7 @@ con
 - $\delta:Q\times A \to Q$ 
 - $F \subseteq Q$
 La condizione di accettazione era che $In(\alpha) \cap F \neq \emptyset$.
+
 Quindi l'automa di Buchi accettava qualcosa se veniva raggiunto infinite volte uno stato appartenente all'insieme F.
 
 Nel caso degli automi di Muller invece, l'insieme F non è più un insieme di stati, bensì un insieme di insiemi di stati. 
@@ -282,10 +411,7 @@ La dimostrazione è banale, è sufficiente considerare un linguaggio $L\subseteq
 
 # Automi di Rabin
 
-
-
-
-### Possibili domande
+# Possibili domande
 
 Esercizio 
 Dato un automa di Büchi $A = (Q, A, \Delta, q_{0}, F )$, dimostrare che, per ogni $s, s'\in Q, W_{ss}^F′$ è regolare.
