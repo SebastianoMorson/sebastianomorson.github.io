@@ -156,3 +156,10 @@ $$
 
 ![riformulation](/assets/images/automa.png)
 
+
+
+## Conseguenze
+
+Il teorema di Buchi permette di dimostrare che un linguaggio è regolare sse è esprimibile tramite una formula S1S. 
+
+Inoltre
