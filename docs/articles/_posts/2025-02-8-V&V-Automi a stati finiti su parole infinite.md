@@ -242,7 +242,7 @@ Significa che la forma di $\alpha$ è ripetitiva nella parte di V, perciò possi
 
 🎯 Esempio per visualizzare la situazione. 
 
-Se ho ad esempio $A=\{a,b\} e una classe $V=\{x \mid x \text{ inizia e finisce per } a\}$ posso osservare come $V$ contiene un insieme infinito di elementi, ma possiamo renderci conto che concatenando qualsiasi elemento di $V$ con qualsiasi altro elemento di $V$ otteniamo una parola che rimane dentro a $V$.
+Se ho ad esempio $A=\{a,b\}$ e una classe $V=\{x \mid x \text{ inizia e finisce per } a\}$ posso osservare come $V$ contiene un insieme infinito di elementi, ma possiamo renderci conto che concatenando qualsiasi elemento di $V$ con qualsiasi altro elemento di $V$ otteniamo una parola che rimane dentro a $V$.
 
 
 Il lemma ci dice che, dato che $\sim$ ha indice finito:
@@ -296,7 +296,7 @@ e ora diventa
 $$
 \delta: Q×A \to Q
 $$
-C'è un'altra cosa piuttosto importante che distingue gli automi di Buchi non deterministici da quelli deterministici: <u>i primi sono chiusi rispetto alla ***complementazione***, i secondi NO</u>. Vedremo la dimostrazione di questa cosa dopo la definizione di caratterizzazione dei linguaggi riconosciuti da automi di Büchi deterministici.
+C'è un'altra cosa piuttosto importante che distingue gli automi di Buchi non deterministici da quelli deterministici: <u>i primi sono chiusi rispetto alla <b><i>complementazione</i></b>, i secondi NO</u>. Vedremo la dimostrazione di questa cosa dopo la definizione di caratterizzazione dei linguaggi riconosciuti da automi di Büchi deterministici.
 
 ## Proprietà di chiusura
 > **Gli  automi di Büchi deterministici godono di 3 chiusure fondamentali:**
