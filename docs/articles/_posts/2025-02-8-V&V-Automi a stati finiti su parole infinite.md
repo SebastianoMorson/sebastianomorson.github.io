@@ -118,12 +118,23 @@ L'$\omega$-chiusura corrisponde a modificare l'automa di Buchi corrispondente so
 Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono i linguaggi $\omega$-regolari $\mathcal{L}$ e $\mathcal{L}'$ è possibile costruire l'automa che riconosce la loro concatenazione semplicemente modificando l'automa $\mathcal{A}$ in modo che gli stati finali siano sostituiti dagli stati iniziali dell'automa $\mathcal{B}$.
 
 
+### Intersezione
+Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono rispettivamente i linguaggi $\mathcal{L(A)}$ e $\mathcal{L(B)}$ allora è possibile costruire l'automa $\mathcal{A'}$ che riconosce l'intersezione tra $\mathcal{L(A)}$ e $\mathcal{L(B)}$. 
+
+Il metodo per costruire $\mathcal{A'}$ non è proprio immediato e richiede un attimo di ragionamento.
+
+Per prima cosa dobbiamo ragionare sul problema: se vogliamo individuare il linguaggio intersezione, dobbiamo verificare se una parola che appartiene a $\mathcal{A}$ appartenga anche a $\mathcal{B}$. In quel caso l'elemento fa parte dell'insieme intersezione.
+
+Il problema principale è che questa parola è infinitamente lunga e quindi dobbiamo far sì che l'automa che riconosce tale parola verifichi infinite volte che il prefisso della parola attraversi un numero infinito di volte uno stato finale di $\mathcal{A}$ e di $\mathcal{B}$. 
+
+Per fare questo controllo costruiamo in questo modo $\mathcal{A'}$:
+1. consideriamo come stati le triple $(q_A, q_B, i)$ (con i = 1 o i = 2)
+2. consideriamo come stati finali gli stati del tipo $(\_, q \in F_2, 2)$
+3. consideriamo come funzione di transizione la funzione $\Delta'$ definita come segue:
+    - $\Delta_1 = \{(q_1, q_2, 1) \to (q_1, q_2, i) \mid (q_1, a, q_2) \in \}$ 
 ### Unione
 Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono i linguaggi $\omega$-regolari $\mathcal{L}$ e $\mathcal{L}'$ è possibile costruire l'automa che riconosce la loro unione semplicemente fondendo assieme l'insieme degli stati (assumendo che siano disgiunti).
 
-
-### Intersezione
-In modo simile a come fatto per l'unione, è possibile creare un automa che invece di unire gli stati finali, modifica gli stati iniziali sostituendoli con il prodotto cartesiano degli stati dei due automi e che modifica analogamente anche la funzione di transizione.
 
 
 ## Complementazione 
