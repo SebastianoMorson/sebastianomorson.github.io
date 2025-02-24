@@ -46,7 +46,63 @@ Le equivalence query (EQ) forniscono un controllo globale: quando il learner pro
 
 >! Nell'effettivo questo approccio permette di evitare di eseguire equivalence query perchè l'idea di base è che "se il 99% degli elementi appartiene al linguaggio reale ed è riconosciuto dal mio automa, perchè dare troppa importanza a quell'insignificante 1% che non è detto nemmeno che esista?"
 
+## Learning Strategy
 
+L'idea dell'algoritmo che porta alla costruzione del DFA che riconosce il linguaggio del learner è il seguente:
+
+1. Inizializzazione
+    
+    - Sia $S=\{\epsilon \}$ e $T=\{\epsilon\}$, ovvero iniziamo con solo la stringa vuota.
+   
+    - $S$ rappresenta gli stati ipotetici del DFA in costruzione.
+   
+    - $T$ contiene suffissi usati per distinguere gli stati.
+
+2. Loop principale
+   
+    - L'algoritmo termina al massimo dopo index($\sim L_0$) iterazioni, ovvero dopo aver trovato il numero minimo di stati del DFA cercato.
+
+3. Verifica della T-completezza
+    - Un insieme S è T-completo se, per ogni stato $s$ in $S$, il suo comportamento sulle stringhe in $T$ è unico.
+    
+    - Se $S$ non è T-completo, allora si aggiunge una nuova stringa a $S$, estendendolo con una nuova lettera $a$.
+
+4. Costruzione del DFA candidato
+    - Si costruisce un DFA con:
+      - Stati $S$
+      - Transizioni definite da $\delta(s,a)=s_a$ (concatenazione)
+      - Stato iniziale $\epsilon$
+      - Stati finali determinati da $Membership(s')$, cioè quelli che appartengono a $L_0$.
+
+5. Verifica di Equivalenza
+    - Se il DFA costruito è corretto ($Equivalence(A)$ è vera), allora l'algoritmo restituisce il DFA.
+    
+    - Altrimenti, se il DFA non è corretto, viene fornito un controesempio $w$.
+
+6. Aggiornamento dell'insieme $T$
+    - Si aggiungono i suffissi del controesempio a $T$ per affinare la distinzione tra stati.
+
+    - Ritorna al punto 3 e ripete il processo con il DFA aggiornato.
+
+
+
+**PSEUDOCODICE:** 
+
+```javascript
+S = T = {ε} // S is T-minimal, possibly not T-complete
+loop // this will loop at most index(∼L0) times
+  while S NOT T-complete
+    let s ∈ S and a ∈ Σ such that
+      ∀s’ ∈ S ∃t∈T Membership(s a t) ≠ Membership(s’ t)
+    S = S ∪ {s a}
+  A = DFA with state set S, transitions δ(s,a) = sa
+  initial state ε, final states s’ s.t. Membership(s’)
+  if Equivalence(A) // this surely happens
+    return A // when |S| = index(∼L0)
+  else
+    let w be the counter-example of equivalence 
+    T = T ∪ {suffixes of w} // S becomes T-incomplete and will grow at next iteration…
+```
 
 ## Funzioni su parole 
 > Quindi l'approccio black-box in teoria mi permette di creare il trasduttore sequenziale che permette, dato un programma scritto in python, di calcolare il corrispettivo codice in javascript non conoscendo l'alfabeto di output? 
