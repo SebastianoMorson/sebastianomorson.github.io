@@ -122,7 +122,7 @@ case, the reset button may be used
 
 Un modello di Kripke che rappresenta il seguente sistema potrebbe essere qualcosa del genere
 
-![microwave_model](/docs/assets/images/microwave_model.png)
+![microwave_model](assets/images/microwave_model.png)
 
 È evidente che le formule CTL che definiscono le proprietà per un modello corretto sono
 
@@ -156,7 +156,7 @@ Possiamo notare come il modello proposto non garantisca tutte le formule richies
 
 In particolare è facile osservare che la proprietà numero 2 è violata in questo punto
 
-![violation](/docs/assets/images/violation.png)
+![violation](assets/images/violation.png)
 
 Si può vedere in modo analogo come anche le proprietà 3 e 4 non sono rispettate da questo modello.
 
