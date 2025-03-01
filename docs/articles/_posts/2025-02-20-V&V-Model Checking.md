@@ -77,11 +77,6 @@ ma:
 - se S' è compassionate NON è detto che S sia compassionate
 
 
-
-
-### Bounded Model Checking
-L'idea è quella di non considerare tutta la computazione infinita, ma cercare possibili cicli. Se la computazione è del tipo A,B,C,D, A,B,C,D, ..., ovviamente la proprietà di "non compare mai E" deve valere all'interno del ciclo A,B,C,D
-
 ## Model checking per CTL
 Ecco, per CTL le cose cambiano un po', perchè gli operatori di percorso aiutano a semplificare le cose. 
 
@@ -163,11 +158,34 @@ Si può vedere in modo analogo come anche le proprietà 3 e 4 non sono rispettat
 Quello che sto per dire è molto importante per capire la differenza sostanziale tra LTL-MC e CTL-MC:
 > in CTL-MC non ci interessa osservare una computazione infinita, ma solo la struttura del modello per poter dire se una proprietà è violata o meno.
 
+#### Algoritmo
+Per il CTL-MC si applica il seguente algoritmo:
+1. si considera un modello di Kripke $M$ e una formula CTL $\alpha$ che il modello deve rispettare
+2. per ogni sottoformula $\beta$ di $\alpha$ si guarda se $\beta$ è del tipo AX $\gamma$ , EX $\gamma$, EU $\gamma$, AU $\gamma$ 
+  1. se è EX $\gamma$: per ogni nodo del modello M, ne considero uno $m$ 
+  2. verifico se esiste un nodo $v$ che è in relazione con $m$ (Rmv significa che c'è un arco che da $m$ va in $v$)
+  3. se esiste allora controllo che la proprietà $\gamma$ appartenga all'insieme delle proprietà valide su $v$ (nello pseudocodice è quel $v\in V(v)$):
+      - se la proprietà si trova in $v$ allora aggiungo la CTL-formula $\beta$ alle proprietà del nodo $m$ (nello pseudocodice $\{\beta\} \cup V(m)$)  
+
+Procedo in modo analogo anche negli altri casi. Per l'operatore Until uso una procedura ricorsiva che non fa altro che eseguire per ogni nodo una procedura che ricerca quali nodi sono in relazione di transizione con il nodo considerato (per poi applicare la procedura in modo ricorsivo sui nodi trovati, finchè non si raggiunge il punto in cui non ci sono nodi di partenza o nodi non conosciuti).
+
+
+Per chiarezza espositiva inserisco di seguito l'algoritmo sotto forma di pseudo-codice,
+
+
+
+
+
+![pseudocode1](/assets/images/pseudocode1.png)
+![pseudocode1](/assets/images/pseudocode2.png)
+![pseudocode1](/assets/images/pseudocode3.png)
+
+
 ##  Model checking LTL vs CTL
-Un'importante osservazione da fare è che il model checking di CTL è più rapido del model checking di LTL.
+Un'importante osservazione da fare è che il model checking di CTL è più rapido del model checking con formule LTL.
 
 LTL-MC é PSPACE mentre CTL-MC è polinomiale rispetto alla dimensione del modello.
 
 La differenza sta nel fatto che per CTL le proprietà possono essere verificate sugli stati singoli, propagando l'informazione localmente (ricordati dell'esempio del forno a microonde).
 
-Per LTL invece certe proprietà possono dipendere da una serire infinita di scelte. Anche per questo motivo abbiamo avuto bisogno di applicare il Bounded Model Checking nel caso LTL, perchè a volte il numero di stati "esplodeva" nel momento in cui generavamo il behaviour graph. 
+Per LTL invece certe proprietà possono dipendere da una serire infinita di scelte. Anche per questo motivo avremo bisogno di applicare il Bounded Model Checking nel caso LTL, perchè a volte il numero di stati "esplodeva" nel momento in cui generavamo il behaviour graph. 
