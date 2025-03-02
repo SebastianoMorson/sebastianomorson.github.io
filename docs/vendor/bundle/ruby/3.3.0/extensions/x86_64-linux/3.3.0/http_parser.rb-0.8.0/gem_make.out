@@ -1,0 +1,19 @@
+current directory: /home/justamonkey/documenti/sebastianomorson.github.io/docs/vendor/bundle/ruby/3.3.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
+/usr/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/justamonkey/documenti/sebastianomorson.github.io/docs/vendor/bundle/ruby/3.3.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
+make DESTDIR\= sitearchdir\=./.gem.20241126-1277015-8a657y sitelibdir\=./.gem.20241126-1277015-8a657y clean
+
+current directory: /home/justamonkey/documenti/sebastianomorson.github.io/docs/vendor/bundle/ruby/3.3.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
+make DESTDIR\= sitearchdir\=./.gem.20241126-1277015-8a657y sitelibdir\=./.gem.20241126-1277015-8a657y
+compiling ruby_http_parser.c
+compiling ryah_http_parser.c
+linking shared-object ruby_http_parser.so
+
+current directory: /home/justamonkey/documenti/sebastianomorson.github.io/docs/vendor/bundle/ruby/3.3.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
+make DESTDIR\= sitearchdir\=./.gem.20241126-1277015-8a657y sitelibdir\=./.gem.20241126-1277015-8a657y install
+/usr/bin/install -c -m 0755 ruby_http_parser.so ./.gem.20241126-1277015-8a657y
+
+current directory: /home/justamonkey/documenti/sebastianomorson.github.io/docs/vendor/bundle/ruby/3.3.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
+make DESTDIR\= sitearchdir\=./.gem.20241126-1277015-8a657y sitelibdir\=./.gem.20241126-1277015-8a657y clean

@@ -17,3 +17,19 @@
 	font-family: "pcantaro";
 	src: url("../fonts/Antaro.ttf");
 }
+
+@font-face {
+	font-family: "titilliumWeb";
+	src: url("../fonts/TitilliumWeb-Regular.ttf");
+}
+
+@font-face {
+	font-family: "specialElite";
+	src: url("../fonts/SpecialElite.ttf");
+}
+
+
+@font-face {
+	font-family: "typewriter";
+	src: url("../fonts/TypewriterScribbled.ttf");
+}
