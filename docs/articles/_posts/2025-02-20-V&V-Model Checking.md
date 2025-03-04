@@ -41,7 +41,7 @@ e il tableau
 
 ![](/assets/images/tableau.png)
 Semplicemente seguendo questo schema:
-I
+
 1. considero tutti gli stati così formati
     1. prendo un atomo $A$ di $T_\varphi$ 
     2. prendo un stato $s$ del grafo delle computazioni $G_P$
