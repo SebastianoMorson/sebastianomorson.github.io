@@ -25,6 +25,7 @@ Il model checking per una formula LTL corrisponde al verificare la P-satisfiabil
 
 ### 1. Definizioni di base
 Diamo ora alcune definizioni di base:
+
 | concetto | definizione |
 |:--: | :--: |
 | **state(A)** | corrisponde alla congiunzione delle formule locali di un atomo A
