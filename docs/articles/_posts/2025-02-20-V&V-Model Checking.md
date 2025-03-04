@@ -36,10 +36,10 @@ Diamo ora alcune definizioni di base:
 A partire dal tableau $T_\varphi$ di una formula LTL $\varphi$ e dal grafo delle computazioni $G_P$ di un programma $P$, è possibile costruire il **behavior graph**, che altro non è che la fusione dei due.
 
 Consideriamo il seguente grafo delle computazioni
-![](/docs/assets/images/computationgraph.png)
+![](/assets/images/computationgraph.png)
 e il tableau 
 
-![](/docs/assets/images/tableau.png)
+![](/assets/images/tableau.png)
 Semplicemente seguendo questo schema:
 I
 1. considero tutti gli stati così formati
@@ -52,7 +52,7 @@ I
 2. considero ogni stato che ho ottenuto dal punto 1 e congiungo tutte le coppie di stati del tipo $(s_i, A_i)$ e $(s_j, A_j)$ in cui $s_i$ è un successore di $s_j$ nel grafo $G_P$ e $A_i$ è un successore di $A_j$ nel tableau $T_\varphi$.
 
 Un esempio di risultato finale è il seguente:
-![](/docs/assets/images/behaviorgraph.png)
+![](/assets/images/behaviorgraph.png)
 
 Ottenuto questo benedetto Behavior Graph, diciamo che:
 - lo stato $(s',A')$ è $\tau$-successore dello stato $(s,A)$ se esiste una transizione da $(s,A)$ a $(s',A')$
