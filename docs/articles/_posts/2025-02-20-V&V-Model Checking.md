@@ -10,27 +10,74 @@ categories: article
 <!--more-->
 
 # Model checking nella logica temporale
-Il model checking 
+Quando parliamo di model checking nella logica temporale intendiamo quel processo in cui andiamo a verificare che un certo sistema garantisca determinate proprietà. Ad esempio in un sistema operativo attraverso il model checking possiamo verificare la capacità dello stesso di evitare situazioni di deadlock o di starvation. 
+
+Chiaramente poter verificare se un sistema garantisce o meno certe proprietà è fondamentale, basti pensare a quanto sia importante assicurare che la centralina di un veicolo garantisca l'attivazione dell'ABS in caso di pattinamento in frenata. Non è ammissibile mettere in commercio un dispositivo ABS che non garantisce la sua puntualità e disponibilità in ogni istante di tempo e computazione della centralina!
+
+Ecco quindi che facciamo un passo in avanti rispetto alle semplici definizioni di formule LTL e CTL, introducendo un metodo per legarle a una specifica computazione o a un insieme di possibili computazioni.
 
 ## Model checking per LTL
-Corrisponde a P-satisfiability.
+Il model checking per una formula LTL corrisponde al verificare la P-satisfiability di un programma, ossia se un certo programma ammette una soluzione.
 
 >Dove vogliamo arrivare: 
 >
 >Se $B_{(P,\varphi)}$ contiene una componente adeguata allora la formula è soddisfabibile.
 
 ### 1. Definizioni di base
-- state(A)
-- consistenza
-- tail
-- componente adeguata
-- behavior graph
+Diamo ora alcune definizioni di base:
+| concetto | definizione |
+|:--: | :--: |
+| **state(A)** | corrisponde alla congiunzione delle formule locali di un atomo A
+| **consistenza** | data una computazione $\Theta = s_0,s_1,s_2, \dots$ e un cammino $\sigma$ del tableau di $\varphi$, diciamo che lo stato $s_i$ è consistente rispetto all'atomo $A_i$ se $s_i \vDash State(A_i)$ |
+| **trail** | data una computazione $\sigma = s_0,s_1,s_2, \dots$ e un cammino $\Theta$ del tableau di $\varphi$, diciamo che $\Theta$ è una trail per $\sigma$ se $\forall i \ge 0$ abbiamo che $s_i$ è consistente rispetto all'atomo $A_i$ |
 
-- S just, compassionate, fair, fulfilling, adequate, 
+#### Behavior Graph
+A partire dal tableau $T_\varphi$ di una formula LTL $\varphi$ e dal grafo delle computazioni $G_P$ di un programma $P$, è possibile costruire il **behavior graph**, che altro non è che la fusione dei due.
+
+Consideriamo il seguente grafo delle computazioni
+![](/docs/assets/images/computationgraph.png)
+e il tableau 
+
+![](/docs/assets/images/tableau.png)
+Semplicemente seguendo questo schema:
+I
+1. considero tutti gli stati così formati
+    1. prendo un atomo $A$ di $T_\varphi$ 
+    2. prendo un stato $s$ del grafo delle computazioni $G_P$
+    3. controllo se $s$ è consistent rispetto a $A$ 
+        - se lo è allora creo un nodo $(s,A)$
+        - se non lo è considero riprendo dal punto 2
+
+2. considero ogni stato che ho ottenuto dal punto 1 e congiungo tutte le coppie di stati del tipo $(s_i, A_i)$ e $(s_j, A_j)$ in cui $s_i$ è un successore di $s_j$ nel grafo $G_P$ e $A_i$ è un successore di $A_j$ nel tableau $T_\varphi$.
+
+Un esempio di risultato finale è il seguente:
+![](/docs/assets/images/behaviorgraph.png)
+
+Ottenuto questo benedetto Behavior Graph, diciamo che:
+- lo stato $(s',A')$ è $\tau$-successore dello stato $(s,A)$ se esiste una transizione da $(s,A)$ a $(s',A')$
+- una transizione è abilitata su $(s,A)$ se è abilitata su $s$
+- una transizione $\tau$ è taken se esiste almeno un nodo $(s,A)$ per il quale $(s',A')$ è un suo $\tau$-successore
+
+A questo punto dato un qualsiasi sottografo $S \subseteq \mathcal{B}_{P,\varphi}$ sappiamo che:
+- S è just se ogni transizione in $\mathcal{J}$ è taken o disabilitata in qualche nodo
+- S è compassionate se ogni transizione in $\mathcal{C}$ è taken o disabilitata in ogni nodo
+- S è fair se è compassionate e just
+- S è fulfilling se ogni nodo promettente è realizzato
+- S è adeguato se S è fair e fulfilling
+
+
+
+Ora, come dicevamo all'inizio, se $\mathcal{B}_{P,\varphi}$ contiene un sottografo adeguato, la formula è soddisfacibile, perciò esiste una computazione del modello che garantisce le proprietà della formula $\varphi$.
+
+Ma perchè? 
+
+Bè, se un sottografo è adeguato significa che tutti i suoi stati sono consistenti e le transizioni fair e fulfilling. Questo significa che la computazione rappresentata dal sottografo soddisfa sicuramente la formula $\varphi$.
+
+**👁️ Attenzione, la componente adeguata è sufficiente a dimostrare la soddisfacibilità della formula, non la sua validità!**
 
 ### 2. Procedimento
 L'idea è questa:
-1. Costruisco il grafo delle computazioni per il programma P $G_P$
+1. Costruisco il grafo delle computazioni $G_P$ per il programma P
 2. Costruisco il tableau $T_\varphi$ per la formula LTL $\varphi$
 3. A partire da $G_P$ e $T_\varphi$ costruisco il behavior graph $B_{(P, \varphi)}$ 
 4. Decompongo $B_{(P,\varphi)}$ nei suoi MSCS $S_1, S_2, \dots, S_n$

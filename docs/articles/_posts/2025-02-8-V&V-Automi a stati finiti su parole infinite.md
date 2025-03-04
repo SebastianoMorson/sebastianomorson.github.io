@@ -224,11 +224,11 @@ $\square$
 ###### Indichiamo con $W_{ss'}^F$ l'insieme delle parole $w \in A^*$ tali per cui esiste una computazione $s\to_{w}^F s'$
 --------------
 
-#### RELAZIONE $\approx_{\cal{A}}$
-La definizione è piuttosto semplice:
+> #### RELAZIONE $\approx_{\cal{A}}$
+>La definizione è piuttosto semplice:
 prendiamo un automa di Büchi $A = (Q, A, q_{0}, \Delta, F)$. Se due parole $u$ e $v$ sono in relazione $\approx_{\cal{A}}$ significa che per ogni $s, s' \in Q$, abbiamo che 
-1. $s\to_{u}s'$ sse $s\to_{v} s'$ 
-2. $s \to_{u}^F s'$ sse $s \to_{v}^F s'$ 
+>1. $s\to_{u}s'$ sse $s\to_{v} s'$ 
+>2. $s \to_{u}^F s'$ sse $s \to_{v}^F s'$ 
 
 Ora sarebbe piacevole verificare se su un automa di Büchi la relazione $\approx_{\cal{A}}$ è una relazione di congruenza di indice finito che satura $L(\cal{A})$ .
 
