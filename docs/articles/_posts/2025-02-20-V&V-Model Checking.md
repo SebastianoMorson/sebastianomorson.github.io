@@ -39,7 +39,7 @@ Consideriamo il seguente grafo delle computazioni
 ![](/assets/images/computationgraph.png)
 e il tableau 
 
-![](/assets/images/tableau.png)
+![](/assets/images/prunedtableu.png)
 Semplicemente seguendo questo schema:
 
 1. considero tutti gli stati così formati
