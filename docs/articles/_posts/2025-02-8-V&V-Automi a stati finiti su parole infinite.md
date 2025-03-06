@@ -125,13 +125,33 @@ Il metodo per costruire $\mathcal{A'}$ non è proprio immediato e richiede un at
 
 Per prima cosa dobbiamo ragionare sul problema: se vogliamo individuare il linguaggio intersezione, dobbiamo verificare se una parola che appartiene a $\mathcal{A}$ appartenga anche a $\mathcal{B}$. In quel caso l'elemento fa parte dell'insieme intersezione.
 
-Il problema principale è che questa parola è infinitamente lunga e quindi dobbiamo far sì che l'automa che riconosce tale parola verifichi infinite volte che il prefisso della parola attraversi un numero infinito di volte uno stato finale di $\mathcal{A}$ e di $\mathcal{B}$. 
+Il problema principale è che questa parola è infinitamente lunga e quindi dobbiamo far sì che l'automa che riconosce tale parola verifichi infinite volte che il prefisso della parola attraversi un numero infinito di volte uno stato finale di $\mathcal{A}$ E uno stato finale di $\mathcal{B}$. 
 
 Per fare questo controllo costruiamo in questo modo $\mathcal{A'}$:
-1. consideriamo come stati le triple $(q_A, q_B, i)$ (con i = 1 o i = 2)
-2. consideriamo come stati finali gli stati del tipo $(\_, q \in F_2, 2)$
-3. consideriamo come funzione di transizione la funzione $\Delta'$ definita come segue:
-    - $\Delta_1 = \{(q_1, q_2, 1) \to (q_1, q_2, i) \mid (q_1, a, q_2) \in \}$ 
+1. consideriamo come stati le triple $(q_A, q_B, i)$ (con i = 1 o i = 2). L'indice $i$ fungerà da "gate" tra le computazioni di $\mathcal{A}$ e $\mathcal{B}$.
+
+2. consideriamo come funzione di transizione la funzione $\Delta'$ definita come $\Delta' = \Delta_1 \cup \Delta_2$ dove:
+    - $\Delta_1 = \{(q_\mathcal{A}, q_\mathcal{B}, 1) \to (q_\mathcal{A}', q_\mathcal{B}', i) \mid (q_\mathcal{A}, a, q_\mathcal{A}') \in \delta_\mathcal{A} \land  (q_\mathcal{B}, a, q_\mathcal{B}') \in \delta_\mathcal{B} \}$
+        - $i=1$ se $q_\mathcal{A} \not \in F_\mathcal{A}$ (ossia se non mi trovavo in uno stato finale di $\mathcal{A}$)
+        - $i=2$ se $q_\mathcal{A} \in F_\mathcal{A}$ (ossia se mi trovavo in uno stato finale di $\mathcal{A}$ e quindi ora voglio usare il gate per switchare sulla computazione di $\mathcal{B}$)
+
+    - $\Delta_2 = \{(q_\mathcal{A}, q_\mathcal{B}, 2) \to (q_\mathcal{A}', q_\mathcal{B}', i) \mid (q_\mathcal{A}, a, q_\mathcal{A}') \in \delta_\mathcal{A} \land  (q_\mathcal{B}, a, q_\mathcal{B}') \in \delta_\mathcal{B} \}$
+        - $i=1$ se $q_\mathcal{B} \in F_\mathcal{B}$ 
+        
+            (ossia se mi trovavo in uno stato finale di $\mathcal{B}$ e quindi ora voglio usare il gate per switchare sulla computazione di $\mathcal{A}$)
+
+        - $i=2$ se $q_\mathcal{B} \not \in F_\mathcal{B}$
+
+3. consideriamo come stati finali gli stati del tipo $(\_, q \in F_\mathcal{B}, 2)$. 
+
+    $$
+    F = \{ (q_\mathcal{A}, q_\mathcal{B}, 2) \mid q_\mathcal{B} \in F_\mathcal{B} \}
+    $$
+
+    In pratica ci troviamo in uno stato finale se mi trovo in uno stato finale di $\mathcal{B}$ e il gate si trova su $2$. 
+
+    Ovviamente questo vale se la prima computazione da cui inizio è quella di $\mathcal{A}$, altrimenti imporrò che gli stati finali siano $(q \in F_\mathcal{A}, \_, 1)$
+
 ### Unione
 Se ho due automi $\mathcal{A}$ e $\mathcal{B}$ che riconoscono i linguaggi $\omega$-regolari $\mathcal{L}$ e $\mathcal{L}'$ è possibile costruire l'automa che riconosce la loro unione semplicemente fondendo assieme l'insieme degli stati (assumendo che siano disgiunti).
 

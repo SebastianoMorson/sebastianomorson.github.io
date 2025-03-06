@@ -80,7 +80,7 @@ L'idea dell'algoritmo che porta alla costruzione del DFA che riconosce il lingua
     - Altrimenti, se il DFA non è corretto, viene fornito un controesempio $w$.
 
 6. Aggiornamento dell'insieme $T$
-    - Si aggiungono i suffissi del controesempio a $T$ per affinare la distinzione tra stati.
+    - Si aggiungono i suffissi del controesempio $w$ a $T$ per affinare la distinzione tra stati.
 
     - Ritorna al punto 3 e ripete il processo con il DFA aggiornato.
 
@@ -104,8 +104,61 @@ loop // this will loop at most index(∼L0) times
     T = T ∪ {suffixes of w} // S becomes T-incomplete and will grow at next iteration…
 ```
 
+## Matrici di Hankel
+È possibile sfruttare le matrici di Hankel per avere un modo più intuitivo per applicare la procedura.
+
+In pratica si costruisce una matrice in cui le righe sono le classi S e le colonne invece gli elementi di T.
+
+Ciascuna cella può contenere il valore 0 o 1 a seconda che $Membership(s\cdot t)$ restituisca yes o no.
+
+Dopodichè il procedimento è identico all'algoritmo visto in precedenza.
+
+Se due righe sono uguali significa che lo stato è il medesimo.
+
+📌 Esempio concreto di costruzione di un DFA
+
+Supponiamo che il learner parta con:
+$S=\{\epsilon,a,b\},T=\{\epsilon,a\}$
+
+La matrice iniziale:
+| H[S,T] | ε	| a | 
+| :--: | :--: | :--:|
+|ε | 0 | 0 | 
+|a | 0 | 0 | 
+|b | 0 | 0 | 
+
+Il learner scopre che tutti i prefissi attuali sembrano uguali (tutte le righe sono uguali), quindi per ora assume un solo stato.
+
+Ora il learner prova nuove parole:
+- Se chiede per abab, scopre che $H(ab,\epsilon)=1$ (perché "ab" appartiene a L).
+- Aggiunge ab a S e aggiorna la matrice.
+
+Ora la matrice è:
+| H[S,T] | ε	| a | 
+| :--: | :--: | :--:|
+|ε | 0 | 0 | 
+|a | 0 | 0 | 
+|b | 0 | 0 | 
+| ab | 1 | 0 |
+
+Il learner nota che la riga di ab è diversa dalle altre, quindi introduce un nuovo stato per ab.
+
+Ora può costruire il DFA:
+
+- Stato iniziale $q_0$ (per ε).
+- Stato $q_1$​ per $a$.
+- Stato $q_2$​ per $ab$ (stato finale).
+
+Aggiunge le transizioni:
+
+  - $q_0 \to_a q_1$
+  - $q_1 \to_b q_2$ (perché abab è accettato)
+  - q2​ è finale.
+
+Alla fine, ripete il controllo con un’Equivalence Query.
+
 ## Funzioni su parole 
-> Quindi l'approccio black-box in teoria mi permette di creare il trasduttore sequenziale che permette, dato un programma scritto in python, di calcolare il corrispettivo codice in javascript non conoscendo l'alfabeto di output? 
+>L'approccio black-box mi permette di creare il trasduttore sequenziale che permette, dato un programma scritto in python, di calcolare il corrispettivo codice in javascript non conoscendo l'alfabeto di output? 
 
 
 
@@ -121,5 +174,3 @@ Il modello di learning basato su membership ed equivalence query, inizialmente p
 - Nel dominio degli ω-linguaggi, la complessità aumenta a causa delle condizioni di accettazione (ad esempio, in automi di Büchi o Müller) e delle corrispondenti rappresentazioni logiche (S1S, WS1S), ma il modello di interazione tra teacher e learner rimane un potente strumento.
 - Le connessioni con omega-regolarità e le logiche S1S/WS1S garantiscono che il potere espressivo dei modelli di automi utilizzati nel learning sia sufficiente a rappresentare le proprietà temporali e infinite dei sistemi reali, come quelli modellati in verifica formale.
 - Infine, l'analisi comparativa tra automi di Büchi, Müller e Rabin fornisce ulteriori strumenti per affrontare problemi di learning in contesti dove il complementare, la determinizzazione e altre operazioni chiave giocano un ruolo fondamentale.
-
-Questa visione integrata non solo approfondisce il metodo di learning degli automi ma ne evidenzia anche il collegamento con la teoria degli ω-linguaggi e la logica S1S/WS1S, argomenti cruciali nella verifica di sistemi reattivi e nella teoria dei linguaggi formali.
