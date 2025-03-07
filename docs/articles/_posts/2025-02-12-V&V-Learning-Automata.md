@@ -121,6 +121,7 @@ Supponiamo che il learner parta con:
 $S=\{\epsilon,a,b\},T=\{\epsilon,a\}$
 
 La matrice iniziale:
+
 | H[S,T] | ε	| a | 
 | :--: | :--: | :--:|
 |ε | 0 | 0 | 
@@ -134,6 +135,7 @@ Ora il learner prova nuove parole:
 - Aggiunge ab a S e aggiorna la matrice.
 
 Ora la matrice è:
+
 | H[S,T] | ε	| a | 
 | :--: | :--: | :--:|
 |ε | 0 | 0 | 

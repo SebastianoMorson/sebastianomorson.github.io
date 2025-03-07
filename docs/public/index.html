@@ -22,18 +22,6 @@
   <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/apple-touch-icon.png">
   
   <link rel="alternate" type="application/atom+xml" title="JustAMonkey" href="/atom.xml">
-<!--
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-        inlineMath: [['$','$']],
-        displayMath: [ ['$$','$$']],
-        processEscapes: true
-      }
-    });
-  </script>
--->
 
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
@@ -44,9 +32,26 @@
     }
   });
 </script>
+
+<script>
+  MathJax = {
+    startup: {
+      ready() {
+        MathJax.startup.defaultReady();
+        const {Token} = MathJax._.input.tex.Token;
+        const {MapHandler} = MathJax._.input.tex.MapHandler;
+        const delimiter = MapHandler.getMap('delimiter');
+        delimiter.add('\\llbracket', new Token('\\llbracket', '\u27E6'));
+        delimiter.add('\\rrbracket', new Token('\\rrbracket', '\u27E7'));
+      }
+    }
+  }
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.4/tex-chtml.js"></script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   
+
 </head>
 
 
