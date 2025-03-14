@@ -36,14 +36,14 @@ Ora però ci vogliamo domandare: che relazioni ci sono tra linguaggi regolari e 
 ### Proprietà di chiusura
 >**Per i linguaggi regolari e $\omega$-regolari valgono le seguenti proprietà:**
 >1. **se $V\subseteq A^*$ è regolare allora $V^{\omega}$ è $\omega$-regolare**
->2. **se $V \subseteq A^*$ è regolare e $L \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot L$ è $\omega$-regolare**
->3. **se $L_{1},L_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $L_{1}\cup L_{2}$ e $L_{1}\cap L_{2}$ sono $\omega$-regolari.**
+>2. **se $V \subseteq A^*$ è regolare e $\mathcal{L} \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot \mathcal{L}$ è $\omega$-regolare**
+>3. **se $\mathcal{L}_{1},\mathcal{L}_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $\mathcal{L}_{1}\cup \mathcal{L}_{2}$ e $\mathcal{L}_{1}\cap \mathcal{L}_{2}$ sono $\omega$-regolari.**
 
 La costruzione degli automi è **effettiva** (ossia esiste un algoritmo che in modo sistematico e non ambiguo permette di costruire un automa a partire da un'espressione).
 
 ---
 #### 👁️ Osservazione: 
-Quando giocavamo con i linguaggi regolari, abbiamo visto che $\mathcal{L}^*$ indica il linguaggio composto da parole formate  concatenando un numero indefinito (ma finito) di elementi di L.
+Quando giocavamo con i linguaggi regolari, abbiamo visto che $\mathcal{L}^*$ indica il linguaggio composto da parole formate  concatenando un numero indefinito (ma finito) di elementi di $\mathcal{L}$.
 
 Ebbene con i linguaggi $\omega$-regolari non possiamo usare la stessa notazione della chiusura di Kleene per indicare la concatenazione di un numero indefinito di elementi di $\mathcal{L}$, perchè la concatenazione potrebbe essere di un numero <u>infinito</u> di elementi di $\mathcal{L}$.
 Per questo usiamo la notazione $\mathcal{L}^\omega$ per definire l'operazione di concatenazione di un numero infinito di elementi di $\mathcal{L}$.
@@ -56,13 +56,13 @@ Per questo usiamo la notazione $\mathcal{L}^\omega$ per definire l'operazione di
 $\square$
 
 #### Dimostrazione 2
-Se V è regolare allora esiste una automa $\cal{M}$ che lo riconosce e se V è anch'esso regolare esiste un secondo automa $\cal{M}'$ che lo riconosce. Ma allora se costruissimo $\cal{M}''$ come l'automa $\cal{M}$ a cui ogni stato finale porta allo stato iniziale di $\cal{M}'$, avremmo che $\cal{M}''$ riconosce la concatenazione di V e L. Perciò $V\cdot L$ è $\omega$-regolare.
+Se $\mathcal{V}$ è regolare allora esiste una automa $\cal{M}$ che lo riconosce e se V è anch'esso regolare esiste un secondo automa $\cal{M}'$ che lo riconosce. Ma allora se costruissimo $\cal{M}''$ come l'automa $\cal{M}$ a cui ogni stato finale porta allo stato iniziale di $\cal{M}'$, avremmo che $\cal{M}''$ riconosce la concatenazione di $\mathcal{L}$ e $\mathcal{V}$. Perciò $\mathcal{V}\cdot \mathcal{L}$ è $\omega$-regolare.
 
 $\square$
 
 
 #### Dimostrazione 3
-Per dimostrare la chiusura rispetto all'unione è sufficiente costruire un automa $\cal{M}$ come la composizione dei due automi $\cal{M}',\cal{M}''$ (gli automi che riconoscono $L_{1}$ e $L_{2}$ ). In particolare lo stato iniziale di $\cal{M}$ raggiunge tramite una $\epsilon$-transizione sia lo stato iniziale di $\cal{M}'$ che quello di $\cal{M}''$
+Per dimostrare la chiusura rispetto all'unione è sufficiente costruire un automa $\cal{M}$ come la composizione dei due automi $\cal{M}',\cal{M}''$ (gli automi che riconoscono $\mathcal{L}_{1}$ e $\mathcal{L}_{2}$ ). In particolare lo stato iniziale di $\cal{M}$ raggiunge tramite una $\epsilon$-transizione sia lo stato iniziale di $\cal{M}'$ che quello di $\cal{M}''$
 
 
 Posso dimostrare la chiusura rispetto all'intersezione usando le leggi di deMorgan. 
@@ -83,9 +83,9 @@ Un'espressione regolare è un'espressione per cui esiste un DFA che accetta tale
 ---
 **🎯Esempio:**
 
-Consideriamo un alfabeto $A=\{a,b\}$ e immaginiamo di descrivere un linguaggio $\omega$-regolare composto da parole infinite che:
+Consideriamo un alfabeto $A=\{a,b\} $ e immaginiamo di descrivere un linguaggio $\omega$-regolare composto da parole infinite che:
 
-- Possono iniziare con una sequenza arbitraria di a (cioè U1=a^*).
+- Possono iniziare con una sequenza arbitraria di a (cioè $U_1=a^*$).
     - Poi ripetono all'infinito solo la parola ab (cioè $V_1=ab$).
 - Oppure possono iniziare con una sequenza arbitraria di $b$ (cioè $U_2=b^∗$).
     - Poi ripetono all'infinito solo la parola baba (cioè $V_2=ba$).
@@ -257,10 +257,54 @@ Ora sarebbe piacevole verificare se su un automa di Büchi la relazione $\approx
 Avendo a che fare con un automa di Büchi sappiamo che il numero di stati è finito, quindi anche l'indice delle classi dev'essere finito.
 Inoltre la definizione di congruenza ci dice che $\approx_{\cal{A}}$ è una relazione di congruenza.
 
-Ci manca da verificare se satura $L(\cal{A})$.
+Ci manca da verificare se satura $\mathcal{L}(\cal{A})$.
 
-Consideriamo $\alpha \in U\cdot V^\omega \cap L(\cal{A})$. Essendo $\alpha \in L(\cal{A})$ sappiamo che esiste una computazione che termina.
-Possiamo vedere $\alpha = u\cdot v_{1}\cdot v_{2}\cdot v_{3} \cdot \dots$
+> $\approx_\mathcal{A}$ satura il linguaggio $\mathcal{\mathcal{L}_\mathcal{A}}$
+
+**Dimostrazione**
+
+Consideriamo una parola $\alpha \in U\cdot V^\omega \cap \mathcal{L}(\cal{A})$. 
+
+Essendo $\alpha \in L(\cal{A})$ sappiamo che esiste una computazione che termina (altrimenti non finiremmo in $\mathcal{A}$). Perciò $\alpha$ genera una computazione del tipo $q_0, s_1, s_2, s_3, ...$ in cui si passa infinite volte in uno stato finale dell'automa $\mathcal{A}$.
+
+
+
+Però sappiamo anche che $\alpha \in U\cap V^\omega$, perciò possiamo vedere $\alpha$ come $\alpha = u \in U \cdot v_{1} \in V \cdot v_{2} \in V  \cdot v_{3} \in V  \cdot \dots$
+
+Uniamo le due cose, e vediamo $\alpha$ come una computazione del tipo
+
+$$
+\alpha = q_0 \to _u s_1 \to _{v_1} s_2 \to _{v_2} s_3 \to \dots
+$$
+
+in cui siamo sicuri che abbiamo infiniti $i$ per cui vale $s_i \to _{v_i} s_{i+1}$.
+
+Questo vale per ogni $u \in U$ e per ogni $v \in V$ chiaramente, perchè U e V sono due classi di equivalenza.
+
+Beneee. 
+
+Ora consideriamo una parola $\beta \in \mathcal{L}(\mathcal{A})$ e cerchiamo di dimostrare che qualsiasi parola consideriamo, se $\beta \in U\cdot V^\omega $ allora $\beta \in \mathcal{L}(\mathcal{A})$ e quindi $U\cdot V^\omega \subseteq \mathcal{L}(\mathcal{A})$.
+
+Riscriviamo $\beta$ come 
+
+$$
+\beta = u'v_1'v_2'\dots
+$$
+
+Poichè $u\approx_\mathcal{A} u'$ e $v\approx_\mathcal{A} v'$ (sempre per il fatto che $u$ e $u'$ sono dentro la stessa classe di equivalenza $U$) allora le stesse cose che valevano prima valgono anche ora, ossia che $\beta$ genera una computazione di $\mathcal{A}$ del tipo
+
+$$
+q_0 \to _{u'} s_1 \to _{v_1'} s_2 \to _{v_2'} s_3 \to \dots
+$$
+
+ma allora è evidente che per un numero infinito di $i$ abbiamo computazioni che portano a uno stato finale, ossia transizioni del tipo 
+
+$$
+s_i \to _{v_i'}^F s_{i+1}
+$$
+
+Perciò qualsiasi parola $\beta$ viene accettata da $\mathcal{A}$ per definizione di accettazione. 
+Abbiamo dimostrato che se $U \cdot V^\omega \cap \mathcal{L}(\mathcal{A})\ne \emptyset$ allora $U \cdot V^\omega \subseteq \mathcal{L}(\mathcal{A})$.
 
 $\square$
 
@@ -273,7 +317,7 @@ Significa che la forma di $\alpha$ è ripetitiva nella parte di V, perciò possi
 
 🎯 Esempio per visualizzare la situazione. 
 
-Se ho ad esempio $A=\{a,b\}$ e una classe $V=\{x \mid x \text{ inizia e finisce per } a\}$ posso osservare come $V$ contiene un insieme infinito di elementi, ma possiamo renderci conto che concatenando qualsiasi elemento di $V$ con qualsiasi altro elemento di $V$ otteniamo una parola che rimane dentro a $V$.
+Se ho ad esempio $ A=\{ a,b \} $ e una classe $V=\{x \mid x \text{ inizia e finisce per } a\}$ posso osservare come $V$ contiene un insieme infinito di elementi, ma possiamo renderci conto che concatenando qualsiasi elemento di $V$ con qualsiasi altro elemento di $V$ otteniamo una parola che rimane dentro a $V$.
 
 
 Il lemma ci dice che, dato che $\sim$ ha indice finito:

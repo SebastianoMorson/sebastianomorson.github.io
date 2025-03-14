@@ -24,13 +24,14 @@ Il modello di apprendimento tipico si basa su due tipi di query:
 >- ***Membership Query (MQ)***:
     Il learner propone una parola $w$ e chiede al teacher: "È $w$ appartenente al linguaggio $\mathcal{L}$?"
     Il teacher risponde "sì" o "no".
-    - Nel caso di risposta negativa, il teacher fornisce anche un controesempio minimo $w'$ che dimostri la discrepanza, ossia un elemento di $(\mathcal{L}_0∖\mathcal{L})\cup(\mathcal{L}∖\mathcal{L}_0)$, dove $\mathcal{L}_0$​ è il linguaggio ipotizzato dal learner.
->
+    
 >- ***Equivalence Query (EQ)***:
     Il learner propone l'automa $\mathcal{A}$ (o, equivalentemente, il linguaggio $\mathcal{L}_0$​ riconosciuto da $\mathcal{A}$) e chiede: "È $\mathcal{L}_0=\mathcal{L}$?"
-    Il teacher risponde "sì", in tal caso il processo di apprendimento termina, oppure "no" fornendo un controesempio che evidenzi una parola in cui $\mathcal{L}_0$​ e $\mathcal{L}$ divergono.
+    Il teacher risponde "sì", in tal caso il processo di apprendimento termina
+> 
+>   - Nel caso di risposta negativa, il teacher fornisce anche un controesempio minimo $w'$ che dimostri la discrepanza, ossia un elemento di $(\mathcal{L}_0∖\mathcal{L})\cup(\mathcal{L}∖\mathcal{L}_0)$, dove $\mathcal{L}_0$​ è il linguaggio ipotizzato dal learner.
 
-Questa interazione iterativa permette al learner di aggiornare la propria ipotesi fino a quando non converge sull'automa corretto.
+Questa interazione  permette al learner di aggiornare la propria ipotesi fino a quando non converge sull'automa corretto.
 
 
 
@@ -47,6 +48,97 @@ Le equivalence query (EQ) forniscono un controllo globale: quando il learner pro
 >! Nell'effettivo questo approccio permette di evitare di eseguire equivalence query perchè l'idea di base è che "se il 99% degli elementi appartiene al linguaggio reale ed è riconosciuto dal mio automa, perchè dare troppa importanza a quell'insignificante 1% che non è detto nemmeno che esista?"
 
 ## Learning Strategy
+Iniziamo a parlare di come fa effettivamente il learner a costruire l'automa da indovinare.
+
+Facciamo finta di essere dei cazzo di cavernicoli con un'idea in testa e ragioniamo. I punti seguenti sono i pensieri che dovremmo fare per arrivare a una soluzione sensata per il nostro problema:
+
+1. Vogliamo costruire un automa $A$, sapendo solo l'alfabeto usato, e dev'essere uguale a un automa $A'$.
+
+2. Perciò per prima cosa il nostro obiettivo è quello di costruire un automa che capisca se una parola appartiene o no a un certo linguaggio. 
+
+3. Come facciamo a dire se una parola appartiene o no a un certo linguaggio? Semplicemente usando le nostre amate Membership Query
+
+4. Quindi fondamentalmente usiamo una classe di equivalenza $\equiv_{\mathcal{L}_0}$ per raggruppare assieme tutte quelle parole che appartengono all'automa 
+
+5. se $u \equiv_{\mathcal{L_0}} v$ significa che $u$ e $v$ appartengono entrambe al linguaggio $\mathcal{L_0}$
+
+6. Che succede se come stati dell'automa considero le classi di equivalenza indotte dalla relazione $\equiv_\mathcal{L_0}$? Bè, otterremmo un automa piuttosto banale composto da 2 stati: uno che riconosce tutte le parole della classe di equivalenza $\equiv_{\mathcal{L}_0}$ e l'altro in cui finiscono le parole che non appartengono alla classe di equivalenza $\equiv_\mathcal{L_0}$
+
+
+7. però c'è un però. La relazione $\equiv_\mathcal{L_0}$ è troppo grossolana. Se due parole $u$ e $v$ appartengono entrambe a $\mathcal{L_0}$ non è detto che entrambe si comportino nella stessa maniera una volta che ci postpongo lo stesso suffisso. 
+
+    Ad esempio $"ababa"$ e $"babab"$ appartengono entrambi al linguaggio 
+    $$
+    \mathcal{L} = \{ \alpha \mid \alpha = (a\cdot b)^*\cdot (a+b) + (b\cdot a)^*\cdot b\}
+    $$
+    ma se aggiungo $a$ ad entrambe, la prima continua ad appartenere a $\mathcal{L}$ mentre la seconda no.
+
+8. vogliamo definire una relazione più precisa
+
+
+Ecco quindi che entra in gioco un nome noto. Tutto si basa su lui. Proprio lui. Il vecchio, saggio, ma sempre attuale MyHill-Nerode, questa volta nella veste della relazione di equivalenza $\sim_L$.
+
+### Myhill-Nerode equivalence
+L'equivalenza di Myhill-Nerode è un raffinamento della classe di equivalenza $\equiv_\mathcal{L}$ vista in precedenza (ossia usa una maglia più fine per setacciare le parole che appartengono alla stessa classe) e dice una cosa piuttosto semplice: 
+> Due parole $u$ e $v$ appartengono alla stessa classe di equivalenza se e solo se il loro comportamento non cambia una volta che ci appiccico lo stesso suffisso
+
+$$
+\text{se } u \sim_{\mathcal{L}_0} v  \text{ allora } \forall t \in \Sigma^* \;\;u\cdot t \in \mathcal{L}_0 \iff  v\cdot t \in \mathcal{L_0}
+$$
+
+Chiaramente nel nostro caso non ci serve che le classi di equivalenza vengano verificate su tutti i possibili suffissi $\Sigma^*$, possiamo relativizzarlo a un sottoinsieme $T\subseteq \Sigma^*$ . Definiamo quindi la relazione $\approx_{\mathcal{L_0},T}$ come:
+
+$$
+ u \approx_{\mathcal{L}_0,T} v  \text{ significa che } \forall t \in T \;\;u\cdot t \in \mathcal{L}_0 \iff  v\cdot t \in \mathcal{L_0}
+
+$$
+
+Vedremo come T conterrà tutti i prefissi dei minimi controesempi del linguaggio conosciuto dal teacher.
+
+
+### Minimalità dell'automa 
+Torniamo ad essere dei cazzo di cavernicoli:
+1. vogliamo usare le classi di equivalenza per descrivere i nostri stati. Perciò se ho uno stato sono certo che tutte le parole della classe di equivalenza corrispondente si comportano alla stessa maniera una volta che ci appiccico lo stesso suffisso (quindi le transizioni vanno da una classe di equivalenza ad un'altra)
+2. ma come rappresento una specifica classe di equivalenza? Uso uno dei suoi elementi come "soprannome" per indicare tutta la classe? Ci potrebbe stare
+3. potrei usare una delle parole che appartiene alla classe per indicare la classe in questione, e di conseguenza con le parole che sono dentro quella classe definiscono anche un preciso stato dell'automa 
+3. come faccio però ad evitare che esistano più stati che corrispondono alla stessa classe di equivalenza? 
+
+Per rispondere a quest'ultimo quesito introduciamo il concetto di T-minimalità. 
+
+Attenzione, da qui in poi faremo riferimento agli stati dell'automa come le stringhe $s \in \Sigma^*$ 
+
+> Un automa è T-minimo se $\forall$ stato dell'automa $s \not = s' $ abbiamo che $s\not\approx_{\mathcal{L_0},T} s'  $
+
+In poche parole, un automa è T-minimo se ogni stato <u>non appartiene</u> alla stessa classe di equivalenza di un altro stato.
+
+### Completezza dell'automa
+Allo stesso modo vogliamo garantire che per ogni possibile simbolo l'automa risponda e non si impalli.
+Quindi definiamo la T-completezza.
+
+> Un automa si dice T-completo se $\forall s \in S$ e $\forall a \in \Sigma$ abbiamo che $\exists s_a \in S$ tale che $sa\approx_{\mathcal{L_0},T} s_a$
+
+Quindi in poche parole per ogni stato, per qualsiasi simbolo dell'alfabeto, esiste uno stato dell'automa in cui si finisce e per il quale la nuova stringa appartiene alla classe di equivalenza del nuovo stato (perciò non è che finisco in uno stato qualsiasi).
+
+
+Ci si può aiutare a raggiungere l'idea intuitiva dietro la minimalità e la completezza guardando questa immagine:
+
+![](/assets/images/myhill.png)
+
+Bisogna considerare:
+- il quadratone come l'insieme delle parole
+- la parte azzurra è il linguaggio da riconoscere
+- i pezzi del puzzle sono classi di equivalenza
+- i pallini rossi sono gli stati. Non vogliamo avere più di uno stato per ogni classe, sennò non abbiamo minimalità
+- vogliamo che per ogni stato ci sia una transizione che porta in un altro stato o nello stesso stato se la parola creata non cambia la classe 
+
+
+### Algoritmo
+A questo punto uniamo le cose:
+1. all'inizio non abbiamo stati, nè controesempi, quindi l'insieme S degli stati/stringhe e l'insieme T dei suffissi/controesempi sono entrambi vuoti
+2. considero uno stato $s\in S$ (all'inizio l'unico stato che ho è quello della stringa vuota $\epsilon$) e un simbolo dell'alfabeto $a \in \Sigma$
+3. ora voglio verificare se ci sono dei suffissi che permettono di cambiare classe di equivalenza (quindi stato), perciò controllo se per ogni suffisso $t \in T$ e per ogni stato $s'(\not = s) \in S$ ho che $\text{Membership(sat)} \neq \text{Membership(s't)}$  
+4. se il passo precedente è vero, significa che il nuovo simbolo $a$ fa saltare in una nuova classe di equivalenza quindi aggiungo $sa$ all'insieme degli stati S 
+5. ovviamente se ogni simbolo non fa saltare in nessuna nuova classe di equivalenza significa che l'automa è T-completo
 
 L'idea dell'algoritmo che porta alla costruzione del DFA che riconosce il linguaggio del learner è il seguente:
 
@@ -88,7 +180,7 @@ L'idea dell'algoritmo che porta alla costruzione del DFA che riconosce il lingua
 
 **PSEUDOCODICE:** 
 
-```javascript
+```
 S = T = {ε} // S is T-minimal, possibly not T-complete
 loop // this will loop at most index(∼L0) times
   while S NOT T-complete
@@ -113,7 +205,7 @@ Ciascuna cella può contenere il valore 0 o 1 a seconda che $Membership(s\cdot t
 
 Dopodichè il procedimento è identico all'algoritmo visto in precedenza.
 
-Se due righe sono uguali significa che lo stato è il medesimo.
+Se due righe sono uguali significa che lo stato è il medesimo (perchè la classe di equivalenza è la stessa).
 
 📌 Esempio concreto di costruzione di un DFA
 
@@ -131,8 +223,8 @@ La matrice iniziale:
 Il learner scopre che tutti i prefissi attuali sembrano uguali (tutte le righe sono uguali), quindi per ora assume un solo stato.
 
 Ora il learner prova nuove parole:
-- Se chiede per abab, scopre che $H(ab,\epsilon)=1$ (perché "ab" appartiene a L).
-- Aggiunge ab a S e aggiorna la matrice.
+- Se chiede per $ab$, scopre che $H(ab,\epsilon)=1$ (perché $ab$ appartiene a L).
+- Aggiunge $ab$ a S e aggiorna la matrice.ab
 
 Ora la matrice è:
 
@@ -155,11 +247,21 @@ Aggiunge le transizioni:
 
   - $q_0 \to_a q_1$
   - $q_1 \to_b q_2$ (perché abab è accettato)
-  - q2​ è finale.
+  - $q_2$​ è finale.
 
 Alla fine, ripete il controllo con un’Equivalence Query.
 
 ## Funzioni su parole 
+Se possiamo imparare automi, perchè non cercare di imparare funzioni? Più specificatamente funzioni monotone?
+
+Ridefiniamo la bella relazione di Myhill-Nerode:
+
+$$
+u \sim_{f_0,T} v \iff \forall t \in T\;\;\; f(ut)-f(u) = f(vt)-f(v)
+$$
+
+e applichiamo essenzialmente la stessa idea applicata precedentemente.
+
 >L'approccio black-box mi permette di creare il trasduttore sequenziale che permette, dato un programma scritto in python, di calcolare il corrispettivo codice in javascript non conoscendo l'alfabeto di output? 
 
 
