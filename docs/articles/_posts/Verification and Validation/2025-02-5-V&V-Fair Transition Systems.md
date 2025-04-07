@@ -59,4 +59,5 @@ Una p-computation non è altro che una sequenza di computazione $\sigma$ di un F
 - **compassion**: non esistono transizioni $\tau \in \cal{C}$ che sono sempre abilitate e vengono prese un numero finito di volte
 
 **state P-accessible**: stato contenuto in una P-computazione
+
 **RUN computation**: sequenza di computazione $\sigma$ che soddisfa solo le proprietà di initiality e consequentiality

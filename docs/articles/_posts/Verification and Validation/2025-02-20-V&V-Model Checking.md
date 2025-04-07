@@ -68,13 +68,15 @@ A questo punto dato un qualsiasi sottografo $S \subseteq \mathcal{B}_{P,\varphi}
 
 
 
-Ora, come dicevamo all'inizio, se $\mathcal{B}_{P,\varphi}$ contiene un sottografo adeguato, la formula è soddisfacibile, perciò esiste una computazione del modello che garantisce le proprietà della formula $\varphi$.
+Ora, come dicevamo all'inizio, se $\mathcal{B}_{P,\varphi}$ contiene un sottografo adeguato, significa che esiste una computazione del modello che garantisce le proprietà della formula $\varphi$.
 
 Ma perchè? 
 
-Bè, se un sottografo è adeguato significa che tutti i suoi stati sono consistenti e le transizioni fair e fulfilling. Questo significa che la computazione rappresentata dal sottografo soddisfa sicuramente la formula $\varphi$.
+Bè, se un sottografo è adeguato significa che abbiamo:
+- ***fulfillingness*** => quindi la formula LTL è soddisfacibile (l'avevamo visto quando abbiamo parlato di LTL satisfiability)
+- ***fairness*** => quindi le transizioni soddisfano le proprietà di justice e compassion 
 
-**👁️ Attenzione, la componente adeguata è sufficiente a dimostrare la soddisfacibilità della formula, non la sua validità!**
+**👁️ Attenzione, la componente adeguata è sufficiente a dimostrare la soddisfacibilità della formula sul modello, non la sua validità! Per verificare la validità è necessario negare la formula e dimostrare che è insoddisfacibile.**
 
 ### 2. Procedimento
 L'idea è questa:

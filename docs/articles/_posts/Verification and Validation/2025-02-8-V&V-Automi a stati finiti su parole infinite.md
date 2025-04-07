@@ -441,7 +441,7 @@ $$
 
 $\mathcal{L}$ non può essere scritto come $\overrightarrow{W}$ e ora dimostreremo per assurdo che è così.
 
-1. Assumiamo $L = b^\omega$
+1. Assumiamo $b^\omega \in \mathcal{L}$
 2.  allora esiste un valore $n_{1}$ tale per  cui $b^{n_{1}} \in W$.
 3. Considerato $b^{n_{1}}ab^{\omega} \in L$ anche in questo caso dovrà esistere $n_{2}$ tale per  cui $b^{n_{1}}ab^{n_{2}} \in W$.
 4. Posso andare avanti all'infinito e finirò sempre per ottenere che esiste un $n$ finito. A quel punto però esistono un'infinità di prefissi che appartengono a $W$ e quindi non è possibile che un qualsiasi simbolo sia considerato una sola volta a meno che l'alfabeto non sia infinito, che non è possibile.
