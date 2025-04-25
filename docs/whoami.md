@@ -29,3 +29,5 @@ If anyone is wondering what the image should represent, well, it's a painting by
   </div>
 
 </div>
+
+<!-- I'm joking, there is no photo under the painting :D <3 -->
