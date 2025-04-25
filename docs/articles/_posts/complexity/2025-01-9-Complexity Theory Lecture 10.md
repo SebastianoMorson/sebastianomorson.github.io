@@ -4,7 +4,7 @@ title: Cook-Levin Theorem
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - complexity-theory
 categories: article
 ---
 <!--more-->

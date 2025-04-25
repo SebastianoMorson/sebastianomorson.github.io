@@ -4,7 +4,7 @@ title: Information Theory - Lecture 5 - Kolmogorov Complexity 1965
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - complexity-theory
 categories: article
 ---
 <!--more-->

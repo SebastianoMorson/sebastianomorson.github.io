@@ -4,7 +4,8 @@ title: RECSYS Lecture 2 - Neighborhood-based collaborative filtering
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - artificial
+  - artificial-intelligence
+  - recommender-systems
 categories: article
 
 ---

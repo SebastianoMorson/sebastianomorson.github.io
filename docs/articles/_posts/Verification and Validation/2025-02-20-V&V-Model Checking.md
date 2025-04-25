@@ -4,7 +4,7 @@ title: V&V-Model Checking
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - verification-techniques
 categories: article
 ---
 <!--more-->
@@ -239,3 +239,9 @@ LTL-MC é PSPACE mentre CTL-MC è polinomiale rispetto alla dimensione del model
 La differenza sta nel fatto che per CTL le proprietà possono essere verificate sugli stati singoli, propagando l'informazione localmente (ricordati dell'esempio del forno a microonde).
 
 Per LTL invece certe proprietà possono dipendere da una serire infinita di scelte. Anche per questo motivo avremo bisogno di applicare il Bounded Model Checking nel caso LTL, perchè a volte il numero di stati "esplodeva" nel momento in cui generavamo il behaviour graph. 
+
+
+Anch'io sono perplesso sull'idea di demonizzare i tagli causati dell'AI. In fondo a volte incentivare il "benessere collettivo" può invece voler dire incentivare l'"inefficienza populista". In parole povere è come chiedere di non scomodare quelle persone che ricoprono posizioni ormai non più necessarie (e forse anche troppo cruciali per essere demandate a un banale umano) perchè dobbiamo pensare ai loro sentimenti. Non è la strategia giusta per il progresso.
+Molto più utile sarebbe fare una valutazione di quali sono le attività che possono essere svolte sia da un uomo che da una macchina e spingere sul rallentare i guadagni a favore di una maggiore partecipazione delle persone. In uno scenario futuro in cui le persone lavoreranno 2 giorni a settimana perchè tutto è demandato alle AI, le prime a perdere saranno le aziende, perchè gli acquirenti non avranno potere di acquisto.
+
+In questo scenario di lavoro bi-settimanale, l'idea di un reddito universale trovo che sia l'equivalente di una droga: ti fa stare bene sul momento ma ne vuoi sempre di più. L'inflazione fa sì che quel reddito ogni anno debba crescere per poter sortire gli stessi effetti iniziali e, se non adeguatamente controllato (e in Italia abbiamo già avuto riprova con il caro reddito di cittadinanza) è più probabile che porti ad adagiarsi sugli allori invece che incentivare il reimpiego. Inoltre non capisco quali siano queste attività di "reimpiego". In un mondo in cui le aziende saranno totalmente digitalizzate e i tagli al personale saranno ingenti, quali lavori saranno così tanto in difficoltà da richiedere un così considerevole numero di lavoratori umani? Molti dicono "torneranno in voga i lavori letterali", ma secondo me è una grande cavolata perchè stento a credere che 100mila scrittori avranno un reddito tra loro paragonabile. Nella migliore delle ipotesi è molto più credibile che una minuta cerchia avrà uno stipendio piccolo/medio-alto e gli altri facciano la fame. Gli unici che si salveranno saranno gli sportivi perchè quello è un mondo in cui il protagonista è proprio l'uomo.Ma soprattutto, rimanendo realisti, a scuola non a tutti i ragazzi piace leggere o scrivere. Tutti quei ragazzi che lavoro ricopriranno se i posti più "popolari" saranno demandati all'AI e ai robot industriali? 

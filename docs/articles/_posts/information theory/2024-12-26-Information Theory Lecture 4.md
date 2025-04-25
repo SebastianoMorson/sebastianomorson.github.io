@@ -4,7 +4,7 @@ title: Information Theory - Lecture 4
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - information-theory
 categories: article
 ---
 <!--more-->

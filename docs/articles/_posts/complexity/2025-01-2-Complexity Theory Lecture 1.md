@@ -4,7 +4,7 @@ title: Turing Machines 1 - Uniform vs Logarithmic cost criterium
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - complexity-theory
 categories: article
 ---
 <!--more-->

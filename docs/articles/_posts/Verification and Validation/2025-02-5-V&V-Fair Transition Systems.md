@@ -5,7 +5,7 @@ truncated_preview: true
 excerpt_separator: <!--more-->
 categories: article
 tags:
-  - miscellaneous
+  - verification-techniques
 ---
 <!--more-->
 Una volta mi faceva schifo la matematica e ora invece trovo che sia fondamentale.

@@ -4,7 +4,7 @@ title: V&V-Automi a stati finiti su parole finite
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - verification-techniques
 categories: article
 ---
 <!--more-->

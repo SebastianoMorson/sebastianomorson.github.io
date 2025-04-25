@@ -5,7 +5,7 @@ truncated_preview: true
 categories: article
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - information-theory
 ---
 <!--more-->
 

@@ -4,7 +4,8 @@ title: RECSYS Lecture 7 - Multi-armed bandit
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - artificial
+  - artificial-intelligence
+  - recommender-systems
 categories: article
 
 ---

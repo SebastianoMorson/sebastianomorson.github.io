@@ -4,11 +4,15 @@ title: Articles
 ---
 
 <!-- Banner con i pulsanti per il filtro -->
-<div class="filter-banner">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="cybersec">Cyber Security</button>
-  <button class="filter-btn" data-filter="artificial">Artificial Intelligence</button>
-  <button class="filter-btn" data-filter="miscellaneous">Miscellaneous</button>
+<div class="filter-banner" style="text-align: center; margin-bottom: 20px;">
+  <div id="tag-filter" style="display: inline-flex; gap: 5px; flex-wrap: wrap; justify-content: center;">
+    {% assign all_tags = site.tags | sort %}
+    {% for tag in all_tags %}
+      <button class="tag-button" data-tag="{{ tag[0] }}" style="padding: 5px 10px; font-size: 12px; border: 1px solid #ccc; background-color: #f9f9f9; cursor: pointer;">
+        {{ tag[0] }}
+      </button>
+    {% endfor %}
+  </div>
 </div>
 
 <!-- Contenitore dei post -->
@@ -64,24 +68,30 @@ title: Articles
 
 <script>
   // Ottieni tutti i bottoni e i post
-  const filterButtons = document.querySelectorAll('.filter-btn');
+  const filterButtons = document.querySelectorAll('.tag-button');
   const posts = document.querySelectorAll('.post');
+
+  // Array per memorizzare i filtri selezionati
+  let activeFilters = [];
 
   // Aggiungi un event listener a ciascun bottone
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
-      // Rimuovi la classe 'active' da tutti i bottoni
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      // Aggiungi la classe 'active' al bottone cliccato
-      button.classList.add('active');
+      const filter = button.getAttribute('data-tag');
 
-      // Ottieni il filtro selezionato
-      const filter = button.getAttribute('data-filter');
+      // Aggiungi o rimuovi il filtro dall'array dei filtri attivi
+      if (activeFilters.includes(filter)) {
+        activeFilters = activeFilters.filter(f => f !== filter);
+        button.classList.remove('active');
+      } else {
+        activeFilters.push(filter);
+        button.classList.add('active');
+      }
 
-      // Mostra o nascondi i post in base al filtro
+      // Mostra o nascondi i post in base ai filtri attivi
       posts.forEach(post => {
         const tags = post.getAttribute('data-tags').split(' ');
-        if (filter === 'all' || tags.includes(filter)) {
+        if (activeFilters.length === 0 || activeFilters.some(filter => tags.includes(filter))) {
           post.style.display = 'block';
         } else {
           post.style.display = 'none';

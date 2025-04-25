@@ -4,7 +4,8 @@ title: RECSYS Lecture 3 - Model-based Collective Filtering
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - artificial
+  - artificial-intelligence
+  - recommender-systems
 categories: article
 
 ---

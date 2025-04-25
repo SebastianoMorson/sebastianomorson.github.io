@@ -5,7 +5,7 @@ excerpt_separator: <!--more-->
 categories: article
 truncated_preview: true
 tags:
-  - miscellaneous
+  - verification-techniques
 ---
 <!--more-->
 # Automi di Büchi (non deterministici)

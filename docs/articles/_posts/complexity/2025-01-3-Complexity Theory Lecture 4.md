@@ -4,7 +4,7 @@ title: Relazione tra Classi di Complessità 1 - Proper Functions, Precise MdT, C
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - complexity-theory
 categories: article
 ---
 <!--more-->

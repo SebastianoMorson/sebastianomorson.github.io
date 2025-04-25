@@ -4,7 +4,8 @@ title: RECSYS Lecture 12 - Structural Recommender Systems
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - artificial
+  - artificial-intelligence
+  - recommender-systems
 categories: article
 
 ---

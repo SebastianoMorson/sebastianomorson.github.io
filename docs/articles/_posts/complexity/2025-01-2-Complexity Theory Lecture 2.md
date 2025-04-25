@@ -4,7 +4,7 @@ title: Turing Machines 2 - Deterministic Turing Machines, Complexity, Speed-up T
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
-  - miscellaneous
+  - complexity-theory
 categories: article
 ---
 <!--more-->
