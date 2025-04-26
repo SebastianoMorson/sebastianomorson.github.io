@@ -97,7 +97,9 @@ title: Articles
       // Mostra o nascondi i post in base ai filtri attivi
       posts.forEach(post => {
         const tags = post.getAttribute('data-tags').split(' ');
-        if (activeFilters.length === 0 || activeFilters.some(filter => tags.includes(filter))) {
+        if (tags.includes('todo')) {
+          post.style.display = 'none';
+        } else if (activeFilters.length === 0 || activeFilters.some(filter => tags.includes(filter))) {
           post.style.display = 'block';
 
         } else {
