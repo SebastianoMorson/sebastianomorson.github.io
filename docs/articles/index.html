@@ -8,9 +8,11 @@ title: Articles
   <div id="tag-filter" style="display: inline-flex; gap: 5px; flex-wrap: wrap; justify-content: center;">
     {% assign all_tags = site.tags | sort %}
     {% for tag in all_tags %}
+    {% if tag[0] != "todo" %}
       <button class="tag-button" data-tag="{{ tag[0] }}" style="padding: 5px 10px; font-size: 12px; border: 1px solid #ccc; background-color: #f9f9f9; cursor: pointer;">
-        {{ tag[0] }}
+        {{ tag[0] | replace : '-', ' ' }}
       </button>
+    {% endif %}
     {% endfor %}
   </div>
 </div>
@@ -83,9 +85,13 @@ title: Articles
       if (activeFilters.includes(filter)) {
         activeFilters = activeFilters.filter(f => f !== filter);
         button.classList.remove('active');
+        button.style.backgroundColor = '#f9f9f9'; // Colore di default
+
       } else {
         activeFilters.push(filter);
         button.classList.add('active');
+        button.style.backgroundColor = '#add8e6'; // Colore azzurrino per il bottone attivo
+
       }
 
       // Mostra o nascondi i post in base ai filtri attivi
@@ -93,10 +99,19 @@ title: Articles
         const tags = post.getAttribute('data-tags').split(' ');
         if (activeFilters.length === 0 || activeFilters.some(filter => tags.includes(filter))) {
           post.style.display = 'block';
+
         } else {
           post.style.display = 'none';
         }
       });
     });
+  });
+
+  // Nascondi i post con il tag "todo" all'inizio
+  posts.forEach(post => {
+    const tags = post.getAttribute('data-tags').split(' ');
+    if (tags.includes('todo')) {
+      post.style.display = 'none';
+    }
   });
 </script>
