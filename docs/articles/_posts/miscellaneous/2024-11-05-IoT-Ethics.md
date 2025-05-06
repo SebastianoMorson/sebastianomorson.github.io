@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Internet-of-Things: ethical considerations
+title: "Internet-of-Things: ethical considerations"
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
