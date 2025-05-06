@@ -81,6 +81,8 @@ title: Articles
     button.addEventListener('click', () => {
       const filter = button.getAttribute('data-tag');
 
+
+
       // Aggiungi o rimuovi il filtro dall'array dei filtri attivi
       if (activeFilters.includes(filter)) {
         activeFilters = activeFilters.filter(f => f !== filter);
