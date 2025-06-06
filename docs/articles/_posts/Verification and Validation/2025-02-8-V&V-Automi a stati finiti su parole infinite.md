@@ -37,7 +37,7 @@ Ora però ci vogliamo domandare: che relazioni ci sono tra linguaggi regolari e 
 >**Per i linguaggi regolari e $\omega$-regolari valgono le seguenti proprietà:**
 >1. **se $V\subseteq A^*$ è regolare allora $V^{\omega}$ è $\omega$-regolare**
 >2. **se $V \subseteq A^*$ è regolare e $\mathcal{L} \subseteq A^\omega$ è $\omega$-regolare allora $V\cdot \mathcal{L}$ è $\omega$-regolare**
->3. **se $\mathcal{L}_{1},\mathcal{L}_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $\mathcal{L}_{1}\cup \mathcal{L}_{2}$ e $\mathcal{L}_{1}\cap \mathcal{L}_{2}$ sono $\omega$-regolari.**
+>3. **se $\mathcal{L}_{1}$,$\mathcal{L}_{2}\subseteq A^\omega$ sono $\omega$-regolari allora $\mathcal{L}_{1}\cup \mathcal{L}_{2}$ e $\mathcal{L}_{1}\cap \mathcal{L}_{2}$ sono $\omega$-regolari.**
 
 La costruzione degli automi è **effettiva** (ossia esiste un algoritmo che in modo sistematico e non ambiguo permette di costruire un automa a partire da un'espressione).
 
@@ -62,10 +62,18 @@ $\square$
 
 
 #### Dimostrazione 3
-Per dimostrare la chiusura rispetto all'unione è sufficiente costruire un automa $\cal{M}$ come la composizione dei due automi $\cal{M}',\cal{M}''$ (gli automi che riconoscono $\mathcal{L}_{1}$ e $\mathcal{L}_{2}$ ). In particolare lo stato iniziale di $\cal{M}$ raggiunge tramite una $\epsilon$-transizione sia lo stato iniziale di $\cal{M}'$ che quello di $\cal{M}''$
+Per dimostrare la chiusura rispetto all'unione è sufficiente costruire un automa $\cal{A}$ come la composizione dei due automi $\cal{A}_1$,$\cal{A}_2$ (gli automi che riconoscono $\cal{L}_{1}$ e $\cal{L}_{2}$ ).
 
+$$
+\begin{align}
+&\cal{A_1} = (Q_1, I_1,\Sigma, \Delta_1, F_1 ) \\
+&\cal{A_2} = (Q_2, I_2,\Sigma, \Delta_2, F_2 ) \\
+&\cal{A} = \cal{A_1} \cup \cal{A_2} = (Q_1 \cup Q_2, I_1 \cup I_2,\Sigma, \Delta_1 \cup \Delta_2, F_1 \cup F_2) \\
+\end{align}
+$$
 
-Posso dimostrare la chiusura rispetto all'intersezione usando le leggi di deMorgan. 
+dove $Q_1 \cap Q_2 = \emptyset$
+
 
 $\square$
 
