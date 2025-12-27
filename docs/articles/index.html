@@ -24,12 +24,11 @@ title: Articles
   <article class="post" data-tags="{{ post.tags | join: ' ' }}">
     <h1 class="post-title">
       <a href="{{ site.baseurl }}{{ post.url }}">
-        {{ post.date | date_to_string }} {{ post.title }}
+        <span class="post-date-inline">{{ post.date | date: "%Y/%d/%m" }}</span> ~ {{ post.title }}
       </a>
     </h1>
-
+  <!--  
     <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date_to_string }}</time>
-    <!--
     {% if post.truncated_preview == true or site.blog.truncated_preview and post.truncated_preview != false %}
       {{ post.excerpt }}
       <a href="{{ site.baseurl }}{{ post.url }}">Read more</a>

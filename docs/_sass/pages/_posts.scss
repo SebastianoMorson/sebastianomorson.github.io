@@ -6,7 +6,7 @@
 
 .page,
 .post {
-  margin-bottom: 2em;
+  margin-bottom: 0.5em;
   border-bottom-style:solid;
   border-bottom-color:#CCCCCC;
   border-bottom-width:0.5px;
@@ -17,15 +17,25 @@
 .post-title,
 .post-title a {
   color: $post-title-color;
-  font-size:x-large;
+  font-size: 1rem;
+  font-weight: normal;
 }
 .page-title,
 .post-title {
   margin-top: 0;
 }
-
+//  font-size: 1.25rem;
 // Meta data line below post title
 .post-date {
+
+// Inline date shown next to title (smaller and lighter than the post title)
+.post-title .post-date-inline,
+.post-title a .post-date-inline {
+  color: $post-date-color;
+  font-weight: normal;
+  font-size: 0.9rem;
+  margin-right: 0.4rem;
+}
   display: block;
   margin-top: -.5rem;
   margin-bottom: 1rem;
