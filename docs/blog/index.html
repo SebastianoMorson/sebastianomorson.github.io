@@ -9,7 +9,7 @@ title: Projects
   <article class="post">
     <h1 class="post-title">
       <a href="{{ site.baseurl }}{{ post.url }}">
-        {{ post.date | date_to_string }} ~ {{ post.title }}
+        <span class="post-date-inline">{{ post.date | date: "%Y·%d·%m" }}</span>  {{ post.title }}
       </a>
     </h1>
     <!--

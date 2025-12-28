@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Fair Transition System
+title: Fair Transition System
 truncated_preview: true
 excerpt_separator: <!--more-->
 categories: article

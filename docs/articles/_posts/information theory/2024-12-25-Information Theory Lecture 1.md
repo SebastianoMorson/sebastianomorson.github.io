@@ -194,10 +194,10 @@ $$
 H(p_{1},\dots,p_{k}) \le \log k = H\left(\frac{1}{k},\dots, \frac{1}{k}\right)
 $$
 
-$k=|A|$
+$k=\mid A \mid$
 
 che fondamentalmente significa che l'entropia è massima se la distribuzione delle probabilità è uniforme
 
 **Dimostrazione**:
-Uso Jensen (al contrario), ossia $$\sum \lambda_{i} \cdot f(x_{i})\le f\left( \sum(\lambda_{i} \cdot x_{i}) \right)$$
-La dimostrazione per intero è presente [[Lect 1 Nota 28 set 2020.pdf#page=8|qui]]
+(Hint) Uso Jensen (al contrario), ossia $$\sum \lambda_{i} \cdot f(x_{i})\le f\left( \sum(\lambda_{i} \cdot x_{i}) \right)$$
+<!-- La dimostrazione per intero è presente [[Lect 1 Nota 28 set 2020.pdf#page=8|qui]] -->

@@ -33,3 +33,17 @@
 	font-family: "typewriter";
 	src: url("../fonts/TypewriterScribbled.ttf");
 }
+
+@font-face {
+  font-family: 'Apple Garamond';
+  src: url('../fonts/AppleGaramond.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'arial';
+  src: url('../fonts/ARIAL.TTF');
+  font-weight: normal;
+  font-style: normal;
+}

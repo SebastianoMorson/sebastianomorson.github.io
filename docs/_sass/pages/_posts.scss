@@ -26,18 +26,47 @@
 }
 //  font-size: 1.25rem;
 // Meta data line below post title
+// Meta data line below post title (used for `.post-date` time element)
 .post-date {
+  display: block;
+  margin-top: -.5rem;
+  margin-bottom: 1rem;
+  color: $post-date-color;
+}
 
 // Inline date shown next to title (smaller and lighter than the post title)
 .post-title .post-date-inline,
 .post-title a .post-date-inline {
   color: $post-date-color;
-  font-weight: normal;
-  font-size: 0.9rem;
+  font-weight: 300;
+  font-size: 0.85rem;
   margin-right: 0.4rem;
+  vertical-align: middle;
+  opacity: 0.95;
 }
-  display: block;
-  margin-top: -.5rem;
-  margin-bottom: 1rem;
-  color: $post-date-color;
+
+// Tag filter buttons (rounded, subtle border, hover/active styles)
+.filter-banner .tag-button {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+  line-height: 1;
+}
+
+.filter-banner .tag-button:hover,
+.filter-banner .tag-button:focus {
+  background-color: #eef6fb;
+  border-color: #c6e1f9;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.filter-banner .tag-button.active {
+  background-color: #add8e6;
+  border-color: #8ec6e6;
 }

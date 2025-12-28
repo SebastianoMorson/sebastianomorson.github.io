@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Automi a stati finiti su parole finite
+title: Automi a stati finiti su parole finite
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

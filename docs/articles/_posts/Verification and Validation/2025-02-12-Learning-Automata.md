@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Learning Automata
+title: Learning Automata
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

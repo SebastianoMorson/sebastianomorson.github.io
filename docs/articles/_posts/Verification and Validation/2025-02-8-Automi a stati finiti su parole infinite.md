@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Automi a stati finiti su parole infinite
+title: Automi a stati finiti su parole infinite
 excerpt_separator: <!--more-->
 categories: article
 truncated_preview: true

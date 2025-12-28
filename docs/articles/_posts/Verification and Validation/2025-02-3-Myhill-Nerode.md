@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Myhill-Nerode Theorem
+title: Myhill-Nerode Theorem
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:

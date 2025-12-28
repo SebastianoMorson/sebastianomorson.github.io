@@ -1,6 +1,6 @@
 ---
 layout: post
-title: V&V-Model Checking
+title: Model Checking
 truncated_preview: true
 excerpt_separator: <!--more-->
 tags:
