@@ -5,7 +5,7 @@ excerpt_separator: <!--more-->
 truncated_preview: true
 tags:
   - artificial-intelligence
-  -todo
+  - todo
 categories: article
 ---
 
